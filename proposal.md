@@ -13,3 +13,6 @@ A sidebar will allow users to switch between groups, as well as access a setting
   - Figma Link: https://www.figma.com/design/FCj4ujNPAujULSoWmLliL5/Untitled?node-id=1-3978&m=dev&t=9FDr9CW5920yrVr6-1
 - Website Flowchart: ![img.png](flowchart.png)
   - This flowchart showcases the functionality of the application.
+
+## Frameworks and Technologies
+- Express.js, MongoDB, React, JavaScript
