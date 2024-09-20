@@ -1,8 +1,8 @@
 ## Names
-  Sebastian Gurgol
-  Giovanni Larson Vasquez
-  Nora Steffen
-  Lorenzo Cassano
+  Sebastian Gurgol, 
+  Giovanni Larson Vasquez, 
+  Nora Steffen, 
+  Lorenzo Cassano, 
 
 ## Task Organizer - Final Project Proposal
 
@@ -12,3 +12,5 @@
 Users will be able to navigate through the site through a dedicated navigation bar.
   
   The technologies we will be using for this project are Node.js (server), Mongodb (database), HTML and CSS for the front end, and Javascript for the backend.
+
+  
