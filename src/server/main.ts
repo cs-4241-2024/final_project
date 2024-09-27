@@ -7,11 +7,16 @@ import parseXLSX from "./parser/xlsxParser.js"
 
 const app = express();
 
-const userSchema = new mongoose.Schema({
+interface IUser {
+    username: string;
+    password: string;
+}
+
+const userSchema = new mongoose.Schema<IUser>({
     username: {type: String, required: true, unique: true},
     password: {type: String, required: true},
 }, {versionKey: false});
-const User = new mongoose.Model("User", userSchema);
+const User: mongoose.Model<IUser> = mongoose.model<IUser>("User", userSchema);
 
 app.post("/login", (req: express.Request, res: express.Response) => {
 
