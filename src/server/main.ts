@@ -8,8 +8,8 @@ import parseXLSX from "./parser/xlsxParser.js"
 const app = express();
 
 const userSchema = new mongoose.Schema({
-    user: {type: String, required: true, unique: true},
-    password: {String, required: true},
+    username: {type: String, required: true, unique: true},
+    password: {type: String, required: true},
 }, {versionKey: false});
 const User = new mongoose.Model("User", userSchema);
 
