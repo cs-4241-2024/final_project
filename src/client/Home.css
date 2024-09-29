@@ -1,0 +1,14 @@
+.root{
+    /* Home Page */
+
+position: relative;
+width: 905px;
+height: 680px;
+
+/* M3/sys/light/surface */
+background: #FEF7FF;
+/* M3/sys/light/outline-variant */
+border: 8px solid #CAC4D0;
+border-radius: 18px;
+
+}

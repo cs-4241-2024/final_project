@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import reactLogo from "./assets/react.svg";
 
+
 function App() {
   const [count, setCount] = useState(0);
 
@@ -15,6 +16,11 @@ function App() {
         </a>
         <a href="https://reactjs.org" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+        <a>
+          <a href="./Home.tsx" >
+            <text>Home</text>
+          </a>
         </a>
       </div>
       <h1>Vite + React</h1>
