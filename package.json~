@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "../a4-components/node_modules/.bin/nodemon src/server/main.js -w src/server",
+    "dev": "nodemon src/server/main.js -w src/server",
     "start": "node src/server/main.js",
-    "build": "../a4-components/node_modules/.bin/vite build"
+    "build": "vite build"
   },
   "engines": {
     "node": "16.x"
