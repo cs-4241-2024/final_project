@@ -82,11 +82,11 @@ export const generateMatches = async function() {
     });
 
     document.querySelectorAll('button[name="delete"]').forEach(button => {
-      button.addEventListener('click', (event) => deleteMatch(event as MouseEvent));
+      button.addEventListener('click', () => deleteMatch);
     });
 
     document.querySelectorAll('button[name="edit"]').forEach(button => {
-      button.addEventListener('click', (event) => openEditModal(event as MouseEvent));
+      button.addEventListener('click', () => openEditModal);
     });
   }
 };

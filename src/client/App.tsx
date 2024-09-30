@@ -1,19 +1,19 @@
 import "./App.css";
 
-import reactLogo from "./assets/react.svg";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import {BrowserRouter as Router, Routes, Route, HashRouter} from 'react-router-dom';
+import Login from "./pages/login";
+import Dashboard from "./pages/dashboard";
+
 function App() {
 
   return (
       <>
-          <Router>
+          <HashRouter>
               <Routes>
-                  <Route exact path="/" element={<Login />} />
-                  <Route exact path="/dashboard" element={<Dashboard />} />
+                  <Route  path="/" element={<Login />} />
+                  <Route  path="/dashboard" element={<Dashboard />} />
               </Routes>
-          </Router>
+          </HashRouter>
 
       </>
   );
