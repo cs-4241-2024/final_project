@@ -6,17 +6,16 @@ import ReactDOM from "react-dom/client";
 
 import App from "./App";
 import Home from "./Home";
+import Login from "./login";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Router>
-      <nav>
-        <Link to="/Home">Home </Link>
-        <Link to="/app">App</Link>
-      </nav>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/app" element={<App />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/App" element={<App />} />
+        <Route path="/Login" element={<Login />} />
       </Routes>
     </Router>
 
