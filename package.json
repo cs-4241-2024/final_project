@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -w src/server -x tsx src/server/main.ts",
-    "start2": "cross-env NODE_ENV=production tsx src/server/main.ts",
-    "start": "serve -s build",
+    "server": "cross-env NODE_ENV=production tsx src/server/main.ts",
+    "start": "serve -s dist",
     "build": "vite build"
   },
   "dependencies": {
