@@ -1,4 +1,7 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 #root {
   max-width: 1280px;

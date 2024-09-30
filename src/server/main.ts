@@ -141,7 +141,6 @@ app.post( '/add', async (req: express.Request,res: express.Response) => {
 
 // assumes req.body takes form { _id:5d91fb30f3f81b282d7be0dd } etc.
 app.delete( '/remove', async (req: express.Request,res: express.Response) => {
-  console.log(req.body._id)
   const result = await collection.deleteOne({
     _id: ObjectId.createFromHexString( req.body._id )
   })
