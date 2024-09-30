@@ -7,6 +7,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import Home from "./Home";
 import Login from "./login";
+import About from "./About";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/Home" element={<Home />} />
         <Route path="/App" element={<App />} />
         <Route path="/Login" element={<Login />} />
+        <Route path="/About" element={<About />} />
       </Routes>
     </Router>
 
