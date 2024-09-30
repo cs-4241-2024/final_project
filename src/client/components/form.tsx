@@ -1,38 +1,39 @@
-import {generateMatches} from "./matches";
 import React from "react";
+import {Match} from "../../types/match";
 
 
-export const add = async function(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
+export default function form(setMatches: Function, matches: Match[]): React.ReactElement {
+    const add = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
 
-    const input = {
-        MatchType: document.querySelector('input[name="match-typeChange"]:checked') as HTMLInputElement,
-        MatchFormat: document.querySelector('input[name="match-formatChange"]:checked') as HTMLInputElement,
-        Match: document.getElementById('matchChange') as HTMLInputElement,
-        SchoolA: document.getElementById("schoolAChange") as HTMLInputElement,
-        SchoolB: document.getElementById("schoolBChange") as HTMLInputElement,
-        PlayerA1: document.getElementById("playerA1Change") as HTMLInputElement,
-        PlayerB1: document.getElementById("playerB1Change") as HTMLInputElement,
-        PlayerA2: document.getElementById("playerA2Change") as HTMLInputElement,
-        PlayerB2: document.getElementById("playerB2Change") as HTMLInputElement,
-        Game1A: document.getElementById("game1AChange") as HTMLInputElement,
-        Game1B: document.getElementById("game1BChange") as HTMLInputElement,
-        Game2A: document.getElementById("game2AChange") as HTMLInputElement,
-        Game2B: document.getElementById("game2BChange") as HTMLInputElement,
-        Game3A: document.getElementById("game3AChange") as HTMLInputElement,
-        Game3B: document.getElementById("game3BChange") as HTMLInputElement,
-    };
-    if(input.MatchType === null ||
-        input.MatchFormat === null ||
-        input.Match === null || input.Match.value === '' ||
-        input.SchoolA === null || input.SchoolA.value === '' ||
-        input.SchoolB === null || input.SchoolB.value === '' ||
-        input.PlayerA1 === null || input.PlayerA1.value === '' ||
-        input.PlayerB1 === null || input.PlayerB1.value === '') {
-        alert('Please fill out all required fields')
-        return
-    }
-    const json = {
+        const input = {
+            MatchType: document.querySelector('input[name="match-type"]:checked') as HTMLInputElement,
+            MatchFormat: document.querySelector('input[name="match-format"]:checked') as HTMLInputElement,
+            Match: document.getElementById('match') as HTMLInputElement,
+            SchoolA: document.getElementById("schoolA") as HTMLInputElement,
+            SchoolB: document.getElementById("schoolB") as HTMLInputElement,
+            PlayerA1: document.getElementById("playerA1") as HTMLInputElement,
+            PlayerB1: document.getElementById("playerB1") as HTMLInputElement,
+            PlayerA2: document.getElementById("playerA2") as HTMLInputElement,
+            PlayerB2: document.getElementById("playerB2") as HTMLInputElement,
+            Game1A: document.getElementById("game1A") as HTMLInputElement,
+            Game1B: document.getElementById("game1B") as HTMLInputElement,
+            Game2A: document.getElementById("game2A") as HTMLInputElement,
+            Game2B: document.getElementById("game2B") as HTMLInputElement,
+            Game3A: document.getElementById("game3A") as HTMLInputElement,
+            Game3B: document.getElementById("game3B") as HTMLInputElement,
+        };
+        // if(input.MatchType === null ||
+        //     input.MatchFormat === null ||
+        //     input.Match === null || input.Match.value === '' ||
+        //     input.SchoolA === null || input.SchoolA.value === '' ||
+        //     input.SchoolB === null || input.SchoolB.value === '' ||
+        //     input.PlayerA1 === null || input.PlayerA1.value === '' ||
+        //     input.PlayerB1 === null || input.PlayerB1.value === '') {
+        //     alert('Please fill out all required fields')
+        //     return
+        // }
+        const json = {
             MatchType: input.MatchType.value,
             MatchFormat: input.MatchFormat.value,
             Match: input.Match.value,
@@ -49,20 +50,21 @@ export const add = async function(event: React.MouseEvent<HTMLButtonElement>) {
             Game3A: input.Game3A.value,
             Game3B: input.Game3B.value,
         }
-    const body = JSON.stringify( json )
-    console.log(body)
+        const body = JSON.stringify( json )
+        console.log(body)
 
-    const response = await fetch( '/add', {
-        method:'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body
-    })
-    const data = await response.json()
-    console.log(data)
-    await generateMatches()
-}
+        const response = await fetch( '/add', {
+            method:'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body
+        })
+        const data = await response.json()
+        console.log(data)
+        setMatches([...matches, data]);
+        console.log(matches)
+    }
 
-export default function form() {
+
     return <form>
         <h2 className="is-size-4 is-flex is-justify-content-start is-align-items-start has-text-weight-semibold">Match
             Formatting:</h2>
@@ -185,7 +187,7 @@ export default function form() {
             </table>
         </div>
         <div className="mt-2 submit-clear flex-horizontal is-justify-content-end is-align-items-end">
-            <input type="submit" id="add" className="button is-link" value="Submit" onClick={() => add}/>
+            <button type="button" id="add" className="button is-link" value="Submit" onClick={add}>Submit</button>
             <button type="reset" className="ml-2 button is-link is-light">Clear</button>
         </div>
     </form>

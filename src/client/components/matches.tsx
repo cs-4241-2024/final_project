@@ -1,92 +1,89 @@
 import { openEditModal } from "./editModal";
-
-export const addMatch = function(data: any) {
-  const matchContainer = document.getElementById('matches-container');
-  if (matchContainer) {
-    const matchHTML = `
-      <div class="fixed-grid">
-        <div class="grid">
-          <div class="cell match-info is-col-span-3 is-inline is-size-5">
-            <p class="is-inline is-size-4">${data.SchoolA} -</p>
-            <p class="is-inline is-size-4">${data.SchoolB} -</p>
-            <p class="is-inline is-size-4"> ${data.Match} -</p>
-            <p class="is-inline is-size-4"> ${data.MatchType}</p>
+import { Match} from "../../types/match";
+import React, {useEffect} from "react";
+export function MatchComponent({data, deleteMatch}: {data: Match, deleteMatch: (event: React.MouseEvent<HTMLButtonElement>) => void}) {
+  return (
+      <div className="fixed-grid">
+        <div className="grid">
+          <div className="cell match-info is-col-span-3 is-inline is-size-5">
+            <p className="is-inline is-size-4">{data.SchoolA} -</p>
+            <p className="is-inline is-size-4">{data.SchoolB} -</p>
+            <p className="is-inline is-size-4"> {data.MatchType} -</p>
+            <p className="is-inline is-size-4"> {data.MatchFormat}</p>
           </div>
-          <div class="cell is-col-start-1">
+          <div className="cell is-col-start-1">
             <div>
-              <p class="is-inline-block">${data.SchoolA}</p>
-              ${data.winner === data.SchoolA ? '<p class="is-inline-block">✔</p>' : ''}
+              <p className="is-inline-block">{data.SchoolA}</p>
+              {data.winner === data.SchoolA ? <p className="is-inline-block">✔</p> : ''}
             </div>
             <div>
-              <p class="is-inline">${data.PlayerA1}</p>
-              ${data.PlayerA2 === '' ? '' : '<p class="is-inline"> / </p>'+'<p class="is-inline-block">'+data.PlayerA2+'</p>'}
+              <p className="is-inline">{data.PlayerA1}</p>
+              {data.PlayerA2 === '' ? '' : <p className="is-inline-block"> / {data.PlayerA2} + </p>}
             </div>
           </div>
-          <div class="cell columns is-gapless is-flex ">
-            <p class="column is-size-3">${data.Game1A}</p>
-            <p class="column is-size-3">${data.Game2A}</p>
-            ${data.Game3A === '0' && data.Game3B === '0' ? '' : '<h3 class="column is-size-3">' + data.Game3A+'</h3>'}
+          <div className="cell columns is-gapless is-flex ">
+            <p className="column is-size-3">{data.Game1A}</p>
+            <p className="column is-size-3">{data.Game2A}</p>
+            {data.Game3A === '0' && data.Game3B === '0' ? '' : <h3 className="column is-size-3"> {data.Game3A} </h3>}
           </div>
-          <button id="${data._id}" name="edit" class="cell is-1-one-fifth button is-warning">Edit</button>
-          <div class="cell is-col-start-1">
+          <button id={data._id} name="edit" className="cell is-1-one-fifth button is-warning" onClick={openEditModal}>Edit</button>
+          <div className="cell is-col-start-1">
             <div>
-              <p class="is-inline-block">${data.SchoolB}</p>
-              ${data.winner === data.SchoolB ? '<p class="is-inline-block">✔</p>' : ''}
+              <p className="is-inline-block">{data.SchoolB}</p>
+              {data.winner === data.SchoolB ? <p className="is-inline-block">✔</p> : ''}
             </div>
             <div>
-              <p class="is-inline">${data.PlayerB1}</p>
-              ${data.PlayerB2 === '' ? '' : '<p class="is-inline"> / </p>'+'<p class="is-inline-block">'+data.PlayerB2+'</p>'}
+              <p className="is-inline">{data.PlayerB1}</p>
+              {data.PlayerB2 === '' ? '' : <p className="is-inline-block"> {data.PlayerB2} </p>}
             </div>
           </div>
-          <div class="cell columns is-gapless is-flex is-justify-content-space-between">
-            <h3 class="column is-size-3">${data.Game1B}</h3>
-            <h3 class="column is-size-3">${data.Game2B}</h3>
-            ${data.Game3A === '0' && data.Game3B === '0' ? '' : '<h3 class="column is-size-3">' + data.Game3B+'</h3>'}
+          <div className="cell columns is-gapless is-flex is-justify-content-space-between">
+            <h3 className="column is-size-3">{data.Game1B}</h3>
+            <h3 className="column is-size-3">{data.Game2B}</h3>
+            {data.Game3A === '0' && data.Game3B === '0' ? '' : <h3 className="column is-size-3">{ data.Game3B} </h3>}
           </div>
-          <button id="${data._id}" name="delete" class="cell is-1-one-fifth button is-danger">Delete</button>
+          <button id={data._id} name="delete" className="cell is-1-one-fifth button is-danger" onClick={deleteMatch}>Delete</button>
         </div>
       </div>
-    `;
-    matchContainer.insertAdjacentHTML('beforeend', matchHTML);
-  }
-};
+  );
+}
 
-export const deleteMatch = async function(event: MouseEvent) {
-  event.preventDefault();
-  const matchId = (event.target as HTMLButtonElement).id;
-  const body = JSON.stringify({ _id: matchId });
-
-  const response = await fetch('/remove', {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body
-  });
-
-  const result = await response.json();
-  console.log(result);
-
-  await generateMatches();
-};
-
-export const generateMatches = async function() {
-  const matchContainer = document.getElementById('matches-container');
-  if (matchContainer) {
-    matchContainer.innerHTML = '';
-    const response = await fetch('/userMatches', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+export default function MatchesContainer(setMatches: Function, matches: Match[]) {
+  const fetchMatches = async () => {
+    const response = await fetch("/userMatches", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
     });
     const jsonData = await response.json();
-    jsonData.forEach((match: any) => {
-      addMatch(match);
+    setMatches(jsonData); // Set the matches from the server
+  };
+
+  const deleteMatch = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const matchId = (event.target as HTMLButtonElement).id;
+    const body = JSON.stringify({ _id: matchId });
+
+    const response = await fetch("/remove", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body,
     });
 
-    document.querySelectorAll('button[name="delete"]').forEach(button => {
-      button.addEventListener('click', () => deleteMatch);
-    });
+    const result = await response.json();
+    console.log(result);
 
-    document.querySelectorAll('button[name="edit"]').forEach(button => {
-      button.addEventListener('click', () => openEditModal);
-    });
-  }
-};
+    // After deletion, re-fetch or filter the state to update the UI
+    setMatches(matches.filter((match) => match._id !== matchId));
+  };
+
+  useEffect(() => {
+    fetchMatches(); // Fetch matches when the component mounts
+  }, []);
+
+  return (
+      <div id="matches-container">
+        {matches.map((matchData) => (
+            <MatchComponent key={matchData._id} data={matchData} deleteMatch={deleteMatch} />
+        ))}
+      </div>
+  );
+}

@@ -1,99 +1,19 @@
-import { generateMatches } from "./matches";
 import React from "react";
+import {Match} from "../../types/match";
 
-export const editMatch = async function(event: React.MouseEvent<HTMLButtonElement>) {
+export const openEditModal = async (event: React.MouseEvent<HTMLButtonElement>)=> {
   event.preventDefault();
-
-  const input = {
-    MatchType: document.querySelector('input[name="match-typeChange"]:checked') as HTMLInputElement,
-    MatchFormat: document.querySelector('input[name="match-formatChange"]:checked') as HTMLInputElement,
-    Match: document.getElementById('matchChange') as HTMLInputElement,
-    SchoolA: document.getElementById("schoolAChange") as HTMLInputElement,
-    SchoolB: document.getElementById("schoolBChange") as HTMLInputElement,
-    PlayerA1: document.getElementById("playerA1Change") as HTMLInputElement,
-    PlayerB1: document.getElementById("playerB1Change") as HTMLInputElement,
-    PlayerA2: document.getElementById("playerA2Change") as HTMLInputElement,
-    PlayerB2: document.getElementById("playerB2Change") as HTMLInputElement,
-    Game1A: document.getElementById("game1AChange") as HTMLInputElement,
-    Game1B: document.getElementById("game1BChange") as HTMLInputElement,
-    Game2A: document.getElementById("game2AChange") as HTMLInputElement,
-    Game2B: document.getElementById("game2BChange") as HTMLInputElement,
-    Game3A: document.getElementById("game3AChange") as HTMLInputElement,
-    Game3B: document.getElementById("game3BChange") as HTMLInputElement,
-  };
-
-  if (
-    !input.MatchType ||
-    !input.MatchFormat ||
-    !input.Match ||
-    !input.SchoolA ||
-    !input.SchoolB ||
-    !input.PlayerA1 ||
-    !input.PlayerB1 ||
-    input.Match.value === '' ||
-    input.SchoolA.value === '' ||
-    input.SchoolB.value === '' ||
-    input.PlayerA1.value === '' ||
-    input.PlayerB1.value === ''
-  ) {
-    alert('Please fill out all required fields');
-    return;
-  }
-
-  const matchId = (event.target as HTMLButtonElement).id;
-  const json = {
-    MatchType: input.MatchType.value,
-    MatchFormat: input.MatchFormat.value,
-    Match: input.Match.value,
-    SchoolA: input.SchoolA.value,
-    SchoolB: input.SchoolB.value,
-    PlayerA1: input.PlayerA1.value,
-    PlayerB1: input.PlayerB1.value,
-    PlayerA2: input.PlayerA2.value,
-    PlayerB2: input.PlayerB2.value,
-    Game1A: input.Game1A.value,
-    Game1B: input.Game1B.value,
-    Game2A: input.Game2A.value,
-    Game2B: input.Game2B.value,
-    Game3A: input.Game3A.value,
-    Game3B: input.Game3B.value,
-  };
-  const body = JSON.stringify(json);
-
-  const response = await fetch(`/update?id=${matchId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body,
-  });
-  const jsonData = await response.json();
-  console.log(jsonData);
-
-  const editModal = document.getElementById("editModal");
-  if (editModal) {
-    editModal.style.display = 'none';
-  }
-
-  await generateMatches().then(() => {
-    const editModal = document.getElementById("editModal");
-    if (editModal) {
-      editModal.style.display = 'none';
-    }
-  });
-};
-
-export const openEditModal = async function(event: React.MouseEvent<HTMLButtonElement>) {
-  event.preventDefault();
-  const editModal = document.getElementById('editModal');
-  if (editModal) {
-    editModal.style.display = 'block';
+  const editModalElement = document.getElementById('editModal');
+  if (editModalElement) {
+    editModalElement.style.display = 'block';
   }
   const docID = (event.target as HTMLButtonElement).id;
 
   const response = await fetch(`/getMatch?id=${docID}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
   });
-  const changeButton = document.querySelector('input[name="changeButton"]') as HTMLInputElement;
+  const changeButton = document.querySelector('button[name="changeButton"]') as HTMLInputElement;
   if (changeButton) {
     changeButton.id = docID;
   }
@@ -151,9 +71,101 @@ export const openEditModal = async function(event: React.MouseEvent<HTMLButtonEl
       doublesChange.checked = true;
     }
   }
-};
+}
 
-export default function editModal() {
+export default function editModal(setMatches:Function, matches: Match[]) {
+  const editMatch = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    const input = {
+      MatchType: document.querySelector('input[name="match-typeChange"]:checked') as HTMLInputElement,
+      MatchFormat: document.querySelector('input[name="match-formatChange"]:checked') as HTMLInputElement,
+      Match: document.getElementById('matchChange') as HTMLInputElement,
+      SchoolA: document.getElementById("schoolAChange") as HTMLInputElement,
+      SchoolB: document.getElementById("schoolBChange") as HTMLInputElement,
+      PlayerA1: document.getElementById("playerA1Change") as HTMLInputElement,
+      PlayerB1: document.getElementById("playerB1Change") as HTMLInputElement,
+      PlayerA2: document.getElementById("playerA2Change") as HTMLInputElement,
+      PlayerB2: document.getElementById("playerB2Change") as HTMLInputElement,
+      Game1A: document.getElementById("game1AChange") as HTMLInputElement,
+      Game1B: document.getElementById("game1BChange") as HTMLInputElement,
+      Game2A: document.getElementById("game2AChange") as HTMLInputElement,
+      Game2B: document.getElementById("game2BChange") as HTMLInputElement,
+      Game3A: document.getElementById("game3AChange") as HTMLInputElement,
+      Game3B: document.getElementById("game3BChange") as HTMLInputElement,
+    };
+
+    if (
+        !input.MatchType ||
+        !input.MatchFormat ||
+        !input.Match ||
+        !input.SchoolA ||
+        !input.SchoolB ||
+        !input.PlayerA1 ||
+        !input.PlayerB1 ||
+        input.Match.value === '' ||
+        input.SchoolA.value === '' ||
+        input.SchoolB.value === '' ||
+        input.PlayerA1.value === '' ||
+        input.PlayerB1.value === ''
+    ) {
+      alert('Please fill out all required fields');
+      return;
+    }
+
+    const matchId = (event.target as HTMLButtonElement).id;
+    console.log(matchId)
+    const json = {
+      MatchType: input.MatchType.value,
+      MatchFormat: input.MatchFormat.value,
+      Match: input.Match.value,
+      SchoolA: input.SchoolA.value,
+      SchoolB: input.SchoolB.value,
+      PlayerA1: input.PlayerA1.value,
+      PlayerB1: input.PlayerB1.value,
+      PlayerA2: input.PlayerA2.value,
+      PlayerB2: input.PlayerB2.value,
+      Game1A: input.Game1A.value,
+      Game1B: input.Game1B.value,
+      Game2A: input.Game2A.value,
+      Game2B: input.Game2B.value,
+      Game3A: input.Game3A.value,
+      Game3B: input.Game3B.value,
+    };
+    const body = JSON.stringify(json);
+
+
+
+    const response = await fetch(`/update?id=${matchId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+    const jsonData = await response.json();
+    console.log(jsonData);
+
+    const editModal = document.getElementById("editModal");
+    if (editModal) {
+      editModal.style.display = 'none';
+    }
+    console.log(jsonData)
+    const updatedMatches = matches.map((match) => {
+    if (match._id === matchId) {
+      return jsonData;
+    }
+    return match;
+  });
+
+  setMatches(updatedMatches);
+  };
+
+  const closeEditModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const editModal = document.getElementById('editModal');
+    if (editModal) {
+      editModal.style.display = 'none';
+    }
+  }
+
   return (
     <div id="editModal" className="modal">
       <div className="modal-background"></div>
@@ -273,12 +285,12 @@ export default function editModal() {
           </div>
 
           <div className="mt-2 submit-clear flex-horizontal is-justify-content-end is-align-items-end">
-            <input type="button" name="changeButton" className="changeButton button is-link" value="Change" />
-            <button type="button" className="cancel-modal ml-2 button is-link is-light">Cancel</button>
+            <button type="button" name="changeButton" className="changeButton button is-link" value="Change" onClick={editMatch} > Change</button>
+            <button type="button" className="cancel-modal ml-2 button is-link is-light" onClick={closeEditModal}>Cancel</button>
           </div>
         </form>
       </div>
-      <button className="modal-close is-large" aria-label="close"></button>
+      <button className="modal-close is-large" aria-label="close" onClick={closeEditModal}></button>
     </div>
   );
 }

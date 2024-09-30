@@ -1,24 +1,12 @@
 import "../App.css";
-import editModal, {editMatch} from "../components/editModal";
+import editModal from "../components/editModal";
 import form from "../components/form";
-import {generateMatches} from "../components/matches";
+import MatchesContainer from "../components/matches";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useState} from "react";
+import {Match} from "../../types/match";
+// import {useEffect, useState} from "react";
 
-window.onload = async function() {
-    // await generateMatches()
-    // const changeButton = document.querySelector('input[name="changeButton"]');
-    // changeButton.onclick = editMatch;
-    //
-    // document.querySelector('.modal-close').addEventListener('click', () => {
-    //     document.getElementById('editModal').style.display = 'none';
-    // });
-    // document.querySelector('.cancel-modal').addEventListener('click', () => {
-    //     document.getElementById('editModal').style.display = 'none';
-    // });
-
-
-}
 async function onLogout(navigate: Function) {
     console.log('Logging out');
     const response = await fetch('/logout', {
@@ -34,30 +22,7 @@ async function onLogout(navigate: Function) {
 
 function Dashboard() {
     const navigate = useNavigate()
-    useEffect(() => {
-        generateMatches();
-        const changeButton = document.querySelector('input[name="changeButton"]');
-        if (changeButton) {
-            (changeButton as HTMLButtonElement).onclick = () => editMatch;
-        }
-
-        const modalClose = document.querySelector('.modal-close');
-        const editModal = document.getElementById('editModal');
-        if (modalClose && editModal) {
-            modalClose.addEventListener('click', () => {
-                editModal.style.display = 'none';
-            });
-        }
-
-        const cancelModal = document.querySelector('.cancel-modal');
-        if (cancelModal && editModal) {
-            cancelModal.addEventListener('click', () => {
-                editModal.style.display = 'none';
-            });
-        }
-
-
-    }, []);
+    const [matches, setMatches] = useState<Match[]>([]);
     return (
         <>
             <h1 className="title is-family-primary is-size-1 pt-6 is-flex is-flex-direction-row">Submit your Match!
@@ -65,11 +30,9 @@ function Dashboard() {
             </h1>
             <div>
 
-                {form()}
-                <div id="matches-container">
-
-                </div>
-                {editModal()}
+                {form(setMatches,matches)}
+                {MatchesContainer(setMatches,matches)}
+                {editModal(setMatches, matches)}
 
             </div>
         </>

@@ -134,15 +134,16 @@ app.post( '/add', async (req: express.Request,res: express.Response) => {
   // Add the winner to the match data
   matchData.winner = winner;
   matchData.owner = req.session.user;
-  console.log(matchData)
   const result = await collection.insertOne( matchData )
-  res.json( result )
+  matchData._id =result.insertedId
+  res.json( matchData )
 })
 
 // assumes req.body takes form { _id:5d91fb30f3f81b282d7be0dd } etc.
 app.delete( '/remove', async (req: express.Request,res: express.Response) => {
+  console.log(req.body._id)
   const result = await collection.deleteOne({
-    _id:new ObjectId( req.body._id )
+    _id: ObjectId.createFromHexString( req.body._id )
   })
 
   res.json( result )
@@ -153,8 +154,10 @@ app.get('/getMatch', async (req: express.Request, res: express.Response) => {
   if (!matchId) {
     return res.status(400).json({ error: 'Match ID is required' });
   }
-
-  const match = await collection.findOne({ _id: ObjectId.createFromHexString(matchId) });
+  let match = null;
+  if (typeof matchId === "string") {
+    match = await collection.findOne({_id: ObjectId.createFromHexString(matchId)});
+  }
   // const match = await collection.findOne({ _id: matchId });
   if (!match) {
     return res.status(404).json({ error: 'Match not found' });
@@ -163,7 +166,7 @@ app.get('/getMatch', async (req: express.Request, res: express.Response) => {
   res.json(match);
 });
 
-app.post( '/update', async (req: express.Request,res: express.Response) => {
+app.post( '/update', async (req: express.Request, res: express.Response) => {
   const matchData = req.body;
   const matchId = req.query.id;
   // Logic to determine the winner
@@ -180,14 +183,17 @@ app.post( '/update', async (req: express.Request,res: express.Response) => {
 
   // Add the winner to the match data
   matchData.winner = winner;
+  let result = null;
+  if (typeof matchId === "string") {
+    result = await collection.updateOne(
+        {_id: ObjectId.createFromHexString(matchId)},
+        // { _id: matchId },
+        {$set: matchData}
+    )
+  }
+  matchData._id = matchId;
 
-  const result = await collection.updateOne(
-      { _id: ObjectId.createFromHexString(matchId) },
-      // { _id: matchId },
-      { $set: matchData }
-  )
-
-  res.json( result )
+  res.json( matchData )
 })
 
 ViteExpress.listen( app, 3000 )
