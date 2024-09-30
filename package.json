@@ -4,12 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/server/main.ts -w src/server",
-    "start": "node src/server/main.ts",
+    "dev": "nodemon --exec npx ts-node src/server/main.ts -w src/server",
+    "start": "nodemon --exec npx ts-node src/server/main.ts",
     "build": "vite build"
-  },
-  "engines": {
-    "node": "16.x"
   },
   "dependencies": {
     "cookie-session": "^2.1.0",
@@ -26,6 +23,7 @@
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^4.2.0",
     "nodemon": "^3.0.1",
+    "typescript": "^5.5.3",
     "vite": "^5.0.2"
   }
 }

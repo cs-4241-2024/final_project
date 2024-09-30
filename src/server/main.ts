@@ -3,11 +3,10 @@ import 'dotenv/config'
 import express from 'express'
 import ViteExpress from 'vite-express'
 import cookie from 'cookie-session'
-import { MongoClient, ObjectId } from 'mongodb'
+import { MongoClient, ObjectId, Collection} from 'mongodb'
 const app = express()
 
-app.use(express.static('views'))
-app.use(express.static('public'))
+app.use(express.static('src'))
 // app.use(express.static('dist'))
 app.use(express.json())
 
@@ -16,13 +15,13 @@ app.use(express.json())
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env.HOST}`
 const client = new MongoClient( uri )
 
-let collection = null
-let loginData = null
+let collection: Collection
+let loginData: Collection
 
 async function run() {
   await client.connect()
-  collection = await client.db("assignment3").collection("matches")
-  loginData = await client.db("assignment3").collection("login-info")
+  collection = client.db("assignment3").collection("matches")
+  loginData = client.db("assignment3").collection("login-info")
 
 
 }
@@ -41,7 +40,7 @@ app.use( cookie({
   name: 'session',
   keys: ['key1', 'key2']
 }))
-app.post( '/login', async (req,res)=> {
+app.post( '/login', async (req: express.Request,res: express.Response)=> {
   // express.urlencoded will put your key value pairs
   // into an object, where the key is the name of each
   // form field and the value is whatever the user entered
@@ -85,7 +84,7 @@ app.post( '/login', async (req,res)=> {
 // res.sendFile( __dirname + '/public/main.html' )
 // })
 
-app.use('/newLogin', async (req, res) => {
+app.use('/newLogin', async (req: express.Request, res: express.Response) => {
   console.log( req.body )
 
   const result = await loginData.insertOne( req.body )
@@ -93,12 +92,12 @@ app.use('/newLogin', async (req, res) => {
 
 })
 
-app.get('/logout', (req, res) => {
+app.get('/logout', (req: express.Request, res: express.Response) => {
   req.session = null; // Clear the session
   res.redirect('/'); // Redirect to the root URL
 });
 
-app.get('/userMatches', async (req, res) => {
+app.get('/userMatches', async (req: express.Request, res: express.Response) => {
   if (!req.session.login) {
     return res.status(401).send('Unauthorized');
   }
@@ -110,14 +109,14 @@ app.get('/userMatches', async (req, res) => {
 
 
 // route to get all docs
-app.get("/docs", async (req, res) => {
+app.get("/docs", async (req: express.Request, res: express.Response) => {
   if (collection !== null) {
     const docs = await collection.find({}).toArray()
     res.json( docs )
   }
 })
 
-app.post( '/add', async (req,res) => {
+app.post( '/add', async (req: express.Request,res: express.Response) => {
   const matchData = req.body;
 
   // Logic to determine the winner
@@ -141,7 +140,7 @@ app.post( '/add', async (req,res) => {
 })
 
 // assumes req.body takes form { _id:5d91fb30f3f81b282d7be0dd } etc.
-app.delete( '/remove', async (req,res) => {
+app.delete( '/remove', async (req: express.Request,res: express.Response) => {
   const result = await collection.deleteOne({
     _id:new ObjectId( req.body._id )
   })
@@ -149,13 +148,14 @@ app.delete( '/remove', async (req,res) => {
   res.json( result )
 })
 
-app.get('/getMatch', async (req, res) => {
+app.get('/getMatch', async (req: express.Request, res: express.Response) => {
   const matchId = req.query.id;
   if (!matchId) {
     return res.status(400).json({ error: 'Match ID is required' });
   }
 
-  const match = await collection.findOne({ _id: new ObjectId(matchId) });
+  const match = await collection.findOne({ _id: ObjectId.createFromHexString(matchId) });
+  // const match = await collection.findOne({ _id: matchId });
   if (!match) {
     return res.status(404).json({ error: 'Match not found' });
   }
@@ -163,7 +163,7 @@ app.get('/getMatch', async (req, res) => {
   res.json(match);
 });
 
-app.post( '/update', async (req,res) => {
+app.post( '/update', async (req: express.Request,res: express.Response) => {
   const matchData = req.body;
   const matchId = req.query.id;
   // Logic to determine the winner
@@ -182,7 +182,8 @@ app.post( '/update', async (req,res) => {
   matchData.winner = winner;
 
   const result = await collection.updateOne(
-      { _id: new ObjectId( matchId ) },
+      { _id: ObjectId.createFromHexString(matchId) },
+      // { _id: matchId },
       { $set: matchData }
   )
 
