@@ -1,4 +1,4 @@
-import "./App.css";
+import "../App.css";
 import editModal, {editMatch} from "../components/editModal";
 import form from "../components/form";
 import {generateMatches} from "../components/matches";
@@ -19,8 +19,8 @@ window.onload = async function() {
 
 
 }
-async function onLogout(event: Event, navigate: Function) {
-
+async function onLogout(navigate: Function) {
+    console.log('Logging out');
     const response = await fetch('/logout', {
         method: 'GET',
     });
@@ -61,7 +61,7 @@ function Dashboard() {
     return (
         <>
             <h1 className="title is-family-primary is-size-1 pt-6 is-flex is-flex-direction-row">Submit your Match!
-                <button id="logoutButton" className="button is-info" onClick={() => onLogout}>Logout</button>
+                <button id="logoutButton" className="button is-info" onClick={() =>onLogout(navigate)}>Logout</button>
             </h1>
             <div>
 
