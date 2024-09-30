@@ -1,45 +1,56 @@
 import "./Home.css";
 import { Button } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+import { IconButton } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { createTheme } from '@mui/material/styles';
 // index.js
 
 import { useState } from "react";
 
+let theme = createTheme({
+  // Theme customization goes here as usual, including tonalOffset and/or
+  // contrastThreshold as the augmentColor() function relies on these
+});
+
+theme = createTheme(theme, {
+  // Custom colors created with augmentColor go here
+  palette: {
+    salmon: theme.palette.augmentColor({
+      color: {
+        main: '#554481',
+      },
+      name: 'purple',
+    }),
+  },
+});
+
+
 function Home() {
+  const navigate = useNavigate();
   return (
-    <div className="root">
-      <div className="content">
-        <div className="home-section">
-          <div className="title-header">
-            <div className="title">Home</div>
-            <div className="icon-button">
-              <div className="container">
-                <div className="state-layer"></div>
-              </div>
-            </div>
-          </div>
-          <div className="carousel">
-            {/* <div className="carousel-item item-1"></div>
-            <div className="carousel-item item-2"></div>
-            <div className="carousel-item item-3"></div>
-            <div className="carousel-item item-last"></div> */}
-          </div>
-        </div>
-        <div className="details-section">
-          <div className="details">
-            <div className="text-content">
-              <div className="label">Details Label</div>
-              <div className="supporting-text">Supporting text for the details section.</div>
-            </div>
-          </div>
-          <div className="button">
-            <div className="state-layer">
-              <div className="label-text">Button Label</div>
-            </div>
-          </div>
+    <div className="main">
+        <IconButton
+          className="back-button"
+          aria-label="back to home"
+          onClick={() => {
+            console.log("back button clicked");
+            navigate('/Login');
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <div className="navigation">
+        <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+    console.log("Login button clicked");
+    navigate('/Editor');
+  }}> 
+  Create your own personal WPI Tracking Sheet here
+  </Button>
+
         </div>
       </div>
-    </div>
-  )
+  );
 }
 
 export default Home;
