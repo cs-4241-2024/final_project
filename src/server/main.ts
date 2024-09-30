@@ -4,6 +4,7 @@ import mongoose, {PassportLocalDocument} from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
 import passport from "passport";
 import dotenv from "dotenv";
+import cookie from "cookie-session";
 dotenv.config();
 
 // @ts-ignore
@@ -35,6 +36,10 @@ async function run() {
     } else {
         throw new Error("Mongoose not connected");
     }
+
+    app.use(cookie({
+        secret: process.env.SESSION_SECRET
+    }));
 
     app.post("/addUser", express.json(), async (req: express.Request, res: express.Response) => {
         const newUser: PassportLocalDocument = new User({username: req.body.username}) as PassportLocalDocument;
