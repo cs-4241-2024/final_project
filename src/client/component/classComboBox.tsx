@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-import { allCourses } from './allCourses';
+import allCourses from '../data/allCourses';
 
 export default function ComboBox() {
   return (

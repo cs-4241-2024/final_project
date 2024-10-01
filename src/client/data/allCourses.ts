@@ -27411,4 +27411,4 @@ const allCourses = [
     }
 ];
 
-module.exports = allCourses;
+export default allCourses;
