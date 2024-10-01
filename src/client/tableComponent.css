@@ -39,7 +39,7 @@
     left: 20px;
     z-index: 999;  /* Ensure it's on top of other elements */
 }
-.navigation-button {
+.editor-button {
     padding: 10px;
     background-color: #554481;
     color: white;
@@ -49,12 +49,13 @@
     cursor: pointer;
     transition: background-color 0.3s;
     height: 40px;
-    width: 500px;
+    width: 250px;
   }
 
-.navigation{
+.editor-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     margin-top: 20px;
+    
 }
