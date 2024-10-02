@@ -1,9 +1,11 @@
 import Header from "./components/Header";
+import WeeklyCalendar from "./components/WeeklyCalendar";
 
 function App() {
     return (
         <div>
-            <Header></Header>
+            <Header />
+            <WeeklyCalendar />
         </div>
     );
 }
