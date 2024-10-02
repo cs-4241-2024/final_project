@@ -6,7 +6,8 @@ const {
     updatePlaylist,
     deletePlaylist,
     getAllPlaylists,
-    addSongToPlaylist
+    addSongToPlaylist,
+    getSongsInPlaylist
 } = require('../controllers/playlistControllers');
 
 // get playlist by id
@@ -26,5 +27,8 @@ router.get('/', getAllPlaylists);
 
 // add song to playlist
 router.post('/:id/add-song', addSongToPlaylist);
+
+// get all songs in a playlist by id
+router.get('/:playlistId/songs', getSongsInPlaylist);
 
 module.exports = router;
