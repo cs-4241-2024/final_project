@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5E0E0;
+}
+
+.container {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #EABDBD;
+    width: 100px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Align content within sidebar vertically */
+    padding-top: 10px; /* Optional: add some spacing at the top */
+}
+
+#groupButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sidebar button {
+    background-color: #D08F8F;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin: 10px 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.sidebar .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sidebar button img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Main content */
+.main {
+    flex: 1;
+    padding: 20px;
+}
+
+.group-header {
+    background-color: #EABDBD;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.group-header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.group-header p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Calendar and Tasks section */
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.calendar, .tasks {
+    background-color: #EABDBD;
+    padding: 20px;
+    border-radius: 10px;
+    width: 48%;
+}
+
+.calendar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.calendar .day {
+    background-color: #8D443E;
+    color: white;
+    width: 30%;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.tasks {
+    background-color: #B67979;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tasks h3 {
+    margin-bottom: 10px;
+}
+
+.tasks ul {
+    list-style-type: none;
+}
+
+.tasks li {
+    margin-bottom: 10px;
+}
+
+/* Footer */
+.footer {
+    position: absolute;
+    bottom: 20px;
+}

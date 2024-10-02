@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Group Task Manager</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div id = "groupButtons">
+                <button id="btnGroup1">G1</button>
+                <button id="btnGroup2">G2</button>
+                <button id="btnGroup3">G3</button>
+                <button id="btnAddGroup">+</button>
+            </div>
+            <div class="footer">
+                <button><svg width="18px" height="18px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="miter"><polyline points="14 7 14 2 2 2 2 22 14 22 14 17"></polyline><line x1="10" y1="12" x2="22" y2="12"></line><polyline points="18 8 22 12 18 16"></polyline></svg></button>
+                <button><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-wide" viewBox="0 0 16 16"><path d="M8.932.727c-.243-.97-1.62-.97-1.864 0l-.071.286a.96.96 0 0 1-1.622.434l-.205-.211c-.695-.719-1.888-.03-1.613.931l.08.284a.96.96 0 0 1-1.186 1.187l-.284-.081c-.96-.275-1.65.918-.931 1.613l.211.205a.96.96 0 0 1-.434 1.622l-.286.071c-.97.243-.97 1.62 0 1.864l.286.071a.96.96 0 0 1 .434 1.622l-.211.205c-.719.695-.03 1.888.931 1.613l.284-.08a.96.96 0 0 1 1.187 1.187l-.081.283c-.275.96.918 1.65 1.613.931l.205-.211a.96.96 0 0 1 1.622.434l.071.286c.243.97 1.62.97 1.864 0l.071-.286a.96.96 0 0 1 1.622-.434l.205.211c.695.719 1.888.03 1.613-.931l-.08-.284a.96.96 0 0 1 1.187-1.187l.283.081c.96.275 1.65-.918.931-1.613l-.211-.205a.96.96 0 0 1 .434-1.622l.286-.071c.97-.243.97-1.62 0-1.864l-.286-.071a.96.96 0 0 1-.434-1.622l.211-.205c.719-.695.03-1.888-.931-1.613l-.284.08a.96.96 0 0 1-1.187-1.186l.081-.284c.275-.96-.918-1.65-1.613-.931l-.205.211a.96.96 0 0 1-1.622-.434zM8 12.997a4.998 4.998 0 1 1 0-9.995 4.998 4.998 0 0 1 0 9.996z"/></svg></button>
+                <button><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 8.5C15 10.433 13.433 12 11.5 12C9.567 12 8 10.433 8 8.5C8 6.567 9.567 5 11.5 5C13.433 5 15 6.567 15 8.5Z" fill="#000000"/><path d="M17.6305 20H5.94623C5.54449 20 5.31716 19.559 5.56788 19.2451C6.68379 17.8479 9.29072 15 12 15C14.7275 15 17.0627 17.8864 18.0272 19.2731C18.2474 19.5897 18.0161 20 17.6305 20Z" fill="#000000" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="main">
+            <!-- Group Header -->
+            <div class="group-header">
+                <h1>Welcome User</h1>
+                <p>Member Names: m1, m2, m3</p>
+            </div>
+                <!-- Group 1 Content -->
+            <div id="group1" class="content active">
+                <div class="calendar">
+                    <div class="day">Day 1</div>
+                    <div class="day">Day 2</div>
+                    <div class="day">Day 3</div>
+                </div>
+
+                <div class="tasks">
+                    <h3>Tasks for the day</h3>
+                    <ul>
+                        <li>Thing 1</li>
+                        <li>Thing 2</li>
+                        <li>Thing 3</li>
+                        <li>Thing 4</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Group 2 Content -->
+            <div id="group2" class="content">
+                <div class="calendar">
+                    <div class="day">Group 2 - Day 1</div>
+                    <div class="day">Group 2 - Day 2</div>
+                    <div class="day">Group 2 - Day 3</div>
+                </div>
+
+                <div class="tasks">
+                    <h3>Group 2 Tasks</h3>
+                    <ul>
+                        <li>Task A</li>
+                        <li>Task B</li>
+                        <li>Task C</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Group 3 Content -->
+            <div id="group3" class="content">
+                <div class="calendar">
+                    <div class="day">Group 3 - Day 1</div>
+                    <div class="day">Group 3 - Day 2</div>
+                    <div class="day">Group 3 - Day 3</div>
+                </div>
+
+                <div class="tasks">
+                    <h3>Group 3 Tasks</h3>
+                    <ul>
+                        <li>Task X</li>
+                        <li>Task Y</li>
+                        <li>Task Z</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Add Group Content -->
+            <div id="addGroup" class="content">
+                <h3>Create a New Group</h3>
+                <p>Here you can add a new group and manage it.</p>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
