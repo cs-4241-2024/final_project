@@ -15,13 +15,43 @@ html, body {
     width: 100vw;
 }
     
-.div1 { grid-area: 1 / 1 / 2 / 4; }
+.div1 { 
+    grid-area: 1 / 1 / 2 / 4; 
+    background-color: #50341f;
+}
 
-.div2 { grid-area: 2 / 1 / 4 / 2; }
+.div2, .div3, .div4 {
+    background-image: url(./assets/brown-stone-modern-pattern-brick.jpg);
+    background-position: left;
+    background-size: cover;
+}
 
-.div3 { grid-area: 2 / 2 / 4 / 3; }
+.div2 { 
+    grid-area: 2 / 1 / 4 / 2; 
+    position: relative;
+    
+}
 
-.div4 { grid-area: 2 / 3 / 4 / 4; }
+.div3 { 
+    grid-area: 2 / 2 / 4 / 3; 
+    position: relative;
+}
+
+.div4 { 
+    grid-area: 2 / 3 / 4 / 4;
+    position: relative;
+}
+
+.arch {
+    background-image: url(./assets/archUpdated.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
 
 .div5 { 
     grid-area: 4 / 1 / 5 / 4; 
