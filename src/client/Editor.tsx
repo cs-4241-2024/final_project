@@ -28,40 +28,54 @@ theme = createTheme(theme, {
 });
 
 
-function Editor() {
+
+
+const Editor: React.FC = () => {
   const navigate = useNavigate();
+  const [rowNum, setRowNum] = useState(5);
+  const [tableData, setTableData] = useState<string[]>([]);
+
+  const handleClearData = () => {
+    setRowNum(5); // Reset row number to initial value
+    setTableData([]); // Clear table data
+    console.log("All components have been reset");
+  };
   return (
-    <div className="main">
-      <IconButton
-        className="back-button"
-        aria-label="back to home"
-        onClick={() => {
-          console.log("back button clicked");
-          navigate('/Home');
-        }}
-      >
-        <ArrowBackIcon />
-      </IconButton>
-      <div className="editor-container">
-        <Button
-          variant="contained"
-          type="submit"
-          className="editor-button"
-          sx={{ backgroundColor: 'purple', color: 'white' }}
-          onClick={() => {
-            console.log("Clear current data button clicked");
-          }}
-        >
-          Clear current data
-        </Button>
+    <div className="editor">
+      <div className="main">
+        <div className="editor-container">
+          <IconButton
+            className="back-button"
+            aria-label="back to home"
+            onClick={() => {
+              console.log("back button clicked");
+              navigate('/Home');
+            }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <div className="editor-container">
+            <Button
+              variant="contained"
+              type="submit"
+              className="editor-button"
+              sx={{ backgroundColor: 'purple', color: 'white' }}
+              onClick={handleClearData}
+            >
+              Clear current data
+            </Button>
 
-        <FileUploadButton />
+            <FileUploadButton />
+            <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
 
 
+          </div>
+        </div>
       </div>
-      <TableComponent name="Table 1" rowNum={5} />
+      <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
+      <TableComponent name="My Table 2" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
     </div>
   );
-}
+};
 
 export default Editor;

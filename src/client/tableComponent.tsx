@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-const TableComponent: React.FC<{ name: string; rowNum: number }> = ({ name, rowNum }) => {
+const TableComponent: React.FC<{ name: string; rowNum: number; tableData: string[]; setTableData: React.Dispatch<React.SetStateAction<string[]>> }> = ({ name, rowNum, tableData, setTableData }) => {
   const [inputValue, setInputValue] = useState("");
-  const [rows, setRows] = useState<string[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
 
@@ -12,7 +11,7 @@ const TableComponent: React.FC<{ name: string; rowNum: number }> = ({ name, rowN
 
   const handleAddRow = () => {
     if (inputValue.trim() !== "") {
-      setRows([...rows, inputValue]);
+      setTableData([...tableData, inputValue]);
       setInputValue("");
     }
   };
@@ -23,19 +22,19 @@ const TableComponent: React.FC<{ name: string; rowNum: number }> = ({ name, rowN
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
-    setEditValue(rows[index]);
+    setEditValue(tableData[index]);
   };
 
   const handleSave = (index: number) => {
-    const updatedRows = [...rows];
+    const updatedRows = [...tableData];
     updatedRows[index] = editValue;
-    setRows(updatedRows);
+    setTableData(updatedRows);
     setEditIndex(null);
   };
 
   const handleDelete = (index: number) => {
-    const updatedRows = rows.filter((_, rowIndex) => rowIndex !== index);
-    setRows(updatedRows);
+    const updatedRows = tableData.filter((_, rowIndex) => rowIndex !== index);
+    setTableData(updatedRows);
   };
 
   return (
@@ -49,7 +48,7 @@ const TableComponent: React.FC<{ name: string; rowNum: number }> = ({ name, rowN
       <button onClick={handleAddRow}>Add to Table</button>
       <table>
         <tbody>
-          {rows.map((row, rowIndex) => (
+          {tableData.map((row, rowIndex) => (
             <tr key={rowIndex}>
               <td>Cell {rowIndex + 1}-1</td>
               <td>{row}</td>
