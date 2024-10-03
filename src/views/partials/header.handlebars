@@ -1,0 +1,17 @@
+<div class="navbar bg-neutral" style="padding-left: 16px; padding-right: 8px;">
+  <div class="navbar-start">
+    <div class="badge badge-neutral">{{ username }}</div>
+  </div>
+  <div class="navbar-center">
+    <a href="/" class="btn btn-neutral text-xl">Kitchen Inventory</a>
+  </div>
+  <div class="navbar-end">
+    <div>
+      <form action="/api/logout" method="POST">
+        <button class="btn" type="submit">
+          Logout
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

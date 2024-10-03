@@ -1,7 +1,11 @@
 import Database from "better-sqlite3";
 import crypto from "crypto";
+import { promisify } from 'util';
+import { Food, FoodWithID, Location } from "./types";
 
-const db = new Database("../db.sqlite", { verbose: console.log });
+const pbkdf2 = promisify(crypto.pbkdf2);
+
+const db = new Database("db.sqlite", { verbose: console.log });
 makeUserTable();
 makeFoodsTable();
 makeLocationsTable();
@@ -14,8 +18,9 @@ function generateSalt(): string {
   return crypto.randomBytes(16).toString("hex");
 }
 
-function hashPassword(password: string, salt: string): string {
-  return crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+async function hashPassword(password: string, salt: string): Promise<string> {
+  const buffer = await pbkdf2(password, salt, 1000, 64, 'sha512');
+  return buffer.toString('hex');
 }
 
 function makeUserTable(): void {
@@ -35,7 +40,7 @@ function makeLocationsTable(): void {
     CREATE TABLE IF NOT EXISTS locations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
-      name TEXT,
+      name TEXT NOT NULL UNIQUE,
       FOREIGN KEY (user_id) REFERENCES users(id)
     );
   `);
@@ -46,7 +51,7 @@ function makeFoodsTable(): void {
     CREATE TABLE IF NOT EXISTS foods (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
-      name TEXT,
+      name TEXT NOT NULL UNIQUE,
       category TEXT,
       quantity INTEGER,
       wanted_quantity INTEGER,
@@ -58,26 +63,33 @@ function makeFoodsTable(): void {
   `);
 }
 
-export function makeUser(username: string, password: string): number {
+/** returns userID if successful, else null */
+export async function makeUser(username: string, password: string): Promise<number | null> {
   const salt = generateSalt();
-  const passwordHash = hashPassword(password, salt);
+  const passwordHash = await hashPassword(password, salt);
 
   const stmt = db.prepare(`
     INSERT INTO users (username, password_hash, salt)
     VALUES (?, ?, ?)
   `);
 
-  const result = stmt.run(username, passwordHash, salt);
-  return result.lastInsertRowid as number;
+  try {
+    const result = stmt.run(username, passwordHash, salt);
+    return result.lastInsertRowid as number;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return null;
+  }
 }
 
-export function getUsername(userID: number): string | null {
+export async function getUsername(userID: number): Promise<string | null> {
   const stmt = db.prepare("SELECT username FROM users WHERE id = ?");
   const result = stmt.get(userID) as { username: string } | undefined;
   return result ? result.username : null;
 }
 
-export function tryLogin(username: string, password: string): number | null {
+/** returns userID if successful, else null */
+export async function tryLogin(username: string, password: string): Promise<number | null> {
   const stmt = db.prepare(
     "SELECT id, password_hash, salt FROM users WHERE username = ?",
   );
@@ -87,12 +99,11 @@ export function tryLogin(username: string, password: string): number | null {
 
   if (!user) return null;
 
-  const attemptedHash = hashPassword(password, user.salt);
+  const attemptedHash = await hashPassword(password, user.salt);
   return attemptedHash === user.password_hash ? user.id : null;
 }
 
-
-export function makeLocation(userID: number, name: string): boolean {
+export async function makeLocation(userID: number, name: string): Promise<number | null> {
   const stmt = db.prepare(`
     INSERT INTO locations (user_id, name)
     VALUES (?, ?)
@@ -100,14 +111,18 @@ export function makeLocation(userID: number, name: string): boolean {
 
   try {
     const result = stmt.run(userID, name);
-    return result.changes > 0;
+    return result.lastInsertRowid as number;
   } catch (error) {
     console.error("Error creating location:", error);
-    return false;
+    return null;
   }
 }
 
-export function editLocation(userID: number, locationID: number, name: string): boolean {
+export async function editLocation(
+  userID: number,
+  locationID: number,
+  name: string,
+): Promise<boolean> {
   const stmt = db.prepare(`
     UPDATE locations
     SET name = ?
@@ -123,7 +138,7 @@ export function editLocation(userID: number, locationID: number, name: string): 
   }
 }
 
-export function deleteLocation(userID: number, locationID: number): boolean {
+export async function deleteLocation(userID: number, locationID: number): Promise<boolean> {
   const stmt = db.prepare(`
     DELETE FROM locations
     WHERE id = ? AND user_id = ?
@@ -138,21 +153,25 @@ export function deleteLocation(userID: number, locationID: number): boolean {
   }
 }
 
-export function makeFood(
+export async function makeFood(
   userID: number,
-  locationID: number,
-  name: string,
-  category: string,
-  quantity: number,
-  wantedQuantity: number
-): boolean {
+  food: Food
+): Promise<boolean> {
   const stmt = db.prepare(`
-    INSERT INTO foods (user_id, location_id, name, category, quantity, wanted_quantity)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO foods (user_id, location_id, name, category, quantity, wanted_quantity, unit_price)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
 
   try {
-    const result = stmt.run(userID, locationID, name, category, quantity, wantedQuantity);
+    const result = stmt.run(
+      userID,
+      food.locationID,
+      food.name,
+      food.category,
+      food.quantity,
+      food.wantedQuantity,
+      food.unitPrice,
+    );
     return result.changes > 0;
   } catch (error) {
     console.error("Error creating food:", error);
@@ -160,23 +179,27 @@ export function makeFood(
   }
 }
 
-export function editFood(
+export async function editFood(
   userID: number,
-  foodID: number,
-  locationID: number,
-  name: string,
-  category: string,
-  quantity: number,
-  wantedQuantity: number
-): boolean {
+  food: FoodWithID,
+): Promise<boolean> {
   const stmt = db.prepare(`
     UPDATE foods
-    SET location_id = ?, name = ?, category = ?, quantity = ?, wanted_quantity = ?
+    SET location_id = ?, name = ?, category = ?, quantity = ?, wanted_quantity = ?, unit_price = ?
     WHERE id = ? AND user_id = ?
   `);
 
   try {
-    const result = stmt.run(locationID, name, category, quantity, wantedQuantity, foodID, userID);
+    const result = stmt.run(
+      food.locationID,
+      food.name,
+      food.category,
+      food.quantity,
+      food.wantedQuantity,
+      food.unitPrice,
+      food.foodID,
+      userID,
+    );
     return result.changes > 0;
   } catch (error) {
     console.error("Error editing food:", error);
@@ -184,7 +207,7 @@ export function editFood(
   }
 }
 
-export function deleteFood(userID: number, foodID: number): boolean {
+export async function deleteFood(userID: number, foodID: number): Promise<boolean> {
   const stmt = db.prepare(`
     DELETE FROM foods
     WHERE id = ? AND user_id = ?
@@ -196,5 +219,40 @@ export function deleteFood(userID: number, foodID: number): boolean {
   } catch (error) {
     console.error("Error deleting food:", error);
     return false;
+  }
+}
+
+export async function getFoods(userID: number, locationID: number): Promise<Food[]> {
+  const stmt = db.prepare(`
+    SELECT name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
+    FROM foods
+    WHERE user_id = ? AND location_id = ?
+  `);
+
+  try {
+    const foods = stmt.all(userID, locationID) as Food[];
+    return foods;
+  } catch (error) {
+    console.error("Error fetching foods:", error);
+    return [];
+  }
+}
+
+export async function getLocations(userID: number): Promise<Location[]> {
+  const stmt = db.prepare(`
+    SELECT id, name
+    FROM locations
+    WHERE user_id = ?
+  `);
+
+  try {
+    const locations = stmt.all(userID) as { id: number; name: string }[];
+    return locations.map((location) => ({
+      id: location.id,
+      name: location.name
+    } as Location));
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    return [];
   }
 }
