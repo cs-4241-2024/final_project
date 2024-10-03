@@ -1,8 +1,7 @@
 import express from "express";
 import ViteExpress from "vite-express";
-import mongoose, {PassportLocalDocument, PassportLocalModel, PassportLocalSchema} from "mongoose";
+import mongoose, {PassportLocalDocument} from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
-import {Strategy as LocalStrategy} from "passport-local";
 import passport from "passport";
 import dotenv from "dotenv";
 dotenv.config();
