@@ -15,9 +15,9 @@ Our idea for the application will likely change as we develop the application, b
 
 ## Technology Stack
 
- - [Svelte](https://svelte.dev/): front-end framework
- - [SvelteKit](https://kit.svelte.dev): similar to NextJS, a framework to help with SSR and routing
- - [Flowbite](https://flowbite-svelte.com/): UI components
+ - [Express.js](https://expressjs.com): web/server framework
+ - [Handlebars](https://handlebarsjs.com/): HTML templating
+ - [daisyUI](https://daisyui.com/) (tailwind): UI components
+ - [HTMX](https://daisyui.com/): javascript behavior in HTML attributes
  - [SQLite](https://www.sqlite.org/): lightweight file-based database
- - [Auth.js](https://authjs.dev/): authentication
  - __Self Hosted__: the superior hosting method

@@ -8,17 +8,8 @@
  - Ben Tyler
  - Ryan Wright
 
-## Developing
-
+## Development
 ```bash
-npm install # installs dependencies
-npm run dev # runs dev server
-npm run dev -- --open # runs dev server & opens browser
-```
-
-## Building
-
-```bash
-npm run build
-npm run preview
+npm run server # to view website (hosted at `http://localhost:3000`)
+npm run tailwind # to update css
 ```

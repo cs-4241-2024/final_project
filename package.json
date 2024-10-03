@@ -1,22 +1,26 @@
 {
-	"name": "cs4141-final",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"svelte": "^4.2.7",
-		"svelte-check": "^4.0.0",
-		"typescript": "^5.0.0",
-		"vite": "^5.0.3"
-	},
-	"type": "module"
+  "name": "cs4241-final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.ts",
+  "scripts": {
+    "server": "tsx src/server.ts",
+    "tailwind": "npx tailwindcss -i ./src/public/input.css -o ./src/public/output.css --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/express": "^5.0.0",
+    "@types/express-handlebars": "^5.3.1",
+    "daisyui": "^4.12.10",
+    "tailwindcss": "^3.4.12",
+    "tsx": "^4.19.1"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "express": "^4.21.0",
+    "express-handlebars": "^8.0.1"
+  }
 }
