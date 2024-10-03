@@ -1,0 +1,35 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 0.4fr repeat(2, 1fr) 0.3fr 1.2fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    height: 100vh;
+    width: 100vw;
+}
+    
+.div1 { grid-area: 1 / 1 / 2 / 4; }
+
+.div2 { grid-area: 2 / 1 / 4 / 2; }
+
+.div3 { grid-area: 2 / 2 / 4 / 3; }
+
+.div4 { grid-area: 2 / 3 / 4 / 4; }
+
+.div5 { 
+    grid-area: 4 / 1 / 5 / 4; 
+    background-color: #f2dfb7;
+}
+
+.div6 { 
+    grid-area: 5 / 1 / 6 / 4; 
+    background-image: url(./assets/barfronttexture.png);
+}
+
