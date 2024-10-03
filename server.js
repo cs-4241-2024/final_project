@@ -1,8 +1,9 @@
 // Import the express module
 const express = require('express');
+const { MongoClient, ObjectId } = require('mongodb');
 // Import Middlewares (for login functionality and security purposes)
 const path = require('path');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -13,8 +14,10 @@ require("dotenv").config();
 
 // Initialize the express app
 const app = express();
+const dbName = "FinalDB";
+const usersCollectionName = "users";
 const sessionCookieName = 'userSession';
-
+const CONNECT = process.env.MONGO_URL;
 // Define a port
 const port = 3000;
 
@@ -28,6 +31,17 @@ app.use(cors());
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan('tiny'));
+
+// Connect to Mongo DB
+const client = new MongoClient(CONNECT);
+let db, usersCollection;
+client.connect().then(() => {
+    db = client.db(dbName)
+    usersCollection = db.collection(usersCollectionName); // Users collection
+    console.log('Connected to MongoDB');
+}).catch(err => {
+    console.error('Failed to connect to MongoDB', err);
+});
 
 
 // Basic route to send the index.html
