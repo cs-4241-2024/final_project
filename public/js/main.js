@@ -119,15 +119,13 @@ const delete_name = async function( event ) {
   // this was the original browser behavior and still
   // remains to this day
   event.preventDefault()
+  const id = event.target.id
+  const body = JSON.stringify({ id: id });
   
-  const input = document.querySelector( '#editname' )
-  const json = { 'str' : input.value }
-  const body = JSON.stringify( json )
-  
-  const response = await fetch( '/delete', {
+  const response = await fetch( `/delete`, {
     method:'POST',
     headers: { 'Content-Type': 'application/json' },
-    body : body
+    body: body
   })
 
   const text = await response.text()
@@ -152,6 +150,16 @@ function updateFriends(){
     headTask.textContent = 'Task';
     headrow.appendChild(headTask);
 
+    const headEdit = document.createElement('td');
+    headEdit.className = "top-row";
+    headEdit.textContent = 'Edit';
+    headrow.appendChild(headEdit);
+
+    const headDelete = document.createElement('td');
+    headDelete.className = "top-row";
+    headDelete.textContent = 'Delete';
+    headrow.appendChild(headDelete);
+
     friendList.appendChild(headrow)
     console.log(data)
     data.forEach(s => {
@@ -166,6 +174,23 @@ function updateFriends(){
       ttask.className = "h-row";
       ttask.textContent = s.task;
       trow.appendChild(ttask)
+
+      const tedit = document.createElement('td');
+      tedit.className = "h-row";
+      const editButton = document.createElement('button');
+      editButton.textContent = "Edit";
+      editButton.id = 'edit-button'
+      tedit.append(editButton)
+      trow.appendChild(tedit)
+
+      const tdelete = document.createElement('td');
+      tdelete.className = "h-row";
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = "Delete";
+      deleteButton.id = s._id
+      deleteButton.addEventListener('click', delete_name)
+      tdelete.append(deleteButton)
+      trow.appendChild(tdelete)
     
       friendList.appendChild(trow)
     })
@@ -205,6 +230,7 @@ window.onload = function() {
     }
   }
   if (deleteButton) {
+    console.log('YESSSS')
     deleteButton.onclick = delete_name;
   }
   if (loginButton) {

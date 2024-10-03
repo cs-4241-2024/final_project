@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = process.env.MongoDBLink;
 let current_user = null; // User variable to track whos logged in
 
@@ -67,15 +67,15 @@ app.post( '/submit', express.json(), async ( req, res ) => {
 
 // Delete items from a users data
 app.post( '/delete', express.json(), async ( req, res ) => {
-  let name_to_delete = req.body.str
-  
+  console.log('JSJSHSDJ')
+  id = req.body.id
   try {
     await client.connect();
     // Find current users data collection
     const collection = client.db("webware").collection(current_user);
     
     // Add data to collection
-    await collection.deleteOne({name: name_to_delete})
+    await collection.deleteOne({_id: new ObjectId(id)})
 
     res.writeHead( 200, { 'Content-Type': 'text/plain'})
     res.end( 'Success Deleting data' )

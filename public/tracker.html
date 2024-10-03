@@ -30,6 +30,19 @@
 
       <h2>My Tasks</h2>
       <table class = "h-table" id = "friend-list"></table>
+
+      <h2>Edit List</h2>
+      <form class = 'form-signin'>
+        <input class = 'input-d' type="text" id="name-to-edit" placeholder="Name To Edit" required>
+        <select id="edit-list">
+          <option value="1">Name</option>
+          <option value="2">Email</option>
+          <option value="3">Phone</option>
+          <option value="4">Grade</option>
+        </select>
+        <input class = 'input-d' type="text" id="new-value" placeholder="New Value" required>
+        <button id = "edit-button" class = "signin-button" type="submit" >Edit</button>
+      </form>
     </main>
   </body>
   <footer>
