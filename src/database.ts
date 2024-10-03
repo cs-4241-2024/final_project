@@ -256,3 +256,27 @@ export async function getLocations(userID: number): Promise<Location[]> {
     return [];
   }
 }
+
+export async function getLocation(userID: number, locationID: number): Promise<Location | null> {
+  const stmt = db.prepare(`
+    SELECT id, name
+    FROM locations
+    WHERE user_id = ? AND id = ?
+  `);
+
+  try {
+    const location = stmt.get(userID, locationID) as { id: number; name: string } | undefined;
+
+    if (location) {
+      return {
+        id: location.id,
+        name: location.name
+      } as Location;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching location:", error);
+    return null;
+  }
+}

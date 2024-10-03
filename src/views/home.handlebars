@@ -2,45 +2,24 @@
 
 <div class="flex justify-center py-12">
   <div class="mt-6 font-bold card w-96 mt-20 mb-20 shadow-xl">
-    <form class="card-body" method="POST" action="/api/login">
+    <div class="card-body">
       <h2 class="mt-5 text-center text-4xl font-bold leading-9 tracking-tight">
         Locations
       </h2>
       <div class="items-center mt-2 space-y-3">
         {{#each locations}}
-          <button href="/location/{{this.id}}" class="btn">
+          <a href="/location/{{this.id}}" class="btn">
             {{this.name}}
-          </button>
+          </a>
         {{/each}}
       </div>
-    </form>
+      <div class="card-actions justify-end mt-4">
+        <button class="btn btn-active w-full" onclick="add_location.showModal()">
+          Add Location
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
-
-<button class="btn btn-neutral" onclick="add_location.showModal()">Add Location</button>
-
-<dialog id="add_location" class="modal modal-bottom sm:modal-middle">
-  <div class="modal-box">
-    <form method="dialog">
-      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-    </form>
-    <h3 class="text-lg font-bold">Add Location</h3>
-
-    <form method="POST" action="/api/location/make">
-      <div class="items-center mt-2 space-y-3">
-        <label class="form-control">
-          <div class="label">
-            <span class="label-text">Location Name</span>
-          </div>
-          <input class="input input-bordered w-full max-w-xs" id="name" name="name" type="text" placeholder="Location Name" />
-        </label>
-        <div class="card-actions justify-end mt-4">
-        <button class="btn btn-active w-full" type="submit">
-        Add
-        </button>
-        </div>
-      </div>
-    </form>
-  </div>
-</dialog>
+{{> location/add }}

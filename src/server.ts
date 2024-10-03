@@ -8,10 +8,11 @@ import { Food, FoodWithID } from "./types.ts";
 
 const app = express();
 const port = process.env.PORT || 3000;
+const template = "main";
 
 app.engine(
   "handlebars",
-  engine({ defaultLayout: "main", extname: ".handlebars" }),
+  engine({ defaultLayout: template, extname: ".handlebars" }),
 );
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
@@ -52,6 +53,13 @@ app.get("/", async (req, res, next) => {
   res.render("home", { username, locations });
 });
 
+async function renderLocation(res, userID: number, locationID: number, useTemplate: boolean) {
+  const username = await db.getUsername(userID);
+  const location = await db.getLocation(userID, locationID);
+  const foods = await db.getFoods(userID, locationID);
+
+  res.render("location", { username, foods, location, template: useTemplate ? template : false });
+}
 app.get("/location/:id", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
@@ -62,10 +70,7 @@ app.get("/location/:id", async (req, res, next) => {
     return;
   }
 
-  const username = await db.getUsername(userID);
-  const foods = await db.getFoods(userID, locationID);
-
-  res.render("location", { username, foods, locationID });
+  await renderLocation(res, userID, locationID, true);
 });
 
 // API
@@ -75,13 +80,6 @@ function apiHandleAuth(req, res) {
     res.status(401).json({ error: "Unauthorized" });
   }
   return userID;
-}
-function apiHandleSuccess(res, success: boolean, object: string, action: string) {
-  if (success) {
-    res.status(201).json({ message: `${object} ${action} successful` });
-  } else {
-    res.status(500).json({ error: `${object} ${action} failed` });
-  }
 }
 
 app.post("/api/location/make", async (req, res) => {
@@ -100,14 +98,22 @@ app.post("/api/location/edit", async (req, res) => {
   if (!userID) return;
   const { locationID, name } = req.body;
   const success = await db.editLocation(userID, locationID, name);
-  apiHandleSuccess(res, success, "location", "edit");
+  if (locationID) {
+    await renderLocation(res, userID, locationID, false);
+  } else {
+    res.status(500).send("Edit location failed");
+  }
 });
 app.post("/api/location/delete", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
   const { locationID } = req.body;
   const success = await db.deleteLocation(userID, locationID);
-  apiHandleSuccess(res, success, "location", "delete");
+  if (success) {
+    res.status(201).redirect(`../../`);
+  } else {
+    res.status(500).json({ error: `Delete location failed` });
+  }
 });
 
 app.post("/api/food/make", async (req, res) => {
@@ -115,21 +121,33 @@ app.post("/api/food/make", async (req, res) => {
   if (!userID) return;
   const food = req.body as Food;
   const success = await db.makeFood(userID, food);
-  apiHandleSuccess(res, success, "food", "make");
+  if (success) {
+    await renderLocation(res, userID, food.locationID, false);
+  } else {
+    res.status(500).send("Make food failed");
+  }
 });
 app.post("/api/food/edit", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
   const food = req.body as FoodWithID;
   const success = await db.editFood(userID, food);
-  apiHandleSuccess(res, success, "food", "edit");
+  if (success) {
+    await renderLocation(res, userID, food.locationID, false);
+  } else {
+    res.status(500).send("Edit food failed");
+  }
 });
 app.post("/api/food/delete", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
-  const { foodID } = req.body;
+  const { foodID, locationID } = req.body;
   const success = await db.deleteFood(userID, foodID);
-  apiHandleSuccess(res, success, "food", "delete");
+  if (success) {
+    await renderLocation(res, userID, locationID, false);
+  } else {
+    res.status(500).send("Delete food failed");
+  }
 });
 
 // Auth Pages
@@ -142,7 +160,7 @@ app.get("/signup", (req, res, next) => {
 });
 
 // Auth API
-app.post("/api/login", async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   const userID = await db.tryLogin(username, password);
 
@@ -150,11 +168,11 @@ app.post("/api/login", async (req, res) => {
     req.session.userID = userID;
     res.redirect("/");
   } else {
-    res.render("login", { layout: false, error: "Invalid Credentials" });
+    res.render("login", { error: "Invalid credentials" });
   }
 });
 
-app.post("/api/signup", async (req, res) => {
+app.post("/signup", async (req, res) => {
   const { username, password } = req.body;
   const userID = await db.makeUser(username, password);
 
@@ -162,11 +180,11 @@ app.post("/api/signup", async (req, res) => {
     req.session.userID = userID;
     res.redirect("/");
   } else {
-    res.render("signup", { layout: false, error: "Signup failed" });
+    res.render("signup", { error: "Signup failed" });
   }
 });
 
-app.post("/api/logout", (req, res) => {
+app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
