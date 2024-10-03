@@ -7,8 +7,11 @@ const submit = async function( event ) {
   // remains to this day
   event.preventDefault()
   
-  const input = document.querySelector( '#yourname' )
-  const json = { 'str' : input.value }
+  const task = document.querySelector( '#task' )
+  const date = document.querySelector('#date')
+  console.log(date.value)
+  const json = { 'task' : task.value , 'date' : date.value}
+  console.log(json)
   const body = JSON.stringify( json )
   
   const response = await fetch( '/submit', {
@@ -110,7 +113,6 @@ const signup = async function( event ) {
   
 }
 
-
 const delete_name = async function( event ) {
   // stop form submission from trying to load
   // a new .html page for displaying results...
@@ -140,50 +142,30 @@ function updateFriends(){
     friendList.innerHTML = '';
     const headrow = document.createElement('tr');
     
-    const headname = document.createElement('td');
-    headname.className = "top-row";
-    headname.textContent = 'Name';
-    headrow.appendChild(headname);
+    const headDate = document.createElement('td');
+    headDate.className = "top-row";
+    headDate.textContent = 'Date';
+    headrow.appendChild(headDate);
 
-    const heademail = document.createElement('td');
-    heademail.className = "top-row";
-    heademail.textContent = 'Email';
-    headrow.appendChild(heademail);
-
-    const headphone = document.createElement('td');
-    headphone.className = "top-row";
-    headphone.textContent = 'Phone';
-    headrow.appendChild(headphone);
-
-    const headgrade = document.createElement('td');
-    headgrade.className = "top-row";
-    headgrade.textContent = 'Grade';
-    headrow.appendChild(headgrade);
+    const headTask = document.createElement('td');
+    headTask.className = "top-row";
+    headTask.textContent = 'Task';
+    headrow.appendChild(headTask);
 
     friendList.appendChild(headrow)
-
+    console.log(data)
     data.forEach(s => {
       const trow = document.createElement('tr');
 
-      const tname = document.createElement('td');
-      tname.className = "h-row";
-      tname.textContent = s.name;
-      trow.appendChild(tname);
+      const tdate = document.createElement('td');
+      tdate.className = "h-row";
+      tdate.textContent = s.date;
+      trow.appendChild(tdate);
   
-      const temail = document.createElement('td');
-      temail.className = "h-row";
-      temail.textContent = s.email;
-      trow.appendChild(temail)
-
-      const tnumber = document.createElement('td');
-      tnumber.className = "h-row"
-      tnumber.textContent = s.phone;
-      trow.appendChild(tnumber)
-
-      const tgrade = document.createElement('td');
-      tgrade.className = "h-row"
-      tgrade.textContent = s.grade;
-      trow.appendChild(tgrade)
+      const ttask = document.createElement('td');
+      ttask.className = "h-row";
+      ttask.textContent = s.task;
+      trow.appendChild(ttask)
     
       friendList.appendChild(trow)
     })

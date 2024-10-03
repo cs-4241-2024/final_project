@@ -40,36 +40,8 @@ app.use( express.json() )
 // Each user data will have their own collection
 // Each collection holds list of json objects for that user
 app.post( '/submit', express.json(), async ( req, res ) => {
-  let str = req.body.str
-  let data_json = {}
-  const data_array = str.split(',')
-
-  // create the json data object
-  for (let i = 0; i < data_array.length; i++){
-    if (i === 0) {
-      data_json.name = data_array[i]
-    }
-    else if (i === 1) {
-      data_json.email = data_array[i]
-    }
-    else if (i === 2){
-      data_json.phone = data_array[i]
-    }
-    else if (i === 3){
-      data_json.age = data_array[i]
-      // Dynamic attribute
-      if (parseInt(data_array[i]) < 19)
-        data_json.grade = 'Freshman'
-      else if (parseInt(data_array[i]) < 20)
-        data_json.grade = 'Sophomore'
-      else if (parseInt(data_array[i]) < 21)
-        data_json.grade = 'Junior'
-      else {
-        data_json.grade = 'Senior'
-      }
-    }
-  }
-
+  let data_json = req.body
+  console.log(data_json)
   try {
     await client.connect();
     // Find current users data collection
