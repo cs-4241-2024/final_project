@@ -1,7 +1,7 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
-import Database from 'better-sqlite3';
 import path from 'path';
+import * as db from './database.ts';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,7 +12,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-const db = new Database('../db.sqlite', { verbose: console.log });
 
 app.get('/', function (req, res, next) {
   res.render('home', { test: 15 });
