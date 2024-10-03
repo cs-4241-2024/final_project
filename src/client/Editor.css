@@ -1,7 +1,7 @@
 .main {
     position: relative;
     width: 905px;
-    height: 680px;
+    height: 100vh;  /* Make the main container fit the viewport height */
     margin: 0 auto;  /* Center the main container horizontally */
     background: white;
     border: 8px solid #1e1e1e;
@@ -12,6 +12,7 @@
     flex-direction: column;  /* Stack the contents vertically */
     justify-content: flex-start;  /* Ensure content starts at the top */
     align-items: center;  /* Center content horizontally */
+    overflow-y: auto;  /* Enable vertical scrolling */
 }
 
 .about-container {
@@ -39,6 +40,7 @@
     left: 20px;
     z-index: 999;  /* Ensure it's on top of other elements */
 }
+
 .editor-button {
     padding: 10px;
     background-color: #554481;
@@ -50,12 +52,11 @@
     transition: background-color 0.3s;
     height: 40px;
     width: 250px;
-  }
+}
 
 .editor-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
-    
 }

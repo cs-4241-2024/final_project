@@ -68,7 +68,7 @@ function Editor() {
                     Import Workday Data
                 </Button>
         </div>
-        <TableComponent name="myTable" rowNum={5} colNum={3} />
+        <TableComponent name="Table 1" rowNum={5} />
       </div>
   );
 }

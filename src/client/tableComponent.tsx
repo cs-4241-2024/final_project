@@ -1,32 +1,41 @@
-import "./tableComponent.css";
-import { Button } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
-import { IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { createTheme } from '@mui/material/styles';
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-let theme = createTheme({
-  // Theme customization goes here as usual, including tonalOffset and/or
-  // contrastThreshold as the augmentColor() function relies on these
-});
-
-theme = createTheme(theme, {
-  // Custom colors created with augmentColor go here
-  palette: {
-    salmon: theme.palette.augmentColor({
-      color: {
-        main: '#554481',
-      },
-    }),
-  },
-});
-
-const TableComponent: React.FC<{ name: string; rowNum: number; colNum: number }> = ({ name, rowNum, colNum }) => {
+const TableComponent: React.FC<{ name: string; rowNum: number }> = ({ name, rowNum }) => {
   const [inputValue, setInputValue] = useState("");
+  const [rows, setRows] = useState<string[]>([]);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
+  };
+
+  const handleAddRow = () => {
+    if (inputValue.trim() !== "") {
+      setRows([...rows, inputValue]);
+      setInputValue("");
+    }
+  };
+
+  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditValue(event.target.value);
+  };
+
+  const handleEdit = (index: number) => {
+    setEditIndex(index);
+    setEditValue(rows[index]);
+  };
+
+  const handleSave = (index: number) => {
+    const updatedRows = [...rows];
+    updatedRows[index] = editValue;
+    setRows(updatedRows);
+    setEditIndex(null);
+  };
+
+  const handleDelete = (index: number) => {
+    const updatedRows = rows.filter((_, rowIndex) => rowIndex !== index);
+    setRows(updatedRows);
   };
 
   return (
@@ -37,13 +46,34 @@ const TableComponent: React.FC<{ name: string; rowNum: number; colNum: number }>
         value={inputValue}
         onChange={handleInputChange}
       />
+      <button onClick={handleAddRow}>Add to Table</button>
       <table>
         <tbody>
-          {Array.from({ length: rowNum }).map((_, rowIndex) => (
+          {rows.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {Array.from({ length: colNum }).map((_, colIndex) => (
-                <td key={colIndex}>Cell {rowIndex + 1}-{colIndex + 1}</td>
-              ))}
+              <td>Cell {rowIndex + 1}-1</td>
+              <td>{row}</td>
+              <td>
+                {editIndex === rowIndex ? (
+                  <input
+                    type="text"
+                    value={editValue}
+                    onChange={handleEditChange}
+                  />
+                ) : (
+                  row
+                )}
+              </td>
+              <td>
+                {editIndex === rowIndex ? (
+                  <button onClick={() => handleSave(rowIndex)}>Save</button>
+                ) : (
+                  <button onClick={() => handleEdit(rowIndex)}>Edit</button>
+                )}
+              </td>
+              <td>
+                <button onClick={() => handleDelete(rowIndex)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
