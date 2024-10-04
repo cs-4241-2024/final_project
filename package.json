@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
+    "start": "tsx src/server.ts",
     "server": "tsx src/server.ts",
     "tailwind": "npx tailwindcss -i ./src/public/input.css -o ./src/public/output.css --watch"
   },
