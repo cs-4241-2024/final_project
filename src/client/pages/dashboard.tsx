@@ -30,8 +30,8 @@ function Dashboard() {
             </h1>
             <div>
 
-                {form(setMatches,matches)}
-                {MatchesContainer(setMatches,matches)}
+                {form(setMatches, matches)}
+                {MatchesContainer(setMatches, matches)}
                 {editModal(setMatches, matches)}
 
             </div>
