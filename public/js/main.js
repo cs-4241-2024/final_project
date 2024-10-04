@@ -23,9 +23,6 @@ async function logout(){
   })
   window.location.href="/"
 }
-window.onload = function() {
-  getLoggedInUser().then()
-}
 
 //Adds the navigation bar to the location of the navbar classon each page.
 //To add the nav bar to a page just add the following HTML element <nav class="navbar"></nav>
@@ -43,5 +40,6 @@ const nav = function () {
 }
 
 window.onload = function () {
+    getLoggedInUser().then()
     nav()
 }
