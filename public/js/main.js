@@ -4,7 +4,7 @@ function iloveClicking(){
   alert("I LOVE CLICKING")
 }
 async function getLoggedInUser(){
-  const response = await fetch('/api/users/userName', {
+  const response = await fetch('/api/users/git/userName', {
     method: 'get'
   })
   console.log("fired")
@@ -18,7 +18,7 @@ async function getLoggedInUser(){
 }
 
 async function logout(){
-  const response = await fetch('/api/users/logout', {
+  const response = await fetch('/api/users/git/logout', {
     method: 'POST'
   })
   window.location.href="/"

@@ -1,13 +1,12 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+import {
     addSong,
     getSongs,
     getSongByID,
     updateSong,
     deleteSong
-} = require("../controllers/songController");
-
+} from "../controllers/songController.js";
 // add new song
 router.post('/', addSong);
 
@@ -23,4 +22,4 @@ router.put('/:id', updateSong);
 // delete song by id
 router.delete('/:id', deleteSong);
 
-module.exports = router;
+export default router

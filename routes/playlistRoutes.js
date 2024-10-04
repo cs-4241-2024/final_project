@@ -1,6 +1,6 @@
-const express = require('express');
+import express from "express";
 const router = express.Router();
-const {
+import {
     getPlaylist,
     createPlaylist,
     updatePlaylist,
@@ -8,7 +8,7 @@ const {
     getAllPlaylists,
     addSongToPlaylist,
     getSongsInPlaylist
-} = require('../controllers/playlistControllers');
+} from "../controllers/playlistControllers.js"
 
 // get playlist by id
 router.get('/:id', getPlaylist);
@@ -31,4 +31,4 @@ router.post('/:id/add-song', addSongToPlaylist);
 // get all songs in a playlist by id
 router.get('/:playlistId/songs', getSongsInPlaylist);
 
-module.exports = router;
+export default router;

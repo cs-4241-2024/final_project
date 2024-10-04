@@ -12,17 +12,17 @@ const Dbname ="SongWebsite"
 const DbConnectionURL = `mongodb+srv://${process.env.DbUser}:${process.env.DbPass}@${process.env.DbURL}`
 const client = new mongodb.MongoClient( DbConnectionURL )
 
-// // get user by their id
-// router.get('/:id', getUser);
-//
-// // create new user
-// router.post('/', createUser);
-//
-// // update user by their id
-// router.put('/:id', updateUser);
-//
-// // get all users (might not be needed?)
-// router.get('/', getAllUsers);
+// get user by their id
+router.get('/:id', getUser);
+
+// create new user
+router.post('/', createUser);
+
+// update user by their id
+router.put('/:id', updateUser);
+
+// get all users (might not be needed?)
+router.get('/', getAllUsers);
 
 
 //Github Authentication
@@ -81,14 +81,14 @@ router.get('/auth/github/callback', passport.authenticate('github',{failureRedir
     res.redirect("/test.html");
 })
 
-router.post('/logout', function(req, res, next) {
+router.post('/git/logout', function(req, res, next) {
     req.logout(function(err) {
         console.log(err)
         res.redirect('/');
     });
 
 });
-router.get('/userName',isAuthenticated,function (req,res){
+router.get('/git/userName',isAuthenticated,function (req,res){
     console.log("sent username")
     res.status(200)
     res.send({userName:req.user.userName})
