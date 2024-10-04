@@ -8,42 +8,44 @@ import { lookupPlayerFromAbbr } from './utils.js'
 
 const app = express()
 
-app.use( express.static( 'src' ) )
+app.use(express.static('src'))
 // app.use(express.static('dist'))
-app.use( express.json() )
+app.use(express.json())
 
 // --------------------MONGO DB------------------------
 
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env.HOST}`
-const client = new MongoClient( uri )
+const client = new MongoClient(uri)
 
 let collection: Collection
 let loginData: Collection
 let schools: Collection
+let players: Collection
 
 async function run() {
     await client.connect()
-    collection = client.db( "assignment3" ).collection( "matches" )
-    loginData = client.db( "assignment3" ).collection( "login-info" )
-    schools = client.db( "assignment3" ).collection( "schools" )
+    collection = client.db("assignment3").collection("matches")
+    loginData = client.db("assignment3").collection("login-info")
+    schools = client.db("assignment3").collection("schools")
+    players = client.db("assignment3").collection("players")
 }
 
 try {
-    run().then( _ => console.log( "connected to database" ) );
+    run().then(_ => console.log("connected to database"));
 } catch (e) {
-    console.error( e )
+    console.error(e)
 }
 // -------------------MIDDLEWARE-----------------------
 // use express.urlencoded to get data sent by default form actions
 // or GET requests
-app.use( express.urlencoded( { extended: true } ) );
+app.use(express.urlencoded({extended: true}));
 
 // cookie middleware! The keys are used for encryption and should be
 // changed
-app.use( cookie( {
+app.use(cookie({
     name: 'session',
     keys: [ 'key1', 'key2' ]
-} ) );
+}));
 
 // add some middleware that always sends unauthenticated users to the login page
 // app.use( function( req,res,next) {
@@ -53,68 +55,68 @@ app.use( cookie( {
 // res.sendFile( __dirname + '/public/main.html' )
 // })
 
-app.use( '/newLogin', async ( req: express.Request, res: express.Response ) => {
-    console.log( req.body )
+app.use('/newLogin', async ( req: express.Request, res: express.Response ) => {
+    console.log(req.body)
 
-    const result = await loginData.insertOne( req.body )
-    res.json( result )
+    const result = await loginData.insertOne(req.body)
+    res.json(result)
 
-} );
+});
 
 // -------------------ROUTES-----------------------
 // --- GET ---
-app.get( "/docs", async ( req: express.Request, res: express.Response ) => {
+app.get("/docs", async ( req: express.Request, res: express.Response ) => {
     if (collection !== null) {
-        const docs = await collection.find( {} ).toArray()
-        res.json( docs )
+        const docs = await collection.find({}).toArray()
+        res.json(docs)
     }
-} );
+});
 
-app.get( '/getMatch', async ( req: express.Request, res: express.Response ) => {
+app.get('/getMatch', async ( req: express.Request, res: express.Response ) => {
     const matchId = req.query.id;
     if (!matchId) {
-        return res.status( 400 ).json( { error: 'Match ID is required' } );
+        return res.status(400).json({error: 'Match ID is required'});
     }
     let match = null;
     if (typeof matchId === "string") {
-        match = await collection.findOne( { _id: ObjectId.createFromHexString( matchId ) } );
+        match = await collection.findOne({_id: ObjectId.createFromHexString(matchId)});
     }
     // const match = await collection.findOne({ _id: matchId });
     if (!match) {
-        return res.status( 404 ).json( { error: 'Match not found' } );
+        return res.status(404).json({error: 'Match not found'});
     }
 
-    res.json( match );
-} );
+    res.json(match);
+});
 
-app.get( '/logout', ( req: express.Request, res: express.Response ) => {
+app.get('/logout', ( req: express.Request, res: express.Response ) => {
     req.session = null; // Clear the session
-    res.redirect( '/' ); // Redirect to the root URL
-} );
+    res.redirect('/'); // Redirect to the root URL
+});
 
-app.get( '/userMatches', async ( req: express.Request, res: express.Response ) => {
+app.get('/userMatches', async ( req: express.Request, res: express.Response ) => {
     if (!req.session.login) {
-        return res.status( 401 ).send( 'Unauthorized' );
+        return res.status(401).send('Unauthorized');
     }
 
     const user = req.session.user;
-    const matches = await collection.find( { owner: user } ).toArray();
-    res.json( matches );
-} );
+    const matches = await collection.find({owner: user}).toArray();
+    res.json(matches);
+});
 
 // --- POST ---
-app.post( '/login', async ( req: express.Request, res: express.Response ) => {
+app.post('/login', async ( req: express.Request, res: express.Response ) => {
     // express.urlencoded will put your key value pairs
     // into an object, where the key is the name of each
     // form field and the value is whatever the user entered
-    console.log( req.body )
+    console.log(req.body)
     let username = req.body.user
     let password = req.body.pass
 
 
     // below is *just a simple authentication example*
     // for A3, you should check username / password combos in your database
-    let loginDoc = await loginData.findOne( { user: username, pass: password } )
+    let loginDoc = await loginData.findOne({user: username, pass: password})
 // Find the user with the matching username
 
     // If a user is found, check if the password matches
@@ -129,16 +131,16 @@ app.post( '/login', async ( req: express.Request, res: express.Response ) => {
         // use redirect to avoid authentication problems when refreshing
         // the page or using the back button, for details see:
         // https://stackoverflow.com/questions/10827242/understanding-the-post-redirect-get-pattern
-        res.status( 200 ).send( "Login and Password correct" )
+        res.status(200).send("Login and Password correct")
     } else {
-        console.log( "not found" )
-        res.status( 400 ).send( "Either Login or Password are incorrect" )
+        console.log("not found")
+        res.status(400).send("Either Login or Password are incorrect")
         // password incorrect, redirect back to login page
         // res.sendFile( __dirname + '/views/index.html' )
     }
-} );
+});
 
-app.post( '/add', async ( req: express.Request, res: express.Response ) => {
+app.post('/add', async ( req: express.Request, res: express.Response ) => {
     const matchData = req.body;
 
     // Logic to determine the winner
@@ -156,12 +158,12 @@ app.post( '/add', async ( req: express.Request, res: express.Response ) => {
     // Add the winner to the match data
     matchData.winner = winner;
     matchData.owner = req.session.user;
-    const result = await collection.insertOne( matchData )
+    const result = await collection.insertOne(matchData)
     matchData._id = result.insertedId
-    res.json( matchData )
-} );
+    res.json(matchData)
+});
 
-app.post( '/update', async ( req: express.Request, res: express.Response ) => {
+app.post('/update', async ( req: express.Request, res: express.Response ) => {
     const matchData = req.body;
     const matchId = req.query.id;
     // Logic to determine the winner
@@ -181,17 +183,17 @@ app.post( '/update', async ( req: express.Request, res: express.Response ) => {
     let result = null;
     if (typeof matchId === "string") {
         result = await collection.updateOne(
-            { _id: ObjectId.createFromHexString( matchId ) },
+            {_id: ObjectId.createFromHexString(matchId)},
             // { _id: matchId },
-            { $set: matchData }
+            {$set: matchData}
         )
     }
     matchData._id = matchId;
 
-    res.json( matchData )
-} );
+    res.json(matchData)
+});
 
-app.post( '/getPlayer', async ( req: express.Request, res: express.Response ) => {
+app.post('/getPlayer', async ( req: express.Request, res: express.Response ) => {
     // Example of how to call this endpoint from the client
     /*
     <button onClick={async () => {
@@ -212,20 +214,20 @@ app.post( '/getPlayer', async ( req: express.Request, res: express.Response ) =>
                 Test getPlayer
      </button>
      */
-    const player = await lookupPlayerFromAbbr( req.body.abbr, schools )
-    res.json( player )
-} );
+    const player = await lookupPlayerFromAbbr(req.body.abbr, schools)
+    res.json(player)
+});
 
 // --- DELETE ---
 // assumes req.body takes form { _id:5d91fb30f3f81b282d7be0dd } etc.
-app.delete( '/remove', async ( req: express.Request, res: express.Response ) => {
-    const result = await collection.deleteOne( {
-        _id: ObjectId.createFromHexString( req.body._id )
-    } )
+app.delete('/remove', async ( req: express.Request, res: express.Response ) => {
+    const result = await collection.deleteOne({
+        _id: ObjectId.createFromHexString(req.body._id)
+    })
 
-    res.json( result )
-} );
+    res.json(result)
+});
 
-ViteExpress.listen( app, 3000 )
+ViteExpress.listen(app, 3000)
 
 // app.listen( process.env.PORT || 3000 )
