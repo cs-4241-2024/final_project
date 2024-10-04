@@ -1,4 +1,4 @@
-function showContent(index) {
+function showContent(groupID) {
   console.log("Show content works");
   
   // Hide all content sections
@@ -8,27 +8,30 @@ function showContent(index) {
   });
 
   // Show the selected content section
-  const selectedContent = document.getElementById('group' + (index + 1));
+  const selectedContent = document.getElementById(groupID);
   selectedContent.style.display = 'block';
-
-  const calendarEl = document.getElementById('calendar' + (index + 1));
-  if (calendarEl) {
-      calendarEl.innerHTML = ''; 
-  }
-  const groupAssignments = groupData.groups[index].assignments.map(assignment => ({
-      title: `${assignment.title} (Assigned to: ${assignment.assignedTo})`,
-      start: assignment.dueDate
-  }));
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      events: groupAssignments, 
-      dateClick: function(info) {
-        // When a date is clicked, show tasks for that day
-        const selectedDate = info.dateStr;
-        showTasksForDate(selectedDate, groupData.groups[index].assignments);
+  if(groupID.replace(/\d+$/, '') === 'group'){
+    groupIndex = (parseInt(groupID.match(/\d+/)[0], 10));
+    groupIndex = groupIndex - 1;
+    console.log("group index: " + groupIndex);
+    const calendarEl = document.getElementById('calendar' + (groupIndex+1));
+    if (calendarEl) {
+        calendarEl.innerHTML = ''; 
     }
-  });
-  calendar.render();
+    const groupAssignments = groupData.groups[groupIndex].assignments.map(assignment => ({
+        title: `${assignment.title} (Assigned to: ${assignment.assignedTo})`,
+        start: assignment.dueDate
+    }));
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: groupAssignments, 
+        dateClick: function(info) {
+          const selectedDate = info.dateStr;
+          showTasksForDate(selectedDate, groupData.groups[groupIndex].assignments);
+      }
+    });
+    calendar.render();
+  }
 }
 
 function showTasksForDate(selectedDate, assignments) {
@@ -56,42 +59,6 @@ async function fetchUsers() {
   } catch (error){
     console.error('Error fetching users:', error);
   }
-}
-
-function populateDropdown(users){
-  const dropdown = document.getElementById('dropdown');
-  dropdown.innerHTML = ''; // clear previous content
-
-  users.forEach(user => {
-    const div = document.createElement('div');
-    div.textContent = user.username;
-    div.classList.add('dropdown-item');
-
-    div.onclick = () => selectUser(user);
-    dropdown.appendChild(div);
-  })
-}
-
-function filterUsers() {
-  const searchValue = document.getElementById('userSearch').value.toLowerCase();
-  const filteredUsers = window.allUsers.filter(user => user.username.toLowerCase().includes(searchValue));
-  populateDropdown(filteredUsers);
-}
-
-function selectUser(user) {
-  const selectedUsersDiv = document.getElementById('selectedUsers');
-  
-  // Check if the user is already selected
-  if (Array.from(selectedUsersDiv.children).some(div => div.textContent === user.name)) {
-    return; // User already selected
-  }
-
-  // Add the selected user to the selected users section
-  const selectedUserDiv = document.createElement('div');
-  selectedUserDiv.textContent = user.name;
-  selectedUserDiv.classList.add('selected-user');
-
-  selectedUsersDiv.appendChild(selectedUserDiv);
 }
 
 // add group
@@ -147,15 +114,6 @@ const addGroup = async function( event) {
                     <h1>${groupName}</h1>
                     <p>Member Names: ${users}</p>
                 </div>
-                <div class="calendar">
-                    <div class="day">Day 1</div>
-                    <div class="day">Day 2</div>
-                    <div class="day">Day 3</div>
-                </div>
-                <div class="tasks">
-                    <h3>No tasks assigned yet</h3>
-                    <ul></ul>
-                </div>
             `;
             mainContent.appendChild(newGroupContent);
     
@@ -174,11 +132,10 @@ const addGroup = async function( event) {
 
 window.onload = async function (){
     fetchUsers();
-    console.log("Main.js Onload")
-    // Add event listeners for each button
+    console.log("Main.js Onload");
     generateGroupHTML(groupData);
     createGroupButtons(groupData);
-    showContent("group1")
+    showContent("group1");
 }
 
 // Function to generate and inject HTML into the DOM
@@ -233,12 +190,12 @@ function createGroupButtons(data) {
         const button = document.createElement("button");
         button.id = `btnGroup${index + 1}`;
         button.innerText = group.groupName.split(' ').map(word => word[0]).join(''); 
-        button.onclick = () => showContent(index); // Attach onclick event
+        button.onclick = () => showContent(`group${index + 1}`); // Attach onclick event
         groupButtonsDiv.appendChild(button); // Add button to the sidebar
     });
 }
 
-  const groupData = {
+const groupData = {
     "groups": [
       {
         "groupName": "Project Team Alpha",
@@ -283,5 +240,5 @@ function createGroupButtons(data) {
         ]
       }
     ]
-  }
+}
   
