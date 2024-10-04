@@ -11,5 +11,5 @@
 ## Development
 ```bash
 npm run server # to view website (hosted at `http://localhost:3000`)
-npm run tailwind # to update css
+npm run tailwind # to live reload css
 ```
