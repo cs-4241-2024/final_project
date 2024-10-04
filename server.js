@@ -74,6 +74,26 @@ app.post('/add-group', async (req,res) => {
 
 });
 
+app.get('/get-users', async (req, res) => {
+    try {
+        const users = await usersCollection.find({}).toArray();
+        
+        if (!users || users.length === 0) {
+            return res.status(404).json({ message: 'No users found' });
+        }
+
+        // Exclude sensitive information (e.g., passwords) from the response
+        const usersWithoutPasswords = users.map(({ password, ...user }) => user);
+
+        // Send the users list as a response
+        res.status(200).json(usersWithoutPasswords);
+
+    } catch (error) {
+        console.error('Error fetching users ligma:', error);
+        res.status(500).json({ message: 'Error fetching users ligma', error });
+    }
+});
+
 // Basic route to send the index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
