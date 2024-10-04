@@ -33,11 +33,13 @@ const edit = async function( event ) {
   // this was the original browser behavior and still
   // remains to this day
   event.preventDefault()
+
+  const id = event.target.id
   
-  const edit_value = document.querySelector( '#edit-list' ).value
-  const name = document.querySelector( '#name-to-edit' ).value
-  const new_value = document.querySelector( '#new-value' ).value
-  const json = {'edit' : edit_value, 'name' : name, 'new_value' : new_value}
+  const newDate = prompt('Enter New Date')
+  const newTask = prompt('Enter new task description')
+
+  const json = {'id' : id, 'date' : newDate, 'task' : newTask}
   const body = JSON.stringify( json )
   
   const response = await fetch( '/edit', {
@@ -161,7 +163,6 @@ function updateFriends(){
     headrow.appendChild(headDelete);
 
     friendList.appendChild(headrow)
-    console.log(data)
     data.forEach(s => {
       const trow = document.createElement('tr');
 
@@ -179,7 +180,8 @@ function updateFriends(){
       tedit.className = "h-row";
       const editButton = document.createElement('button');
       editButton.textContent = "Edit";
-      editButton.id = 'edit-button'
+      editButton.id = s._id
+      editButton.addEventListener('click', edit)
       tedit.append(editButton)
       trow.appendChild(tedit)
 
@@ -230,7 +232,6 @@ window.onload = function() {
     }
   }
   if (deleteButton) {
-    console.log('YESSSS')
     deleteButton.onclick = delete_name;
   }
   if (loginButton) {

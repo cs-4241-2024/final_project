@@ -41,7 +41,6 @@ app.use( express.json() )
 // Each collection holds list of json objects for that user
 app.post( '/submit', express.json(), async ( req, res ) => {
   let data_json = req.body
-  console.log(data_json)
   try {
     await client.connect();
     // Find current users data collection
@@ -67,7 +66,6 @@ app.post( '/submit', express.json(), async ( req, res ) => {
 
 // Delete items from a users data
 app.post( '/delete', express.json(), async ( req, res ) => {
-  console.log('JSJSHSDJ')
   id = req.body.id
   try {
     await client.connect();
@@ -93,9 +91,9 @@ app.post( '/delete', express.json(), async ( req, res ) => {
 })
 
 app.post( '/edit', express.json(), async ( req, res ) => {
-  let name = req.body.name;
-  let edit = req.body.edit;
-  let new_value = req.body.new_value;
+  let id = req.body.id;
+  let date = req.body.date;
+  let task = req.body.task;
   
   try {
     await client.connect();
@@ -103,7 +101,7 @@ app.post( '/edit', express.json(), async ( req, res ) => {
     const collection = client.db("webware").collection(current_user);
 
     // Try and find correct name ot edit
-    let user_to_edit = await collection.findOne({ 'name': name });
+    let user_to_edit = await collection.findOne({ _id: new ObjectId(id) });
     
     if (!user_to_edit){
       res.writeHead( 500, { 'Content-Type': 'text/plain'})
@@ -111,26 +109,10 @@ app.post( '/edit', express.json(), async ( req, res ) => {
       return
     }
 
-    if (edit === '1'){
-      await collection.updateOne({'name' : name},
-        {$set : {'name' : new_value}}
-      )
-    }
-    if (edit === '2'){
-      await collection.updateOne({'name' : name},
-        {$set : {'email' : new_value}}
-      )
-    }
-    if (edit === '3'){
-      await collection.updateOne({'name' : name},
-        {$set : {'phone' : new_value}}
-      )
-    }
-    if (edit === '4'){
-      await collection.updateOne({'name' : name},
-        {$set : {'grade' : new_value}}
-      )
-    }
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) }, 
+      { $set: { date: date, task: task } }
+    )
 
     return res.status(200).send('changes made successfully');
     
