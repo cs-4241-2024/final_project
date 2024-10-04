@@ -1,7 +1,41 @@
+import { useEffect, useState } from "react";
 import Bracket from "../components/bracket/bracket";
 import BracketColumn from "../components/bracket/bracketColumn";
 
 export default function Brackets() {
+    const [seeds, setSeeds] = useState<{ [key: string]: string }>({});
+
+    useEffect(() => {
+        async function checkStartBracket() {
+            try {
+                const response = await fetch('/getStartBracket');
+                if (response.ok) {
+                    fetchSeeds();
+                } else {
+                    console.error('Start bracket check failed');
+                }
+            } catch (error) {
+                console.error('Error checking start bracket:', error);
+            }
+        }
+
+        async function fetchSeeds() {
+            try {
+                const response = await fetch('/getSeeds');
+                if (response.ok) {
+                    const data = await response.json();
+                    setSeeds(data);
+                } else {
+                    console.error('Failed to fetch seeds');
+                }
+            } catch (error) {
+                console.error('Error fetching seeds:', error);
+            }
+        }
+
+        checkStartBracket();
+    }, []);
+
     return (
         <div>
             <h1 className={"text-6xl"}>Brackets</h1>
@@ -9,15 +43,14 @@ export default function Brackets() {
             <div className={"grid grid-cols-5"}>
                 <BracketColumn round={"preliminary"}>
                     {/*Top Half*/}
-                    <Bracket name={"FR"} subtitle={"1A"}/>
+                    <Bracket name={seeds["1A"] || "Seed 1A"} subtitle={"1A"}/>
                     <Bracket name={"BYE"} subtitle={"BYE"}/>
-                    <Bracket name={"HER"} subtitle={"5A"}/>
-                    <Bracket name={"DF"} subtitle={"4B"}/>
-                    <Bracket name={"NT"} subtitle={"3A"}/>
-                    <Bracket name={"WY"} subtitle={"6B"}/>
+                    <Bracket name={seeds["5A"] || "Seed 5A"} subtitle={"5A"}/>
+                    <Bracket name={seeds["4B"] || "Seed 4B"} subtitle={"4B"}/>
+                    <Bracket name={seeds["3A"] || "Seed 3A"} subtitle={"3A"}/>
+                    <Bracket name={seeds["6B"] || "Seed 6B"} subtitle={"6B"}/>
                     <Bracket name={"BYE"} subtitle={"BYE"}/>
-                    <Bracket name={"YK"} subtitle={"2B"}/>
-
+                    <Bracket name={seeds["2B"] || "Seed 2B"} subtitle={"2B"}/>
                 </BracketColumn>
                 <BracketColumn round={"quarter"}>
                     {/*Top Half*/}
@@ -44,14 +77,14 @@ export default function Brackets() {
                 </BracketColumn>
                 {/*Bottom Half*/}
                 <BracketColumn round={"preliminary"}>
-                    <Bracket name={"Seed 2A"} subtitle={"2A"}/>
+                    <Bracket name={seeds["2A"] || "Seed 2A"} subtitle={"2A"}/>
                     <Bracket name={"BYE"} subtitle={"BYE"}/>
-                    <Bracket name={"Seed 6A"} subtitle={"6A"}/>
-                    <Bracket name={"Seed 3B"} subtitle={"3B"}/>
-                    <Bracket name={"Seed 4A"} subtitle={"4A"}/>
-                    <Bracket name={"Seed 5B"} subtitle={"5B"}/>
+                    <Bracket name={seeds["6A"] || "Seed 6A"} subtitle={"6A"}/>
+                    <Bracket name={seeds["3B"] || "Seed 3B"} subtitle={"3B"}/>
+                    <Bracket name={seeds["4A"] || "Seed 4A"} subtitle={"4A"}/>
+                    <Bracket name={seeds["5B"] || "Seed 5B"} subtitle={"5B"}/>
                     <Bracket name={"BYE"} subtitle={"BYE"}/>
-                    <Bracket name={"Seed 1B"} subtitle={"1B"}/>
+                    <Bracket name={seeds["1B"] || "Seed 1B"} subtitle={"1B"}/>
                 </BracketColumn>
                 <BracketColumn round={"quarter"}>
                     <Bracket name={"5"}></Bracket>
