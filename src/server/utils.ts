@@ -20,10 +20,11 @@ import { Player } from "../types/player.js";
  */
 export async function lookupPlayerFromAbbr( playerAbbr: string, schools: Collection ): Promise<Object | null> {
     // split the abbreviation into the school abbreviation and the player index
-    const schoolAbbr: string = playerAbbr.match(/[A-Z]+/)[0];
-    if (schoolAbbr == null) {
+    const matchResult = playerAbbr.match(/[A-Z]+/);
+    if (matchResult == null) {
         return null;    // invalid abbreviation
     }
+    const schoolAbbr: string = matchResult[0];
     const playerIndex: number = parseInt(playerAbbr.slice(schoolAbbr.length));
 
     // find the school with the abbreviation
