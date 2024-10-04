@@ -1,11 +1,11 @@
-const express = require('express');
+import express from "express";
 const router = express.Router();
-const {
+import {
     createReply,
     getRepliesForPost,
     updateReply,
     deleteReply
-} = require("../controllers/replyControllers");
+} from "../controllers/replyControllers.js";
 
 // create new reply
 router.post('/:postId', createReply);
@@ -19,4 +19,4 @@ router.put('/:id', updateReply);
 // delete reply by id
 router.delete('/:id', deleteReply);
 
-module.exports = router;
+export default router;
