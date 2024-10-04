@@ -57,6 +57,7 @@ export default function Login(): ReactElement {
 
   return (
     <div className="flex-vertical container">
+      <button onClick={() => navigate('/brackets')}>Brackets</button> {/* This is a temp button to brackets page*/}
       <form className="is-fullheight">
         <h1 className="is-size-6 is-font-family-primary mb-4">Login or Create New Account</h1>
         <div className="field">
