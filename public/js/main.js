@@ -1,14 +1,45 @@
-function showContent(groupId) {
-    console.log("Show content works")
-    // Hide all content sections
-    const contents = document.querySelectorAll('.content');
-    contents.forEach(content => {
-        content.style.display = 'none'
-    });
+function showContent(index) {
+  console.log("Show content works");
+  
+  // Hide all content sections
+  const contents = document.querySelectorAll('.content');
+  contents.forEach(content => {
+      content.style.display = 'none';
+  });
 
-    // Show the selected content section
-    const selectedContent = document.getElementById(groupId);
-    selectedContent.style.display = 'block'
+  // Show the selected content section
+  const selectedContent = document.getElementById('group' + (index + 1));
+  selectedContent.style.display = 'block';
+
+  const calendarEl = document.getElementById('calendar' + (index + 1));
+  if (calendarEl) {
+      calendarEl.innerHTML = ''; 
+  }
+  const groupAssignments = groupData.groups[index].assignments.map(assignment => ({
+      title: `${assignment.title} (Assigned to: ${assignment.assignedTo})`,
+      start: assignment.dueDate
+  }));
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: groupAssignments, 
+      dateClick: function(info) {
+        // When a date is clicked, show tasks for that day
+        const selectedDate = info.dateStr;
+        showTasksForDate(selectedDate, groupData.groups[index].assignments);
+    }
+  });
+  calendar.render();
+}
+
+function showTasksForDate(selectedDate, assignments) {
+  const tasksForDate = assignments.filter(assignment => assignment.dueDate === selectedDate);
+  
+  const tasksListEl = document.querySelector('.tasks-list');
+  tasksListEl.innerHTML = tasksForDate.length > 0
+      ? tasksForDate.map(assignment => `
+          <li>${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})</li>
+        `).join("")
+      : '<li>No tasks due on this date</li>';
 }
 
 // add group
@@ -81,62 +112,57 @@ const addGroup = async function( event) {
         console.error('Error adding group:', error); 
         alert('There was an error adding the group. Please try again.');
     }    
-            
-
 }
 
-window.onload = async function (){
-    console.log("Main.js Onload")
-    // Add event listeners for each button
-    generateGroupHTML(groupData);
-    createGroupButtons(groupData);
-    showContent("group1")
+window.onload = async function () {
+  console.log("Main.js Onload");
+  generateGroupHTML(groupData);
+  createGroupButtons(groupData);
+  showContent(0);
 }
 
 // Function to generate and inject HTML into the DOM
 function generateGroupHTML(data) {
   data.groups.forEach((group, index) => {
       console.log(`Generating HTML for group: ${group.groupName}`);
-    
+
       // Group Members Names
       const memberNames = group.members.map(member => member.name).join(", ");
-    
-      // Task List
-      const tasks = group.assignments.map(assignment => `<li>${assignment.title} (Due: ${assignment.dueDate})</li>`).join("");
-    
-      // Calendar Placeholder (Example 3 days for simplicity)
-      const calendarDays = `
-        <div class="calendar">
-          <div class="day">Day 1</div>
-          <div class="day">Day 2</div>
-          <div class="day">Day 3</div>
-        </div>
-      `;
-    
+      
       // Construct the dynamic HTML content
       const groupHTML = `
-        <!-- Group 1 Content -->
-        <div id="group${index + 1}" class="content">
-          <!-- Group Header -->
-          <div class="group-header">
-            <h1 id="${group.groupName}">Welcome to ${group.groupName}</h1>
-            <p>Member Names: ${memberNames}</p>
+          <div id="group${index + 1}" class="content" style="display: none;">
+            <div class="group-header">
+                <h1>Welcome to ${group.groupName}</h1>
+                <p>Member Names: ${memberNames}</p>
+            </div>
+            <div class="calendar-tasks-container">
+
+              <div id="calendar${index + 1}" class="calendar-section"></div>
+              <div class="tasks-container">
+                <div class="tasks-section">
+                  <h3>Tasks for the day</h3>
+                  <ul class="tasks-list">
+                    <li>Select a day to see tasks</li>
+                  </ul>
+                </div>
+
+                <div class="all-tasks-section">
+                  <h3>All Tasks</h3>
+                  <ul class="all-tasks-list">
+                    ${group.assignments.map(assignment => `
+                      <li>${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})</li>
+                        `).join("")}
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          ${calendarDays}
-    
-          <div class="tasks">
-            <h3>Tasks for the day</h3>
-            <ul>
-              ${tasks}
-            </ul>
-          </div>
-        </div>
       `;
-    
+
       // Inject the generated HTML into the DOM
       document.querySelector(".main").insertAdjacentHTML("beforeend", groupHTML);
-    });
+  });
 }
 
 // Function to create buttons for each group in the sidebar
@@ -147,7 +173,7 @@ function createGroupButtons(data) {
         const button = document.createElement("button");
         button.id = `btnGroup${index + 1}`;
         button.innerText = group.groupName.split(' ').map(word => word[0]).join(''); 
-        button.onclick = () => showContent(`group${index + 1}`); // Attach onclick event
+        button.onclick = () => showContent(index); // Attach onclick event
         groupButtonsDiv.appendChild(button); // Add button to the sidebar
     });
 }
