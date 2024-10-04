@@ -1,17 +1,27 @@
 body {
-  background:#92C99A;
+  background: #92C99A;
   margin: 0;
 }
+
 /*googleFont*/
-*{
+* {
   font-family: "Open Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 100;
   font-style: normal;
   font-variation-settings:
-          "wdth" 100;
+    "wdth" 100;
+}
+
+#searchInput {
+  margin-top: 10px;
+  margin-left: 5vw;
+  font-size: 20px;
+  width: 350px;
 }
 
 
-
-
+button {
+  font-size: 20px;
+  margin: 20px;
+}
