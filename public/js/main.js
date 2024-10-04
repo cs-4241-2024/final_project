@@ -42,20 +42,78 @@ function showTasksForDate(selectedDate, assignments) {
       : '<li>No tasks due on this date</li>';
 }
 
+async function fetchUsers() {
+  try {
+    const response = await fetch('/get-users');
+    const users = await response.json();
+
+    console.log(`users are ${JSON.stringify(users)}`);
+
+
+    window.allUsers = users;
+
+    populateDropdown(users);
+  } catch (error){
+    console.error('Error fetching users:', error);
+  }
+}
+
+function populateDropdown(users){
+  const dropdown = document.getElementById('dropdown');
+  dropdown.innerHTML = ''; // clear previous content
+
+  users.forEach(user => {
+    const div = document.createElement('div');
+    div.textContent = user.username;
+    div.classList.add('dropdown-item');
+
+    div.onclick = () => selectUser(user);
+    dropdown.appendChild(div);
+  })
+}
+
+function filterUsers() {
+  const searchValue = document.getElementById('userSearch').value.toLowerCase();
+  const filteredUsers = window.allUsers.filter(user => user.username.toLowerCase().includes(searchValue));
+  populateDropdown(filteredUsers);
+}
+
+function selectUser(user) {
+  const selectedUsersDiv = document.getElementById('selectedUsers');
+  
+  // Check if the user is already selected
+  if (Array.from(selectedUsersDiv.children).some(div => div.textContent === user.name)) {
+    return; // User already selected
+  }
+
+  // Add the selected user to the selected users section
+  const selectedUserDiv = document.createElement('div');
+  selectedUserDiv.textContent = user.name;
+  selectedUserDiv.classList.add('selected-user');
+
+  selectedUsersDiv.appendChild(selectedUserDiv);
+}
+
 // add group
 const addGroup = async function( event) {
     const groupName = document.getElementById("groupNameInput").value; // generate specific group id in server
-    const users = document.getElementById("usersInput").value; // list of user with each an id, email, name, password, group id access to
-    //const tasks = []; // list of task with each user(s) assigned to, date/time due, title and description
+    const selectedUsersDiv = document.getElementById("selectedUsers"); // list of user with each an id, email, name, password, group id access to
+    const selectedUsers = Array.from(selectedUsersDiv.children).map(div => div.textContent);
+    
+    if (selectedUsers) {
+      alert("let s fucking go!!");
+    } else{
+      alert("it s chil but it doesnt work");
+    }
 
-    if (!users ||  !groupName){
+    if (!selectedUsers.length ||  !groupName){
         alert('Please fill in all the required fields');
         return;
     }
 
     const data = {
         groupName: groupName,
-        users: users.split(",").map(user => user.trim()) 
+        users: selectedUsers 
     };
 
     try {
@@ -64,61 +122,63 @@ const addGroup = async function( event) {
             body: JSON.stringify(data),
             headers: {'Content-Type': 'application/json'}
         });
+
         if (response.ok){
             const result = await response.json();
-        }
-
-            // Add a new button in the sidebar for the new group
-        const groupButtons = document.getElementById("groupButtons");
-        const newGroupButton = document.createElement("button");
-        newGroupButton.innerText = groupName;
-        newGroupButton.onclick = function () {
+            const groupButtons = document.getElementById("groupButtons");
+            const newGroupButton = document.createElement("button");
+            newGroupButton.innerText = groupName;
+            newGroupButton.onclick = function () {
+                showContent(groupName);
+            };
+    
+    
+            groupButtons.appendChild(newGroupButton);
+    
+            // Create a new content section for the new group
+            const mainContent = document.querySelector(".main");
+            const newGroupContent = document.createElement("div");
+            newGroupContent.className = "content";
+            newGroupContent.id = groupName; // Unique ID for the new group content
+    
+            // Add group header and users
+            newGroupContent.innerHTML = `
+                <div class="group-header">
+                    <h1>${groupName}</h1>
+                    <p>Member Names: ${users}</p>
+                </div>
+                <div class="calendar">
+                    <div class="day">Day 1</div>
+                    <div class="day">Day 2</div>
+                    <div class="day">Day 3</div>
+                </div>
+                <div class="tasks">
+                    <h3>No tasks assigned yet</h3>
+                    <ul></ul>
+                </div>
+            `;
+            mainContent.appendChild(newGroupContent);
+    
+            // Clear the form fields
+            document.getElementById("groupForm").reset();
+            
+            // Optionally switch to the new group view
             showContent(groupName);
-        };
-
-
-        groupButtons.appendChild(newGroupButton);
-
-        // Create a new content section for the new group
-        const mainContent = document.querySelector(".main");
-        const newGroupContent = document.createElement("div");
-        newGroupContent.className = "content";
-        newGroupContent.id = groupName; // Unique ID for the new group content
-
-        // Add group header and users
-        newGroupContent.innerHTML = `
-            <div class="group-header">
-                <h1>${groupName}</h1>
-                <p>Member Names: ${users}</p>
-            </div>
-            <div class="calendar">
-                <div class="day">Day 1</div>
-                <div class="day">Day 2</div>
-                <div class="day">Day 3</div>
-            </div>
-            <div class="tasks">
-                <h3>No tasks assigned yet</h3>
-                <ul></ul>
-            </div>
-        `;
-        mainContent.appendChild(newGroupContent);
-
-        // Clear the form fields
-        document.getElementById("groupForm").reset();
-        
-        // Optionally switch to the new group view
-        showContent(groupName);
+        }
+         
     } catch (error){
         console.error('Error adding group:', error); 
         alert('There was an error adding the group. Please try again.');
     }    
 }
 
-window.onload = async function () {
-  console.log("Main.js Onload");
-  generateGroupHTML(groupData);
-  createGroupButtons(groupData);
-  showContent(0);
+window.onload = async function (){
+    fetchUsers();
+    console.log("Main.js Onload")
+    // Add event listeners for each button
+    generateGroupHTML(groupData);
+    createGroupButtons(groupData);
+    showContent("group1")
 }
 
 // Function to generate and inject HTML into the DOM
