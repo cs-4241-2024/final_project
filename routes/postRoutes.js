@@ -1,13 +1,13 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
-import {
+const {
     getPost,
     createPost,
     updatePost,
     deletePost,
     getAllPosts,
     addReply
-} from "../controllers/postControllers.js"
+} = require("../controllers/postControllers");
 
 // get post by id
 router.get('/:id', getPost);
@@ -24,4 +24,4 @@ router.delete('/:id', deletePost);
 // get all posts
 router.get('/', getAllPosts);
 
-export default router;
+module.exports = router;
