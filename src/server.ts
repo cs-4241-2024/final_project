@@ -4,7 +4,7 @@ import path from "path";
 import * as db from "./database.ts";
 import session from "express-session";
 import bodyParser from "body-parser";
-import { Food, FoodWithID } from "./types.ts";
+import { Food } from "./types.ts";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,7 +12,13 @@ const template = "main";
 
 app.engine(
   "handlebars",
-  engine({ defaultLayout: template, extname: ".handlebars" }),
+  engine({
+    defaultLayout: template,
+    extname: ".handlebars",
+    helpers: {
+      lessThan: (a: number, b: number) => a < b
+    }
+  }),
 );
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
@@ -53,25 +59,60 @@ app.get("/", async (req, res, next) => {
   res.render("home", { username, locations });
 });
 
-async function renderLocation(res, userID: number, locationID: number, useTemplate: boolean) {
+async function renderLocation(
+  res,
+  userID: number,
+  locationID: number,
+  useTemplate: boolean,
+) {
   const username = await db.getUsername(userID);
   const location = await db.getLocation(userID, locationID);
   const foods = await db.getFoods(userID, locationID);
 
-  res.render("location", { username, foods, location, template: useTemplate ? template : false });
+  res.render("location", {
+    username,
+    foods,
+    location,
+    template: useTemplate ? template : false,
+  });
+}
+function validateParam(param: string): boolean {
+  return !param || param.length < 1 || isNaN(Number(param));
 }
 app.get("/location/:id", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
 
-  const locationID = Number(req.params.id);
-  if (!req.params.id || req.params.id.length < 1 || isNaN(locationID)) {
+  if (validateParam(req.params.id)) {
     res.redirect("/");
     return;
   }
+  const locationID = Number(req.params.id);
 
   await renderLocation(res, userID, locationID, true);
 });
+app.get(
+  "/location/:locationID/edit-food-dialog/:foodID",
+  async (req, res, next) => {
+    const userID = pageHandleAuth(req, res);
+    if (!userID) return;
+
+    if (
+      validateParam(req.params.locationID) ||
+      validateParam(req.params.foodID)
+    ) {
+      res.send("Error making edit food dialog.");
+      return;
+    }
+    const locationID = Number(req.params.locationID);
+    const foodID = Number(req.params.foodID);
+
+    const location = await db.getLocation(userID, locationID);
+    const food = await db.getFood(userID, locationID, foodID);
+
+    res.render("partials/food/edit", { food, location, template: false });
+  },
+);
 
 // API
 function apiHandleAuth(req, res) {
@@ -130,23 +171,23 @@ app.post("/api/food/make", async (req, res) => {
 app.post("/api/food/edit", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
-  const food = req.body as FoodWithID;
-  const success = await db.editFood(userID, food);
-  if (success) {
-    await renderLocation(res, userID, food.locationID, false);
-  } else {
-    res.status(500).send("Edit food failed");
-  }
-});
-app.post("/api/food/delete", async (req, res) => {
-  const userID = apiHandleAuth(req, res);
-  if (!userID) return;
-  const { foodID, locationID } = req.body;
-  const success = await db.deleteFood(userID, foodID);
-  if (success) {
-    await renderLocation(res, userID, locationID, false);
-  } else {
-    res.status(500).send("Delete food failed");
+  const { button, ...foodData } = req.body as Food & { button: string };
+  const food: Food = foodData;
+
+  if (button == "delete") {
+    const success = await db.deleteFood(userID, food.id);
+    if (success) {
+      await renderLocation(res, userID, food.locationID, false);
+    } else {
+      res.status(500).send("Delete food failed");
+    }
+  } else if (button == "save") {
+    const success = await db.editFood(userID, food);
+    if (success) {
+      await renderLocation(res, userID, food.locationID, false);
+    } else {
+      res.status(500).send("Edit food failed");
+    }
   }
 });
 

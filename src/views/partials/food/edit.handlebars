@@ -1,0 +1,55 @@
+<dialog id="edit_food" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="text-xl font-bold">Edit {{food.name}}</h3>
+
+   <form hx-post="/api/food/edit" hx-target="body">
+      <div class="items-center mt-2 space-y-3">
+        <input type="hidden" name="locationID" value="{{location.id}}">
+        <input type="hidden" name="id" value="{{food.id}}">
+
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Name</span>
+          </div>
+          <input class="input input-bordered w-full" id="name" name="name" type="text" value="{{food.name}}"/>
+        </label>
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Category</span>
+          </div>
+          <input class="input input-bordered w-full" id="category" name="category" type="text" value="{{food.category}}"/>
+        </label>
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Quantity</span>
+          </div>
+          <input class="input input-bordered w-full" id="quantity" name="quantity" type="number" step="1" min="0" value="{{food.quantity}}"/>
+        </label>
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Wanted Quantity</span>
+          </div>
+          <input class="input input-bordered w-full" id="wantedQuantity" name="wantedQuantity" type="number" step="1" min="0" value="{{food.wantedQuantity}}"/>
+        </label>
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Unit Price ($)</span>
+          </div>
+          <input class="input input-bordered w-full" id="unitPrice" name="unitPrice" type="number" step="0.01" min="0" value="{{food.unitPrice}}"/>
+        </label>
+
+        <div class="flex justify-between mt-10">
+          <button value="delete" class="btn btn-warning mt-2" type="submit" name="button">
+            Delete
+          </button>
+          <button value="save" class="btn btn-success px-8 mt-2" type="submit" name="button">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</dialog>

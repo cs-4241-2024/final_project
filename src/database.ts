@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import crypto from "crypto";
 import { promisify } from 'util';
-import { Food, FoodWithID, Location } from "./types";
+import { Food, Location } from "./types";
 
 const pbkdf2 = promisify(crypto.pbkdf2);
 
@@ -181,7 +181,7 @@ export async function makeFood(
 
 export async function editFood(
   userID: number,
-  food: FoodWithID,
+  food: Food,
 ): Promise<boolean> {
   const stmt = db.prepare(`
     UPDATE foods
@@ -197,7 +197,7 @@ export async function editFood(
       food.quantity,
       food.wantedQuantity,
       food.unitPrice,
-      food.foodID,
+      food.id,
       userID,
     );
     return result.changes > 0;
@@ -224,7 +224,7 @@ export async function deleteFood(userID: number, foodID: number): Promise<boolea
 
 export async function getFoods(userID: number, locationID: number): Promise<Food[]> {
   const stmt = db.prepare(`
-    SELECT name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
+    SELECT id, name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
     FROM foods
     WHERE user_id = ? AND location_id = ?
   `);
@@ -235,6 +235,22 @@ export async function getFoods(userID: number, locationID: number): Promise<Food
   } catch (error) {
     console.error("Error fetching foods:", error);
     return [];
+  }
+}
+
+export async function getFood(userID: number, locationID: number, foodID: number): Promise<Food | null> {
+  const stmt = db.prepare(`
+    SELECT id, name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
+    FROM foods
+    WHERE user_id = ? AND location_id = ? AND id = ?
+  `);
+
+  try {
+    const food = stmt.get(userID, locationID, foodID) as Food;
+    return food;
+  } catch (error) {
+    console.error("Error fetching food:", error);
+    return null
   }
 }
 

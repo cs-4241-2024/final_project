@@ -13,7 +13,7 @@
 </div>
 
 <div class="overflow-x-auto mt-8 mx-5 p-5 shadow-xl card">
-  <table class="table table-zebra">
+  <table class="table table-zebra rounded-4xl">
     <thead>
       <tr>
         <th>Name</th>
@@ -30,14 +30,23 @@
           <td class="font-bold">{{this.name}}</td>
           <td>{{this.category}}</td>
           <td>
-            <span style="color: red">
+            {{#if (lessThan this.quantity this.wantedQuantity)}}
+              <span style="color: red">
+                {{this.quantity}}
+              </span>
+            {{else}}
               {{this.quantity}}
-            </span>
+            {{/if}}
           </td>
           <td>{{this.wantedQuantity}}</td>
           <td>{{this.unitPrice}}</td>
           <td class="w-16 p-2">
-            <button class="btn">Edit</button>
+            <button class="btn"
+                    hx-get="/location/{{../location.id}}/edit-food-dialog/{{this.id}}"
+                    hx-target="#edit-food-dialog"
+                    hx-trigger="click">
+              Edit
+            </button>
           </td>
         </tr>
       {{/each}}
@@ -46,7 +55,7 @@
 </div>
 
 <div class="mt-10 flex justify-center w-full">
-  <button class="btn btn-active w-full max-w-xs" onclick="add_food.showModal()">
+  <button class="btn btn-accent w-full max-w-xs" onclick="add_food.showModal()">
     Add Food
   </button>
 </div>
@@ -54,3 +63,6 @@
 {{> location/delete }}
 {{> location/rename }}
 {{> food/add }}
+<div id="edit-food-dialog" hx-on::after-swap="edit_food.showModal()">
+
+</div>
