@@ -2,7 +2,7 @@ const dotenv = require('dotenv').config()
 
 const DbConnectionURL = `mongodb+srv://${process.env.DbUser}:${process.env.DbPass}@${process.env.DbURL}`
 const { MongoClient, ObjectId } = require("mongodb")
-const client = new MongoClient( DbConnectionURL )
+const client = new MongoClient(DbConnectionURL)
 
 const express = require('express')
 const app = express()
@@ -12,7 +12,7 @@ const port = 3000
 
 
 app.get('/', (req, res) => {
-    res.sendFile('/public/index.html', {root: __dirname})
+    res.sendFile('/public/index.html', { root: __dirname })
 })
 
 
