@@ -12,10 +12,10 @@ function showContent(groupId) {
         content.style.display = 'none'
     });
   // Show the selected content section
-  const selectedContent = document.getElementById(groupID);
+  const selectedContent = document.getElementById(groupId);
   selectedContent.style.display = 'block';
-  if(groupID.replace(/\d+$/, '') === 'group'){
-    groupIndex = (parseInt(groupID.match(/\d+/)[0], 10));
+  if(groupId.replace(/\d+$/, '') === 'group'){
+    groupIndex = (parseInt(groupId.match(/\d+/)[0], 10));
     groupIndex = groupIndex - 1;
     console.log("group index: " + groupIndex);
     const calendarEl = document.getElementById('calendar' + (groupIndex+1));
@@ -224,6 +224,15 @@ function generateGroupHTML(data) {
                         `).join("")}
                   </ul>
                 </div>
+                <div>
+            <form id = "addTask">
+                <Label> Add new task</Label>
+                <input type = "text" id = "addTaskInput" placeholder="New Task" required>
+                <input type = "text" id = "assignUserInput" placeholder="Assign User" required>
+                <input type = "text" id = "dateInput" placeholder="Date" required>
+                <button type = "button" onclick = "addTask()">Add new task</button>
+            </form>
+           </div>
               </div>
             </div>
           </div>
@@ -245,6 +254,30 @@ function createGroupButtons(data) {
         button.onclick = () => showContent(`group${index + 1}`); // Attach onclick event
         groupButtonsDiv.appendChild(button); // Add button to the sidebar
     });
+}
+
+function addNewTask(){
+    // Get the values from the input fields
+    const task = document.getElementById('addTaskInput').value;
+    const assignedUser = document.getElementById('assignUserInput').value;
+    const dueDate = document.getElementById('dateInput').value;
+
+    // Validate inputs (ensure none are empty)
+    if (!task || !assignedUser || !dueDate) {
+        alert("Please fill in all the fields.");
+        return;
+    }
+
+    // Create a new task object
+    const newTask = {
+        title: task,
+        user: assignedUser,
+        date: dueDate
+    };
+
+    // TODO update the database with the task list 
+    // taskList.push(newTask);
+
 }
 
 const groupData = {
