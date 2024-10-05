@@ -41,7 +41,8 @@ let db, usersCollection, groupCollection, taskCollection;
 client.connect().then(() => {
     db = client.db(dbName)
     usersCollection = db.collection(usersCollectionName); // Users collection
-    groupCollection = db.collection(groupCollectionName);
+    groupCollection = db.collection(groupCollectionName); // Group Collection
+    taskCollection = db.collection(taskCollectionName); //Task Collection
     console.log('Connected to MongoDB');
 }).catch(err => {
     console.error('Failed to connect to MongoDB', err);
@@ -114,7 +115,7 @@ app.get('/get-group-info', async (req, res) => {
 app.get('/get-users', async (req, res) => {
     try {
         const users = await usersCollection.find({}).toArray();
-        
+
         if (!users || users.length === 0) {
             return res.status(404).json({ message: 'No users found' });
         }
@@ -275,6 +276,47 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
+        // Set a cookie to track the session
+        res.cookie(sessionCookieName, { userId: user._id }, { httpOnly: true, maxAge: 3600000 }); // 1 hour expiration
+
+        console.log('Login successful:', user.username);
+
+        // If login is successful, return a success message
+        return res.status(200).json({ message: 'Login successful' });
+
+    } catch (error) {
+        // Handle any errors
+        console.error('Error logging in:', error);
+        res.status(500).json({ message: 'Error logging in', error });
+    }
+});
+
+//Check if the user logged in submitted the correct current password
+app.post('/check-password', async (req, res) => {
+    const { username, password } = req.body;
+
+    console.log('Request Body:', req.body); // Debug log
+
+    try {
+        // Find the user by username
+        const user = await usersCollection.findOne({ username });
+
+        if (!user) {
+            // If no user found, return an error
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
+        // Hash the provided password
+        // const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Compare the provided password with the hashed password in the database
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            // If password doesn't match, return an error
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
         console.log('Login successful:', user.username);
         
         // If login is successful, return a success message
@@ -287,17 +329,43 @@ app.post('/login', async (req, res) => {
     }
 });
 
+//Change password
+app.post('/update-password', async (req, res) => {
+    const { username, password } = req.body;
+
+    console.log('Request Body:', req.body); // Debug log
+
+    try {
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update the user's password in the database
+        await usersCollection.updateOne(
+            { username: username },
+            { $set: { password: hashedPassword } }
+        );
+
+        // Return a success message
+        return res.status(200).json({ message: 'Success' });
+
+    } catch (error) {
+        // Handle any errors
+        console.error('Error changing password:', error);
+        res.status(500).json({ message: 'Error changing password', error });
+    }
+});
+
 //Logout
 app.post('/logout', (req, res) =>{
-    req.logout((err) => {
-        if(err) {
-            return res.status(500).json({ message: 'Error logging out', error: err });
-        }
-        //clear cookie
+    try {
+        // Clear the session cookie
         res.clearCookie(sessionCookieName);
-        //redirect to homepage
+
+        // Redirect to the homepage or return a success message
         res.redirect('/');
-    })
+    } catch (error) {
+        res.status(500).json({ message: 'Error logging out', error });
+    }
 });
 
 // Start the server

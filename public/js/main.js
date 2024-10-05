@@ -47,10 +47,6 @@ function showTasksForDate(selectedDate, assignments) {
     : '<li>No tasks due on this date</li>';
 }
 
-async function fetchGroupInformation() {
-  try
-}
-
 async function fetchUsers() {
   try {
     const response = await fetch('/get-users');
@@ -316,6 +312,62 @@ function generateGroupHTML(data) {
     // Inject the generated HTML into the DOM
     document.querySelector(".main").insertAdjacentHTML("beforeend", groupHTML);
   });
+}
+
+const changePassword = async function(event) {
+  // Get password input value
+  const username = document.getElementById("currentUsername").value;
+  const password = document.getElementById("currentPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  // Check if currentPassword is correct
+  try {
+    const response = await fetch('/check-password', {
+      method: 'POST',
+      body: JSON.stringify({ username: username, password: password }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Check if the user is authenticated
+    if (response.ok) {
+      console.log('Password is correct');
+
+      // Check if newPassword and confirmPassword match
+      if (newPassword === confirmPassword) {
+        // Update the password
+        try{
+          const updateResponse = await fetch('/update-password', {
+          method: 'POST',
+          body: JSON.stringify({ username: username, password: newPassword }),
+          headers: {
+            'Content-Type': 'application/json'
+          }});
+          
+          if (updateResponse.ok) {
+            alert('Password updated successfully');
+          } else {
+            alert('Error updating password. Please try again.');
+          }
+        } catch (error) {
+          console.error('Error updating password:', error);
+          alert('There was an error updating the password. Please try again.');
+        };
+        
+
+      
+      // If the user entered the wrong username or password
+    }else{
+      alert('bruh you entered the wrong password');
+  
+      }  
+    }
+  } catch (error) {
+    console.error('Error checking password:', error);
+    alert('There was an error checking the password. Please try again.');
+  } 
 }
 
 // Function to create buttons for each group in the sidebar
