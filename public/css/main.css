@@ -25,19 +25,19 @@ button {
   margin: 20px;
 }
 
-table {
+.navbar {
   border-collapse: collapse;
   width: 100%;
 }
 
-th {
+.navbarItem {
   background-color: rgb(56, 129, 255);
   padding-top: 15px;
   padding-bottom: 15px;
   font-size: 20px;
 }
 
-th:hover {
+.navbarItem:hover {
   background-color: rgb(47, 101, 193);
 }
 

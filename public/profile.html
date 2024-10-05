@@ -1,59 +1,49 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <title>CS4241 Assignment 2</title>
-    <meta charset="utf-8">
-    <script src="js/main.js"></script>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/profilePageStyling.css">
+    <head>
+        <title>CS4241 Assignment 2</title>
+        <meta charset="utf-8">
+        <script src="js/main.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/profilePageStyling.css">
 
 
-    <!-- get rid of favicon error -->
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <style>
-        table {
-            border-spacing: 40px;
-            border: transparent;
-        }
+        <!-- get rid of favicon error -->
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    </head>
 
-        table td {
-            width: 33.33%;
-        }
-    </style>
-</head>
+    <body>
+        <nav class="navbar"></nav> <!--don't put anything before navbar-->
 
-<body>
-    <nav class="navbar"></nav> <!--don't put anything before navbar-->
+        <h1> This is [Username]'s profile page</h1>
+        <!--move create post button over-->
+        <div>
+            <table border="2" width="1300" height="850">
+                <tr style="height: 90%;">
+                    <td style="background-color:white;">Saved Playlists</td>
+                    <td style="background-color:white;">Favorite Songs</td>
+                    <td style="background-color:white;">Forum Posts</td>
+                </tr>
+                <tr style="height: 10%;">
+                    <td style="text-align: center;">
+                        <button id="createPlaylist">Create Playlist</button>
 
-    <h1> This is [Username]'s profile page</h1>
-    <!--move create post button over-->
-    <div>
-        <table border="2" width="1300" height="850">
-            <tr style="height: 90%;">
-                <td style="background-color:white;">Saved Playlists</td>
-                <td style="background-color:white;">Favorite Songs</td>
-                <td style="background-color:white;">Forum Posts</td>
-            </tr>
-            <tr style="height: 10%;">
-                <td style="text-align: center;">
-                    <button id="createPlaylist">Create Playlist</button>
+                    </td>
+                    <td style="text-align: center;">
+                        <button id="addFavoriteSongs">Add Favorite Songs</button>
 
-                </td>
-                <td style="text-align: center;">
-                    <button id="addFavoriteSongs">Add Favorite Songs</button>
+                    </td>
+                    <td style="text-align: center;">
+                        <button id="createPostButton" onclick="iloveClicking()">Create Post</button>
 
-                </td>
-                <td style="text-align: center;">
-                    <button id="createPostButton" onclick="iloveClicking()">Create Post</button>
-
-                </td>
+                    </td>
 
 
-            </tr>
-        </table>
+                </tr>
+            </table>
 
-    </div>
-</body>
+        </div>
+    </body>
 
 </html>
