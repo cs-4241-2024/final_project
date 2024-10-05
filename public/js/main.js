@@ -7,8 +7,8 @@ function iloveClicking() {
 //Adds the navigation bar to the location of the navbar classon each page.
 //To add the nav bar to a page just add the following HTML element <nav class="navbar"></nav>
 const nav = function () {
-	const navbar = document.querySelector('.navbar')
-	navbar.innerHTML = `
+    const navbar = document.querySelector('.navbar')
+    navbar.innerHTML = `
 	<table>
 		<th><a class=navbarLink href="index.html">Home</a></th>
 		<th><a class=navbarLink href="profile.html">Profile</a></th>
@@ -20,5 +20,5 @@ const nav = function () {
 }
 
 window.onload = function () {
-	nav()
+    nav()
 }
