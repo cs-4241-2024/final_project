@@ -7,6 +7,8 @@ import Header from "./components/header";
 import Home from "./pages/Home";
 import GameSubmission from "./pages/GameSubmission";
 
+import Dashboard from "./pages/dashboard";
+import Brackets from "./pages/Brackets";
 
 function App() {
 
@@ -18,7 +20,9 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/game-submission" element={<GameSubmission />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/brackets" element={<Brackets/>}/>
                     <Route  path="/a4-logic" element={<A4Logic />} />
+
                 </Routes>
             </BrowserRouter>
 

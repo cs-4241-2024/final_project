@@ -5,6 +5,7 @@ import ViteExpress from 'vite-express'
 import cookie from 'cookie-session'
 import { MongoClient, ObjectId, Collection } from 'mongodb'
 import { lookupPlayerFromAbbr } from './utils.js'
+import { School } from '../types/school.js'
 
 const app = express()
 
@@ -102,6 +103,71 @@ app.get('/userMatches', async ( req: express.Request, res: express.Response ) =>
     const user = req.session.user;
     const matches = await collection.find({owner: user}).toArray();
     res.json(matches);
+});
+
+app.get('/schools',async (req: express.Request, res: express.Response) => {
+    if (schools !== null) {
+        const docs = await schools.find({}).toArray()
+        res.json(docs)
+    }
+})
+
+app.get('/getSchool', (req: express.Request, res: express.Response) => {
+    const schoolName = req.body;
+    if(!schoolName) {
+        return res.status(400).json({error: 'School name is required'});
+    }
+
+    const school = schools.findOne({name: schoolName});
+    if(!school) {
+        return res.status(404).json({error: 'School not found'});
+    }
+    res.json(school);
+})
+
+app.get('/getStartBracket', async (req: express.Request, res: express.Response) => {
+    try {
+        const allSchools = await schools.find({}).toArray();
+        const totalPoints = allSchools.reduce((sum, school) => sum + school.points, 0);
+
+        if (totalPoints >= 30) {
+            res.status(200).send('Good request');
+        } else {
+            res.status(400).send('Bad request: Total points less than 30');
+        }
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/getSeeds', async (req: express.Request, res: express.Response) => {
+    try {
+        const allSchools = await schools.find({}).toArray();
+
+        // Separate schools into pools A and B
+        const poolA = allSchools.filter(school => school.pool === 'A');
+        const poolB = allSchools.filter(school => school.pool === 'B');
+
+        // Sort schools within each pool based on points in descending order
+        poolA.sort((a, b) => b.points - a.points);
+        poolB.sort((a, b) => b.points - a.points);
+
+        const seeds: { [key: string]: string } = {};
+
+        // Assign seeds for pool A
+        poolA.forEach((school, index) => {
+            seeds[`${index + 1}A`] = school.abbr;
+        });
+
+        // Assign seeds for pool B
+        poolB.forEach((school, index) => {
+            seeds[`${index + 1}B`] = school.abbr;
+        });
+
+        res.json(seeds);
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 // --- POST ---

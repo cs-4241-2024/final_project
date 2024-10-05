@@ -4,4 +4,5 @@ export type School = {
     abbr: string;
     players: Player[];
     points: number;
+    pool: string;
 }

@@ -1,45 +1,54 @@
 import React, { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-async function loginFunc(event, navigate) {
+async function loginFunc(event: React.MouseEvent<HTMLButtonElement>, navigate: ReturnType<typeof useNavigate>) {
   event.preventDefault();
-  const input = { user: document.getElementById('username'), pass: document.getElementById('password') },
-    json = { user: input.user.value, pass: input.pass.value },
-    body = JSON.stringify(json);
+  const input = {
+    user: document.getElementById('username') as HTMLInputElement | null,
+    pass: document.getElementById('password') as HTMLInputElement | null
+  };
+  if (input.user && input.pass) {
+    const json = { user: input.user.value, pass: input.pass.value },
+      body = JSON.stringify(json);
 
-  console.log("test:", body);
+    console.log("test:", body);
 
-  const response = await fetch('/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body
-  });
-  console.log(response.status);
-  if (response.status === 200) {
-    alert("Login Successful");
-    navigate('/dashboard');
-    // window.location.href='/dashboard';
-  } else {
-    alert("Login failed");
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
+    console.log(response.status);
+    if (response.status === 200) {
+      alert("Login Successful");
+      navigate('/dashboard');
+    } else {
+      alert("Login failed");
+    }
   }
 }
 
-const newLogin = async function (event) {
+const newLogin = async function (event: React.MouseEvent<HTMLButtonElement>) {
   event.preventDefault();
-  const input = { user: document.getElementById('username'), pass: document.getElementById('password') },
-    json = { user: input.user.value, pass: input.pass.value },
-    body = JSON.stringify(json);
+  const input = {
+    user: document.getElementById('username') as HTMLInputElement | null,
+    pass: document.getElementById('password') as HTMLInputElement | null
+  };
+  if (input.user && input.pass) {
+    const json = { user: input.user.value, pass: input.pass.value },
+      body = JSON.stringify(json);
 
-  const response = await fetch('/newLogin', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body
-  });
+    const response = await fetch('/newLogin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
 
-  if (response.status === 200) {
-    alert("New Login Created");
-  } else {
-    alert("No New Login Created");
+    if (response.status === 200) {
+      alert("New Login Created");
+    } else {
+      alert("No New Login Created");
+    }
   }
 }
 
@@ -48,6 +57,7 @@ export default function Login(): ReactElement {
 
   return (
     <div className="flex-vertical container">
+      <button onClick={() => navigate('/brackets')}>Brackets</button>
       <form className="is-fullheight">
         <h1 className="is-size-6 is-font-family-primary mb-4">Login or Create New Account</h1>
         <div className="field">
