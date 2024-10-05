@@ -13,7 +13,7 @@ export default function Home() {
             <Button className="bg-TrevGreen" navigateTo={"/round-robin"}>
                 <p>Round Robin</p>
             </Button>
-            <Button className="bg-TrevGreen" navigateTo={"/bracket"}>
+            <Button className="bg-TrevGreen" navigateTo={"/brackets"}>
                 <p>Bracket</p>
             </Button>
             <HeroSection/>
