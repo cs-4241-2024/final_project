@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'TrevBlue': '#214479',
+        'TrevGreen': '#1E6837',
+      }
+    },
   },
   plugins: [],
 }
