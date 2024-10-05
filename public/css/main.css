@@ -20,8 +20,29 @@ body {
   width: 350px;
 }
 
-
 button {
   font-size: 20px;
   margin: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  background-color: rgb(56, 129, 255);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 20px;
+}
+
+th:hover {
+  background-color: rgb(47, 101, 193);
+}
+
+.navbarLink {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
 }

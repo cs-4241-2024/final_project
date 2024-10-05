@@ -1,50 +1,24 @@
-// // FRONT-END (CLIENT) JAVASCRIPT HERE
+// FRONT-END (CLIENT) JAVASCRIPT HERE
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   const loginFile = document.getElementById('loginPage');
-//   const usernameChosen = document.getElementById('username');
-//   const passwordChosen = document.getElementById('password');
+function iloveClicking() {
+	alert("I LOVE CLICKING")
+}
 
-//   loginFile.addEventListener('submit', async function (event) {
-//     event.preventDefault();
+//Adds the navigation bar to the location of the navbar classon each page.
+//To add the nav bar to a page just add the following HTML element <nav class="navbar"></nav>
+const nav = function () {
+	const navbar = document.querySelector('.navbar')
+	navbar.innerHTML = `
+	<table>
+		<th><a class=navbarLink href="index.html">Home</a></th>
+		<th><a class=navbarLink href="profile.html">Profile</a></th>
+		<th><a class=navbarLink href="forum.html">Forum</a></th>
+		<th><a class=navbarLink href="playlists.html">Playlists</a></th>
+		<th><a class=navbarLink href="songs.html">Songs</a></th>
+		<th><a class=navbarLink href="users.html">Users</a></th>
+	</table>`
+}
 
-//     const username = usernameChosen.value();
-//     const password = passwordChosen.value();
-
-//     if (username === '' || password === '') {
-
-//       alert("You left your username and/or password slot blank. Please try again!");
-//       return;
-//     }
-
-
-//     try {
-
-//       const response = await fetch('/login', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ username, password }),
-//       });
-
-
-//       const data = await response.json();
-//       if (data.success && response.ok) {
-//         alert("You have successfully logged in!")
-
-//         //INSERT CODE HERE LATER TO REDIRECT TO PROFILE HOME PAGE
-//       }
-//       else {
-//         alert("Login unsuccessful. Please try again.")
-//       }
-//     }
-//     catch {
-//       alert("ERROR! ERROR! Login unsuccessful! Please try again at a later time.")
-//     }
-
-
-//   })
-
-
-// })
+window.onload = function () {
+	nav()
+}
