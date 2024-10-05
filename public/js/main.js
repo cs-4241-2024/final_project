@@ -1,3 +1,9 @@
+function toggleDropdownVisibility() {
+  const dropdown = document.getElementById('dropdown');
+  const searchValue = document.getElementById('userSearch').value;
+  dropdown.style.display = searchValue ? 'block' : 'none'; // Show if there is a value in the search bar
+}
+
 function showContent(groupId) {
     console.log("Show content works")
     // Hide all content sections
@@ -49,22 +55,34 @@ function filterUsers() {
 
 function selectUser(user) {
   const selectedUsersDiv = document.getElementById('selectedUsers');
-  
+    
   // Check if the user is already selected
-  if (Array.from(selectedUsersDiv.children).some(div => div.textContent === user.name)) {
-    return; // User already selected
+  if (Array.from(selectedUsersDiv.children).some(div => div.textContent === user.username)) {
+      return; // User already selected
   }
 
   // Add the selected user to the selected users section
   const selectedUserDiv = document.createElement('div');
-  selectedUserDiv.textContent = user.name;
+  selectedUserDiv.textContent = user.username;
   selectedUserDiv.classList.add('selected-user');
 
   selectedUsersDiv.appendChild(selectedUserDiv);
+
+  // Remove the selected user from the dropdown
+  const dropdownItems = document.querySelectorAll('.dropdown-item');
+  dropdownItems.forEach(item => {
+      if (item.textContent === user.username) {
+          item.remove();
+      }
+  });
+
+  // Clear the search input and hide the dropdown
+  document.getElementById('userSearch').value = '';
+  document.getElementById('dropdown').style.display = 'none';
 }
 
 // add group
-const addGroup = async function( event) {
+const addGroup = async function(event) {
     const groupName = document.getElementById("groupNameInput").value; // generate specific group id in server
     const selectedUsersDiv = document.getElementById("selectedUsers"); // list of user with each an id, email, name, password, group id access to
     const selectedUsers = Array.from(selectedUsersDiv.children).map(div => div.textContent);
