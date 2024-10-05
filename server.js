@@ -161,6 +161,70 @@ app.post('/login', async (req, res) => {
     }
 });
 
+//Check if the user logged in submitted the correct current password
+app.post('/check-password', async (req, res) => {
+    const { username, password } = req.body;
+
+    console.log('Request Body:', req.body); // Debug log
+
+    try {
+        // Find the user by username
+        const user = await usersCollection.findOne({ username });
+
+        if (!user) {
+            // If no user found, return an error
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
+        // Hash the provided password
+        // const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Compare the provided password with the hashed password in the database
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            // If password doesn't match, return an error
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
+        console.log('Login successful:', user.username);
+        
+        // If login is successful, return a success message
+        return res.status(200).json({ message: 'Login successful' });
+
+    } catch (error) {
+        // Handle any errors
+        console.error('Error logging in:', error);
+        res.status(500).json({ message: 'Error logging in', error });
+    }
+});
+
+//Change password
+app.post('/update-password', async (req, res) => {
+    const { username, password } = req.body;
+
+    console.log('Request Body:', req.body); // Debug log
+
+    try {
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update the user's password in the database
+        await usersCollection.updateOne(
+            { username: username },
+            { $set: { password: hashedPassword } }
+        );
+
+        // Return a success message
+        return res.status(200).json({ message: 'Success' });
+
+    } catch (error) {
+        // Handle any errors
+        console.error('Error changing password:', error);
+        res.status(500).json({ message: 'Error changing password', error });
+    }
+});
+
 //Logout
 app.post('/logout', (req, res) =>{
     try {
