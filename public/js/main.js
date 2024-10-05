@@ -188,6 +188,26 @@ window.onload = async function (){
     generateGroupHTML(groupData);
     createGroupButtons(groupData);
     showContent("group1");
+
+    // Add logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', async function() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+            const data = await response.json();
+            console.log('Logout response:', data);
+            if (response.ok) {
+                console.log("Successfully logged out user!");
+                window.location.href = '/login.html';
+            } else {
+                alert('Error during logout: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+            alert('An error occurred during logout. Please try again.');
+        }
+    });
 }
 
 // Function to generate and inject HTML into the DOM
@@ -279,6 +299,8 @@ function addNewTask(){
     // taskList.push(newTask);
 
 }
+
+
 
 const groupData = {
     "groups": [

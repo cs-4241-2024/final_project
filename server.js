@@ -41,7 +41,8 @@ let db, usersCollection, groupCollection, taskCollection;
 client.connect().then(() => {
     db = client.db(dbName)
     usersCollection = db.collection(usersCollectionName); // Users collection
-    groupCollection = db.collection(groupCollectionName);
+    groupCollection = db.collection(groupCollectionName); // Group Collection
+    taskCollection = db.collection(taskCollectionName); //Task Collection
     console.log('Connected to MongoDB');
 }).catch(err => {
     console.error('Failed to connect to MongoDB', err);
@@ -49,7 +50,7 @@ client.connect().then(() => {
 
 app.post('/add-group', async (req,res) => {
     const {groupName, users} = req.body;
-    
+
     try {
         //check if group already exists
         const existingGroup = await groupCollection.findOne({groupName});
@@ -77,7 +78,7 @@ app.post('/add-group', async (req,res) => {
 app.get('/get-users', async (req, res) => {
     try {
         const users = await usersCollection.find({}).toArray();
-        
+
         if (!users || users.length === 0) {
             return res.status(404).json({ message: 'No users found' });
         }
@@ -102,26 +103,26 @@ app.get('/', (req, res) => {
 //Register User
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
-  
+
     try {
-      // Check if the username already exists
-      const existingUser = await usersCollection.findOne({ username });
-      if (existingUser) {
-        return res.status(400).json({ message: 'Username already exists' });
-      }
-  
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Insert new user into the database
-      const newUser = { username, password: hashedPassword };
-      await usersCollection.insertOne(newUser);
-  
-      res.status(201).json({ message: 'User registered successfully' });
+        // Check if the username already exists
+        const existingUser = await usersCollection.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Username already exists' });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert new user into the database
+        const newUser = { username, password: hashedPassword };
+        await usersCollection.insertOne(newUser);
+
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-      res.status(500).json({ message: 'Error registering user', error });
+        res.status(500).json({ message: 'Error registering user', error });
     }
-  });
+});
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -145,8 +146,11 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
+        // Set a cookie to track the session
+        res.cookie(sessionCookieName, { userId: user._id }, { httpOnly: true, maxAge: 3600000 }); // 1 hour expiration
+
         console.log('Login successful:', user.username);
-        
+
         // If login is successful, return a success message
         return res.status(200).json({ message: 'Login successful' });
 
@@ -159,15 +163,15 @@ app.post('/login', async (req, res) => {
 
 //Logout
 app.post('/logout', (req, res) =>{
-    req.logout((err) => {
-        if(err) {
-            return res.status(500).json({ message: 'Error logging out', error: err });
-        }
-        //clear cookie
+    try {
+        // Clear the session cookie
         res.clearCookie(sessionCookieName);
-        //redirect to homepage
+
+        // Redirect to the homepage or return a success message
         res.redirect('/');
-    })
+    } catch (error) {
+        res.status(500).json({ message: 'Error logging out', error });
+    }
 });
 
 // Start the server
