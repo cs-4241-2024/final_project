@@ -206,8 +206,60 @@ app.post('/login', async ( req: express.Request, res: express.Response ) => {
     }
 });
 
-app.post('/add', async ( req: express.Request, res: express.Response ) => {
+app.get('/userMatches', async (req: express.Request, res: express.Response) => {
+    if (!req.session.login) {
+        return res.status(401).send('Unauthorized');
+    }
+
+    const user = req.session.user;
+    const matches = await collection.find({ owner: user}).toArray();
+    res.json(matches);
+});
+
+
+// route to get all docs
+app.get("/docs", async (req: express.Request, res: express.Response) => {
+    if (collection !== null) {
+        const docs = await collection.find({}).toArray()
+        res.json( docs )
+    }
+})
+
+app.post( '/add', async (req: express.Request,res: express.Response) => {
     const matchData = req.body;
+    const schools = [
+        { abbr: "SAN", name: "Sandburg" },
+        { abbr: "AND", name: "Andrew" },
+        { abbr: "NT", name: "New Trier" },
+        { abbr: "DGN", name: "Downers Grove North" },
+        { abbr: "FR", name: "Fremd" },
+        { abbr: "HER", name: "Hersey" },
+        { abbr: "HS", name: "Hinsdale South" },
+        { abbr: "LT", name: "Lockport" },
+        { abbr: "NN", name: "Naperville North" },
+        { abbr: "DF", name: "Deerfield" },
+        { abbr: "WY", name: "Whitney Young" },
+        { abbr: "YK", name: "York" }
+    ];
+    // determine if doubles or singles
+    if(matchData.PlayerA1 && matchData.PlayerA2 && matchData.PlayerB1 && matchData.PlayerB2){
+        matchData.MatchType = "Doubles";
+    }
+    else{
+        matchData.MatchType = "Singles";
+    }
+
+    // determine school
+    const findSchoolName = (code: string) => {
+        const school = schools.find(s => code.startsWith(s.abbr));
+        return school ? school.abbr : "Unknown School";
+    };
+
+    matchData.SchoolA = findSchoolName(matchData.PlayerA1);
+    matchData.SchoolB = findSchoolName(matchData.PlayerB1);
+
+
+
 
     // Logic to determine the winner
     let winner;
@@ -217,16 +269,42 @@ app.post('/add', async ( req: express.Request, res: express.Response ) => {
         winner = matchData.SchoolA;
     } else if (matchData.Game3A > matchData.Game3B) {
         winner = matchData.SchoolA;
-    } else {
+    } else{
         winner = matchData.SchoolB;
     }
 
     // Add the winner to the match data
     matchData.winner = winner;
     matchData.owner = req.session.user;
-    const result = await collection.insertOne(matchData)
-    matchData._id = result.insertedId
-    res.json(matchData)
+    const result = await collection.insertOne( matchData )
+    matchData._id =result.insertedId
+    res.json( matchData )
+})
+
+// assumes req.body takes form { _id:5d91fb30f3f81b282d7be0dd } etc.
+app.delete( '/remove', async (req: express.Request,res: express.Response) => {
+    const result = await collection.deleteOne({
+        _id: ObjectId.createFromHexString( req.body._id )
+    })
+
+    res.json( result )
+})
+
+app.get('/getMatch', async (req: express.Request, res: express.Response) => {
+    const matchId = req.query.id;
+    if (!matchId) {
+        return res.status(400).json({ error: 'Match ID is required' });
+    }
+    let match = null;
+    if (typeof matchId === "string") {
+        match = await collection.findOne({_id: ObjectId.createFromHexString(matchId)});
+    }
+    // const match = await collection.findOne({ _id: matchId });
+    if (!match) {
+        return res.status(404).json({ error: 'Match not found' });
+    }
+
+    res.json(match);
 });
 
 app.post('/update', async ( req: express.Request, res: express.Response ) => {
