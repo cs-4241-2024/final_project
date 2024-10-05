@@ -8,6 +8,7 @@ import {
     getAllPosts,
     addReply
 } from "../controllers/postControllers.js"
+import {isAuthenticated} from "./userRoutes.js";
 
 // get post by id
 router.get('/:id', getPost);
@@ -22,6 +23,6 @@ router.put('/:id', updatePost);
 router.delete('/:id', deletePost);
 
 // get all posts
-router.get('/', getAllPosts);
+router.get('/',getAllPosts);
 
 export default router;

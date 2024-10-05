@@ -66,7 +66,7 @@ passport.deserializeUser(async function (gitHubID, done) {
 router.use(expressSession({ secret:process.env.sessionSecret, resave: false, saveUninitialized: false, store:MongoStore.create({mongoUrl:DbConnectionURL}) }))
 router.use(passport.initialize())
 router.use(passport.session({}));
-function isAuthenticated(req, res, next) {
+export function isAuthenticated(req, res, next) {
     console.log(req)
     if (req.isAuthenticated()) { return next(); }
     else{
@@ -78,18 +78,19 @@ router.get('/auth/github', passport.authenticate('github'),function (req,res){
 })
 
 router.get('/auth/github/callback', passport.authenticate('github',{failureRedirect: '/'}),function (req,res){
-    res.redirect("/test.html");
+    res.redirect("/testPages/testAuth.html");
 })
 
 router.post('/git/logout', function(req, res, next) {
     req.logout(function(err) {
         console.log(err)
-        res.redirect('/');
+        res.redirect('/testPages/testLogin.html');
     });
 
 });
 router.get('/git/userName',isAuthenticated,function (req,res){
     console.log("sent username")
+    console.log(req.session.login)
     res.status(200)
     res.send({userName:req.user.userName})
 })
