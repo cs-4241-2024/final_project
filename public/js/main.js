@@ -224,15 +224,6 @@ function generateGroupHTML(data) {
                         `).join("")}
                   </ul>
                 </div>
-                <div>
-            <form id = "addTask">
-                <Label> Add new task</Label>
-                <input type = "text" id = "addTaskInput" placeholder="New Task" required>
-                <input type = "text" id = "assignUserInput" placeholder="Assign User" required>
-                <input type = "text" id = "dateInput" placeholder="Date" required>
-                <button type = "button" onclick = "addTask()">Add new task</button>
-            </form>
-           </div>
               </div>
             </div>
           </div>
@@ -256,28 +247,60 @@ function createGroupButtons(data) {
     });
 }
 
-function addNewTask(){
-    // Get the values from the input fields
-    const task = document.getElementById('addTaskInput').value;
-    const assignedUser = document.getElementById('assignUserInput').value;
-    const dueDate = document.getElementById('dateInput').value;
+const changePassword = async function(event) {
+  // Get password input value
+  const username = document.getElementById("currentUsername").value;
+  const password = document.getElementById("currentPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
 
-    // Validate inputs (ensure none are empty)
-    if (!task || !assignedUser || !dueDate) {
-        alert("Please fill in all the fields.");
-        return;
+  // Check if currentPassword is correct
+  try {
+    const response = await fetch('/check-password', {
+      method: 'POST',
+      body: JSON.stringify({ username: username, password: password }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Check if the user is authenticated
+    if (response.ok) {
+      console.log('Password is correct');
+
+      // Check if newPassword and confirmPassword match
+      if (newPassword === confirmPassword) {
+        // Update the password
+        try{
+          const updateResponse = await fetch('/update-password', {
+          method: 'POST',
+          body: JSON.stringify({ username: username, password: newPassword }),
+          headers: {
+            'Content-Type': 'application/json'
+          }});
+          
+          if (updateResponse.ok) {
+            alert('Password updated successfully');
+          } else {
+            alert('Error updating password. Please try again.');
+          }
+        } catch (error) {
+          console.error('Error updating password:', error);
+          alert('There was an error updating the password. Please try again.');
+        };
+        
+
+      
+      // If the user entered the wrong username or password
+    }else{
+      alert('bruh you entered the wrong password');
+  
+      }  
     }
-
-    // Create a new task object
-    const newTask = {
-        title: task,
-        user: assignedUser,
-        date: dueDate
-    };
-
-    // TODO update the database with the task list 
-    // taskList.push(newTask);
-
+  } catch (error) {
+    console.error('Error checking password:', error);
+    alert('There was an error checking the password. Please try again.');
+  } 
 }
 
 const groupData = {
