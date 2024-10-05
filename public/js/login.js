@@ -32,7 +32,6 @@ window.onload = async function (){
                 console.log("response ok")
                 window.location.href = "index.html";
             }else{
-                console.log("fuccck")
                 alert(data.message);
                 if(data.message === "Invalid login"){
                     const register = confirm("Register User?");
@@ -48,7 +47,6 @@ window.onload = async function (){
             console.error('Error during login:', error);
             alert('An error occurred during login. Please try again.');
         }
-        console.log("what is happening")
     })
     document.getElementById('register').addEventListener('click', async function(event){
         // Get username & password

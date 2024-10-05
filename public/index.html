@@ -13,7 +13,7 @@
         <!-- Sidebar -->
         <nav class="sidebar">
             <div id = "groupButtons">
-                <button id="btnAddGroup" onclick="showContent('addGroup')">+</button>
+                <button id="btnAddGroup" onclick="showGroup()">+</button>
             </div>
             <div class="footer">
                 <button id = "btnLogout" onclick="showContent('logout')"><svg width="18px" height="18px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="miter"><polyline points="14 7 14 2 2 2 2 22 14 22 14 17"></polyline><line x1="10" y1="12" x2="22" y2="12"></line><polyline points="18 8 22 12 18 16"></polyline></svg></button>
@@ -32,12 +32,17 @@
                     <input type="text" id="groupNameInput" placeholder="Enter group name" required>
                     <!-- Multi-select dropdown for users -->
                     <label for="userSearch">Select Users:</label>
-                    <div class="select-container">
-                        <input type="text" id="userSearch" placeholder="Search and select users..." oninput="filterUsers()" autocomplete="off" />
-                        <div id="dropdown" class="dropdown">
-                            <!-- Users will be populated here from JS -->
+                        <div class="dropdown-container">
+                            <div class="selected-options" id="selected-options">
+                                <!-- Selected options will appear here -->
+                            </div>
+                            <div class="dropdown">
+                                <input type="text" placeholder="Search..." id="search-bar">
+                                <div class="options-list" id="options-list">
+                                    <!-- has all users-->
+                                </div>
+                            </div>
                         </div>
-                    </div>
                     <button type="button" onclick="addGroup()">Add Group</button>
                 </form>
             </div>

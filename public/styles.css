@@ -135,6 +135,62 @@ body {
     border-left: 4px solid #de9696; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.dropdown-container {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.selected-options {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.selected-options .option {
+    background-color: #007BFF;
+    color: white;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 5px;
+}
+
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+#search-bar {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.options-list {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+}
+
+.options-list label {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.options-list label:hover {
+    background-color: #f0f0f0;
+}
+
+.options-list input[type="checkbox"] {
+    margin-right: 10px;
+}
   
 
 /* Footer */
