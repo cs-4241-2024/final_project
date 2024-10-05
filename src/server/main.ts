@@ -42,6 +42,9 @@ async function run() {
     }));
 
     app.post("/addUser", express.json(), async (req: express.Request, res: express.Response) => {
+        if (!req.session) {
+            throw Error("Session not found!");
+        }
         const newUser: PassportLocalDocument = new User({username: req.body.username}) as PassportLocalDocument;
         await newUser.setPassword(req.body.password);
         await newUser.save();
@@ -50,11 +53,27 @@ async function run() {
         if (user.user === false) {
             res.sendStatus(403);
         } else {
-            res.json(user.user._id);
+            req.session.user = user.user._id;
+            // res.json(user.user._id);
+            res.sendStatus(200);
+        }
+    });
+
+    app.get("/checkLogin", async (req: express.Request, res: express.Response) => {
+        if (!req.session) {
+            throw Error("Session not found!");
+        }
+        if (req.session.isPopulated) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(401);
         }
     });
 
     app.post("/login", express.json(), async (req: express.Request, res: express.Response) => {
+        if (!req.session) {
+            throw Error("Session not found!");
+        }
         const user = await User.authenticate()(req.body.username, req.body.password);
         console.log(user);
         if (user.user === false) {
