@@ -9,6 +9,10 @@ import replyRoutes from './routes/replyRoutes.js'
 import songRoutes from './routes/songRoutes.js'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import passport from "passport";
+import expressSession from "express-session";
+import MongoStore from "connect-mongo";
+import passportGithub2 from "passport-github2";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -18,6 +22,55 @@ const app = express()
 app.use(express.urlencoded({ extended: false })); //url parser
 app.use(express.json()) // parse data as json
 const port = 3000
+const Dbname ="SongWebsite"
+//Github Authentication
+passport.use(new passportGithub2.Strategy({
+        clientID: process.env.gitHubClient,
+        clientSecret: process.env.gitHubSecret,
+        callbackURL: "http://localhost:3000/api/users/auth/github/callback"
+    },
+    async function (accessToken, refreshToken, profile, done) {
+        await client.connect()
+        let usersTable = await client.db(Dbname).collection("Users")
+
+        //attempt to find the user, if no user is present create one
+        let findResult = await usersTable.findOneAndUpdate({gitHubID:profile.id},
+            { $setOnInsert:{
+                    gitHubID:profile.id,
+                    userName:profile.username,
+                    playlists:[],
+                    posts:[],
+                    replies:[],
+                    favorites:[],
+                    uploadedSongs:[]}
+            }, {upsert:true})
+
+        return done(null, findResult)
+    }
+));
+
+passport.serializeUser(function(user, done) {
+    done(null, user.gitHubID);
+});
+
+passport.deserializeUser(async function (gitHubID, done) {
+    await client.connect()
+    let usersTable = await client.db(Dbname).collection("Users")
+    let findUser = await usersTable.findOne({gitHubID:gitHubID})
+    done(null, findUser);
+});
+
+app.use(expressSession({ secret:process.env.sessionSecret, resave: false, saveUninitialized: false, store:MongoStore.create({mongoUrl:DbConnectionURL}) }))
+app.use(passport.initialize())
+app.use(passport.session({}));
+
+export function isAuthed(req, res, next) {
+    console.log(req)
+    if (req.isAuthenticated()) { return next(); }
+    else{
+        res.sendStatus(400)
+    }
+}
 
 app.get('/', (req, res) => {
     res.sendFile('/public/index.html', {root: __dirname})

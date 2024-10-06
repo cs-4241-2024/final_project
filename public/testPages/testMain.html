@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./testForm.js" type="module"></script>
+    <script src="./testAuth.js" type="module"></script>
+    <script src="./testMain.js" type="module"></script>
+</head>
+<body>
+
+<p id="pUser" onload="getLoggedInUser()"></p>
+<button id="logout">logOut</button>
+<form>
+    <label for="title">title</label><input id="title">
+    <label for="content">content</label><input id="content">
+    <label for="isSong">isSong</label><input id="isSong" type="checkbox">
+    <label for="isPlaylist">isPlaylist</label><input id="isPlaylist" type="checkbox">
+    <label for="idOfTopic">idOfTopic</label><input id="idOfTopic">
+    <button id="submitNewPost">add post</button>
+</form>
+<table>
+    <tbody id="postsTable">
+
+    </tbody>
+</table>
+</body>
+</html>
