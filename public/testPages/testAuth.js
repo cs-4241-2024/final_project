@@ -1,4 +1,4 @@
-async function getLoggedInUser(){
+export async function getLoggedInUser(){
     const response = await fetch('/api/users/git/userName', {
         method: 'get'
     })
@@ -12,13 +12,9 @@ async function getLoggedInUser(){
     }
 }
 
-async function logout(){
+export async function logout(){
     const response = await fetch('/api/users/git/logout', {
         method: 'POST'
     })
     window.location.href="/testPages/testLogin.html"
-}
-
-window.onload = function () {
-    getLoggedInUser().then()
 }

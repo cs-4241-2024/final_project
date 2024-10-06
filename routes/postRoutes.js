@@ -1,28 +1,25 @@
 import express from "express";
 const router = express.Router();
 import {
-    getPost,
     createPost,
     updatePost,
     deletePost,
-    getAllPosts,
-    addReply
+    searchPosts
 } from "../controllers/postControllers.js"
-import {isAuthenticated} from "./userRoutes.js";
+import {isAuthed} from "../server.js";
 
-// get post by id
-router.get('/:id', getPost);
+router.use(express.json())
+router.use(express.urlencoded({ extended: false })); //url parser
 
 // create new post
-router.post('/', createPost);
+router.post('/', isAuthed, createPost);
 
 // update post by id
-router.put('/:id', updatePost);
+router.put('/:id',isAuthed, updatePost);
 
 // delete post by id
-router.delete('/:id', deletePost);
+router.delete('/:id',isAuthed, deletePost);
 
-// get all posts
-router.get('/',getAllPosts);
-
+//search and return for posts
+router.post('/search',searchPosts)
 export default router;
