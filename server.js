@@ -38,11 +38,8 @@ passport.use(new passportGithub2.Strategy({
             { $setOnInsert:{
                     gitHubID:profile.id,
                     userName:profile.username,
-                    playlists:[],
-                    posts:[],
-                    replies:[],
                     favorites:[],
-                    uploadedSongs:[]}
+                    }
             }, {upsert:true})
 
         return done(null, findResult)
