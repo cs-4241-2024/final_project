@@ -1,5 +1,5 @@
 import pkg from 'mongodb';
-const { MongoClient, ObjectID } = pkg;
+const { MongoClient, ObjectId } = pkg;
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -51,7 +51,7 @@ export const getSongByID = async (req, res) => {
     try {
         await client.connect();
         const db = client.db('SongWebsite');
-        const song = await db.collection('songs').findOne({_id: ObjectID(req.params.id)});
+        const song = await db.collection('songs').findOne({_id: new ObjectId(req.params.id)});
         if(!song) {
             return res.status(404).json({error: 'Song not found'});
         }
@@ -67,7 +67,7 @@ export const deleteSong = async (req, res) => {
     try {
         await client.connect();
         const db = client.db('SongWebsite');
-        const result = await db.collection('songs').deleteOne({_id: ObjectID(req.params.id)});
+        const result = await db.collection('songs').deleteOne({_id: new ObjectId(req.params.id)});
 
         if (result.deletedCount === 0) {
             res.status(404).json({error: 'Song not found'});
@@ -87,7 +87,7 @@ export const updateSong = async (req, res) => {
         const db = client.db('SongWebsite');
 
         const updatedSong = await db.collection('songs').updateOne(
-            {_id: ObjectID(req.params.id)},
+            {_id: new ObjectId(req.params.id)},
             {$set: {
                     name: req.body.name,
                     artist: req.body.artist,
@@ -109,8 +109,6 @@ export const updateSong = async (req, res) => {
         await client.close();
     }
 }
-
-
 
 
 
