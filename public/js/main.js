@@ -49,6 +49,27 @@ function showTasksForDate(selectedDate, assignments) {
       : '<li>No tasks due on this date</li>';
 }
 
+const checkAuth = async function () {
+    try {
+        const response = await fetch('/protected', {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Not authenticated');
+        }
+        console.log('Current User is authenticated')
+
+        fetchUsers(); //If authenticated, fetch users
+
+    }catch (error){
+        console.error('User not authenticated:', error);
+        // Redirect to login page if not authenticated
+        window.location.href = 'login.html';
+    }
+}
+
 async function fetchUsers() {
   try {
     const response = await fetch('/get-users');
@@ -183,7 +204,8 @@ const addGroup = async function(event) {
 }
 
 window.onload = async function (){
-    fetchUsers();
+    //fetchUsers();
+    checkAuth();
     console.log("Main.js Onload");
     generateGroupHTML(groupData);
     createGroupButtons(groupData);

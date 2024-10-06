@@ -227,15 +227,20 @@ app.post('/update-password', async (req, res) => {
 
 //Logout
 app.post('/logout', (req, res) =>{
-    try {
-        // Clear the session cookie
-        res.clearCookie(sessionCookieName);
+    res.clearCookie(sessionCookieName);
+    res.json({ message: 'Logged out successfully' });
+});
 
-        // Redirect to the homepage or return a success message
-        res.redirect('/');
-    } catch (error) {
-        res.status(500).json({ message: 'Error logging out', error });
-    }
+function authentication(req,res,next){
+    const sessionCookie = req.cookies[sessionCookieName];
+
+    if (!sessionCookie) return res.status(401).json({ message: 'Access denied. Please login.' });
+
+    req.user = sessionCookie; // Add userId to req.user
+    next();
+}
+app.get('/protected', authentication, (req,res) =>{
+    res.json({ message: 'This is a protected route', user: req.user });
 });
 
 // Start the server
