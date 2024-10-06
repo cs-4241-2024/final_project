@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // @ts-ignore
-import parseXLSX from "./parser/xlsxParser.js"
+import parseXLSX from "./parser/parseXLSX.js"
 
 const app = express();
 
