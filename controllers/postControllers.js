@@ -4,16 +4,12 @@ const DbConnectionURL = `mongodb+srv://${process.env.DbUser}:${process.env.DbPas
 const client = new mongodb.MongoClient( DbConnectionURL )
 const Dbname ="SongWebsite"
 
-export function getPost(){
-    return "TODO"
-}
-
 export async function createPost(req,res) {
     let newPost = req.body
-    console.log("newPost")
-    console.log(newPost)
-    console.log(req.body)
-    console.log("newPost2")
+    //console.log("newPost")
+    //console.log(newPost)
+    //console.log(req.body)
+    //console.log("newPost2")
     if(newPostIsVaild(newPost)) {
         try {
             newPost.createdBy=req.user._id
@@ -35,9 +31,17 @@ export async function createPost(req,res) {
 }
 
 export async function searchPosts(req,res) {
-    let searchParms = setSearchParameters(req.body)
-    console.log("searchParms")
-    console.log(searchParms)
+    let searchParms = req.body
+    // console.log("searchParms")
+    // console.log(searchParms)
+
+    if(searchParms.title!==undefined){
+        searchParms.title = {$regex:searchParms.title, $options: 'i' }
+    }
+    if(searchParms.content!==undefined){
+        searchParms.content = {$regex:searchParms.content, $options: 'i' }
+    }
+
     try {
         let postTable = await client.db(Dbname).collection("Posts")
         let foundPosts = await postTable.find(searchParms).toArray()
@@ -56,8 +60,8 @@ export async function searchPosts(req,res) {
 export async function updatePost(req, res) {
     let idToUpdate = req.params.id
     let editedRecord = req.body
-    console.log(idToUpdate)
-    console.log(editedRecord)
+    //console.log(idToUpdate)
+    //console.log(editedRecord)
     try {
         let updateScheme = {
             $set: {
@@ -66,7 +70,10 @@ export async function updatePost(req, res) {
             },
         }
         let postTable = await client.db(Dbname).collection("Posts")
-        let updateResult = await postTable.updateOne({_id: new ObjectId(idToUpdate)},updateScheme)
+        let updateResult = await postTable.updateOne({
+            _id: new ObjectId(idToUpdate),
+            createdBy: req.user._id
+            },updateScheme)
         if (updateResult) {
             res.status(200)
             res.send("Update done")
@@ -83,10 +90,11 @@ export async function updatePost(req, res) {
 
 export async function deletePost(req, res) {
     let idToDelete = req.params.id
-    console.log(idToDelete)
+    //console.log(idToDelete)
     try{
         let postTable = await client.db(Dbname).collection("Posts")
-        let deleteResult =  postTable.deleteOne({_id: new ObjectId(idToDelete)})
+        let deleteResult =  postTable.deleteOne({_id: new ObjectId(idToDelete),
+            createdBy: req.user._id})
         if (deleteResult) {
             res.status(200)
             res.send("delete done")
@@ -100,12 +108,6 @@ export async function deletePost(req, res) {
         res.status(400)
         res.send('error connecting to database')
     }
-}
-export function getAllPosts(){
-    return "TODO"
-}
-export function addReply(){
-    return "TODO"
 }
 
 function newPostIsVaild(newPost){
@@ -125,37 +127,4 @@ function newPostIsVaild(newPost){
         return false
     }
     return true
-}
-
-function setSearchParameters(params){
-    let finalParams = {}
-    if(params._id!==undefined){
-        finalParams._id = new ObjectId(params._id)
-    }
-    if(params.createdBy!==undefined){
-        finalParams.createdBy = new ObjectId(params.createdBy)
-    }
-    if(params.createdOn!==undefined){
-        finalParams.createdOn = params.createdOn
-    }
-    if(params.isPlaylist!==undefined){
-        finalParams.isPlaylist = params.isPlaylist
-    }
-    if(params.isSong!==undefined){
-        finalParams.isSong = params.isSong
-    }
-    if(params.idOfTopic!==undefined){
-        finalParams.idOfTopic = new ObjectId(params.idOfTopic)
-    }
-    if(params.title!==undefined){
-        finalParams.title = params.title
-    }
-    if(params.content!==undefined){
-        finalParams.content = params.content
-    }
-    if(params.replies!==undefined){
-        finalParams.replies = params.replies
-    }
-
-    return finalParams
 }

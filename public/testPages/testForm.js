@@ -21,6 +21,7 @@ export async function submitNewPost(ev){
 export async function loadPosts(){
     const response = await fetch('/api/posts/search', {
         method: 'POST',
+        headers:{'Content-Type': 'application/json'},
         body: JSON.stringify({})
     })
 
