@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 import allCourses from '../data/allCourses';
 
-export default function ComboBox() {
+export default function ClassComboBox() {
   return (
     <Autocomplete
       disablePortal
@@ -14,3 +14,4 @@ export default function ComboBox() {
     />
   );
 }
+
