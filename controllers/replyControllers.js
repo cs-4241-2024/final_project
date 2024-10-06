@@ -7,6 +7,7 @@ const { MongoClient, ObjectId } = pkg;
 const uri = `mongodb+srv://${process.env.DbUser}:${process.env.DbPass}@${process.env.DbURL}`;
 const client = new MongoClient(uri);
 
+
 export const createReply = async (req, res) => {
     const {content, createdBy} = req.body;
     const postId = req.params.postId;
@@ -14,8 +15,8 @@ export const createReply = async (req, res) => {
     try {
         await client.connect();
         const db = client.db('SongWebsite');
-        const postsCollection = db.collection('posts');
-        const repliesCollection = db.collection('replies');
+        const postsCollection = db.collection('Posts');
+        const repliesCollection = db.collection('Replies');
 
         const newReply = {
             _id: new ObjectId(),
@@ -24,14 +25,14 @@ export const createReply = async (req, res) => {
             createdOn: new Date()
         }
 
-        const result = repliesCollection.insertOne(newReply);
+        const result = await repliesCollection.insertOne(newReply);
         if(result.insertedCount === 0) {
             return res.status(500).json({error: 'Failed to add reply'});
         }
 
-        const postUpdateResult = postsCollection.updateOne(
+        const postUpdateResult = await postsCollection.updateOne(
             {_id: new ObjectId(postId)},
-            {$push: {replies: newReply}}
+            {$push: {replies: newReply._id}}
         )
 
         if(postUpdateResult.modifiedCount === 0) {
@@ -63,7 +64,7 @@ export const getRepliesForPost = async (req, res) => {
             return res.status(404).json({error: 'No post found.'});
         }
 
-        const replies = await db.collection('replies').find({ _id: { $in: post.replies } }).toArray();
+        const replies = await db.collection('Replies').find({ _id: { $in: post.replies } }).toArray();
 
         res.status(200).json(replies);
     } catch (error) {
@@ -82,13 +83,13 @@ export const updateReply = async (req, res) => {
         await client.connect();
         const db = client.db('SongWebsite');
 
-        const updateResult = await db.collection('replies').updateOne(
+        const updateResult = await db.collection('Replies').updateOne(
             { _id: new ObjectId(replyId) },
             { $set: { content: content } }
         );
 
         if(updateResult.matchedCount === 0) {
-            res.status(404).json({error: 'No reply found.'});
+            return res.status(404).json({error: 'No reply found.'});
         }
 
         res.status(200).json({message: 'Reply updated successfully.'});
@@ -107,7 +108,7 @@ export const deleteReply = async (req, res) => {
         await client.connect();
         const db = client.db('SongWebsite');
 
-        const deleteResult = await db.collection('replies').deleteOne({ _id: new ObjectId(replyId) });
+        const deleteResult = await db.collection('Replies').deleteOne({ _id: new ObjectId(replyId) });
 
         if (deleteResult.deletedCount === 0) {
             return res.status(404).json({ error: 'Reply not found' });
