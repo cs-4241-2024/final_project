@@ -6,8 +6,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { createTheme } from '@mui/material/styles';
 import TableComponent from './tableComponent';
 import FileUploadButton from './FileUploadButton';
+import ClassComboBox from "./component/classComboBox";
 // index.js
-
 import { useState } from "react";
 
 let theme = createTheme({
@@ -66,14 +66,19 @@ const Editor: React.FC = () => {
             </Button>
 
             <FileUploadButton />
-            <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
+            
 
 
           </div>
+          
         </div>
+        <div className="AutoComplete">
+          <ClassComboBox />
+        </div>
+        {/* <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
       </div>
-      <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
-      <TableComponent name="My Table 2" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
+      {/* <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
+      <TableComponent name="My Table 2" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
     </div>
   );
 };
