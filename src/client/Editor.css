@@ -1,75 +1,61 @@
-.main {
-    position: relative;
-    width: 905px;
-    height: 100vh;  /* Make the main container fit the viewport height */
-    margin: 0 auto;  /* Center the main container horizontally */
-    background: white;
-    border: 8px solid #1e1e1e;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 18px;
-    color: black;
-    display: flex;
-    flex-direction: column;  /* Stack the contents vertically */
-    justify-content: flex-start;  /* Ensure content starts at the top */
-    align-items: center;  /* Center content horizontally */
-    overflow-y: auto;  /* Enable vertical scrolling */
+.mainEdit {
+  position: relative;
+  width: 905px;
+  margin: 0 auto;
+  background: white;
+  border: 8px solid #1e1e1e;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.about-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    text-align: center;
-    margin-top: 60px; 
-}
-
-.about-container h1 {
-    margin-bottom: 10px;
-}
-
-.about-container p {
-    max-width: 600px;
-    line-height: 1.5;
-}
-
-.back-button {
-    position: absolute !important;
-    top: 20px;
-    left: 20px;
-    z-index: 999;  /* Ensure it's on top of other elements */
-}
-
-.editor-button {
-    padding: 10px;
-    background-color: #554481;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    height: 40px;
-    width: 250px;
-}
 
 .editor-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 10px;
 }
 
 .AutoComplete {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    padding: 10px;
-    font-size: 16px;
-    /* resize: none; */
-    /* align-items: center; */
-    justify-content: center;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
 
+.tracking-sheet-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+  padding: 10px;
+}
+
+.tracking-sheet-container {
+  flex: 1;
+  max-width: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }

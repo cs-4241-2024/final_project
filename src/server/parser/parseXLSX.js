@@ -1,4 +1,4 @@
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 // const fs = require('fs');
 // const path = require('path');
 // const outputPath = path.join(__dirname, '../JSONS/rows.json');
@@ -7,6 +7,11 @@ import XLSX from 'xlsx';
 function parseXLSX(workbook) {
 
     try {
+
+        if (!workbook.SheetNames.length) {
+            console.error('No sheets found in the workbook.');
+            return null;
+        }
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
         // //DEBUGGING
