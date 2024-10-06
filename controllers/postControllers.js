@@ -54,25 +54,25 @@ export async function searchPosts(req,res) {
 }
 
 export async function updatePost(req, res) {
-    let idToDelete = req.params.id
+    let idToUpdate = req.params.id
     let editedRecord = req.body
-    console.log(idToDelete)
+    console.log(idToUpdate)
+    console.log(editedRecord)
     try {
         let updateScheme = {
             $set: {
-                title:parseInt(editedRecord["title"]),
-                content:parseInt(editedRecord["content"]),
+                title:editedRecord["title"],
+                content:editedRecord["content"],
             },
         }
-
         let postTable = await client.db(Dbname).collection("Posts")
-        let deleteResult = postTable.deleteOne({_id: new ObjectId(idToDelete)})
-        if (deleteResult) {
+        let updateResult = await postTable.updateOne({_id: new ObjectId(idToUpdate)},updateScheme)
+        if (updateResult) {
             res.status(200)
-            res.send("delete done")
+            res.send("Update done")
         } else {
             res.status(400)
-            res.send('delete failed: not found in db')
+            res.send('Update failed not found in db??')
         }
     } catch (e) {
         console.log(e)
