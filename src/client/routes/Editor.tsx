@@ -6,6 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { createTheme } from '@mui/material/styles';
 import ClassTable from '../components/ClassTable';
 import FileUploadButton from '../components/FileUploadButton';
+import SimpleTable from "../components/SimpleTable";
 import ClassComboBox from "../components/ClassComboBox";
 // index.js
 import { useState } from "react";
@@ -27,59 +28,65 @@ theme = createTheme(theme, {
   },
 });
 
-
-
-
 const Editor: React.FC = () => {
   const navigate = useNavigate();
-  const [rowNum, setRowNum] = useState(5);
-  const [tableData, setTableData] = useState<string[]>([]);
+  const [clearData, setClearData] = useState(false);
 
   const handleClearData = () => {
-    setRowNum(5); // Reset row number to initial value
-    setTableData([]); // Clear table data
+    setClearData(true);
+    setTimeout(() => { setClearData(false); }, 0);
     console.log("All components have been reset");
   };
   return (
-    <div className="editor">
-      <div className="main">
-        <div className="editor-container">
-          <IconButton
-            className="back-button"
-            aria-label="back to home"
-            onClick={() => {
-              console.log("back button clicked");
-              navigate('/Home');
-            }}
+    <div className="mainEdit">
+      <div className="editor-container">
+        <IconButton
+          className="back-button"
+          aria-label="back to home"
+          onClick={() => {
+            console.log("back button clicked");
+            navigate('/Home');
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <div className="editor-header">
+          <Button
+            variant="contained"
+            type="submit"
+            className="editor-button"
+            sx={{ backgroundColor: 'purple', color: 'white' }}
+            onClick={handleClearData}
           >
-            <ArrowBackIcon />
-          </IconButton>
-          <div className="editor-container">
-            <Button
-              variant="contained"
-              type="submit"
-              className="editor-button"
-              sx={{ backgroundColor: 'purple', color: 'white' }}
-              onClick={handleClearData}
-            >
-              Clear current data
-            </Button>
-
-            <FileUploadButton />
-            
-
-
-          </div>
-          
+            Clear current data
+          </Button>
+          <FileUploadButton />
         </div>
-        <div className="AutoComplete">
-          <ClassComboBox />
-        </div>
-        {/* <ClassTable name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
       </div>
-      {/* <ClassTable name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
-      <ClassTable name="My Table 2" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
-    </div>
+
+      <div className="AutoComplete">
+        <ClassComboBox />
+      </div>
+
+      <div className="tracking-sheet-container">
+        <div className="column-1">
+          <SimpleTable title="Humanity Depth (4)" numInputs={4} clear={clearData}/>
+          <SimpleTable title="Humanity Breadth (2)" numInputs={2} clear={clearData}/>
+          <SimpleTable title="Physical Education (4)" numInputs={4} clear={clearData}/>
+          <SimpleTable title="Social Science (2)" numInputs={2} clear={clearData}/>
+          <SimpleTable title="IQP (3)" numInputs={3} clear={clearData}/>
+          <SimpleTable title="Mathematics (7)" numInputs={7} clear={clearData}/>
+        </div>
+        <div className="column-2">
+          <SimpleTable title="Free Electives (3)" numInputs={3} clear={clearData}/>
+          <SimpleTable title="Computer Science (18)" numInputs={18} clear={clearData}/>
+
+          <SimpleTable title="Basic Science (5)" numInputs={5} clear={clearData}/>
+        </div>
+      </div>
+
+    </div >
+
   );
 };
 

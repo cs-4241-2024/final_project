@@ -1,0 +1,25 @@
+.simple-table-container {
+    padding: 2px;
+  }
+  
+  .simple-table-title {
+    text-align: left;
+  }
+  
+  .input-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input-wrapper {
+    padding: 0.5px;
+  }
+  
+  .input-cell {
+    width: 300px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  

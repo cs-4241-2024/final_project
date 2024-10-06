@@ -1,5 +1,5 @@
-const parseXLSX = require('./xlsxParser.js');
-const groupRow = require('./caterogizeJson.js');
+const parseXLSX = require('./parseXLSX.js');
+const groupRow = require('./groupRow.js');
 import path from 'node:path';
 import XLSX from 'xlsx';
 

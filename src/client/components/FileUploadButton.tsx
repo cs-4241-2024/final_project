@@ -7,7 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 let theme = createTheme({
     palette: {
         primary: {
-            main: '#554481', 
+            main: '#554481',
         },
     },
 });
@@ -15,7 +15,7 @@ let theme = createTheme({
 theme = createTheme(theme, {
     palette: {
         salmon: theme.palette.augmentColor({
-            color: { main: '#554481' }, 
+            color: { main: '#554481' },
             name: 'purple',
         }),
     },
@@ -24,24 +24,33 @@ theme = createTheme(theme, {
 const FileUploadButton: React.FC = () => {
     const [fileName, setFileName] = useState<string>('');
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            // Check if the file is an Excel file
+            if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
+                console.error('Please upload a valid Excel file.');
+                return;
+            }
+
             setFileName(file.name);
             console.log('Selected file:', file);
         }
     };
 
+
+
+
     return (
         <ThemeProvider theme={theme}>
             <div>
                 <input
-                     type="file"
-                     accept=".xlsx"
-                     id="fileInput"
-                     className="hidden-file-input"  
-                     onChange={handleFileChange}
-                     title="Choose an XLSX file"
+                    type="file"
+                    accept=".xlsx"
+                    id="fileInput"
+                    className="hidden-file-input"
+                    onChange={handleFileChange}
+                    title="Choose an XLSX file"
                 />
                 <Button
                     variant="contained"
