@@ -1,10 +1,10 @@
-import pkg from 'mongodb';
-const { MongoClient, ObjectId } = pkg;
-
 import dotenv from 'dotenv';
 dotenv.config();
 
-const uri = `mongodb+srv://webwaresongsite:mongodb!@songsite.g4glr.mongodb.net/?retryWrites=true&w=majority&appName=SongSite`;
+import pkg from 'mongodb';
+const { MongoClient, ObjectId } = pkg;
+
+const uri = `mongodb+srv://${process.env.DbUser}:${process.env.DbPass}@${process.env.DbURL}`;
 const client = new MongoClient(uri);
 
 export const addSong = async (req, res) => {
@@ -109,9 +109,6 @@ export const updateSong = async (req, res) => {
         await client.close();
     }
 }
-
-
-
 
 
 
