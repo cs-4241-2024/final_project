@@ -29,7 +29,7 @@ export const createReply = async (req, res) => {
             return res.status(500).json({error: 'Failed to add reply'});
         }
 
-        const postUpdateResult = db.collection('Posts').updateOne(
+        const postUpdateResult = postsCollection.updateOne(
             {_id: new ObjectId(postId)},
             {$push: {replies: newReply}}
         )
