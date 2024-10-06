@@ -6,15 +6,17 @@ import {
     updatePost,
     deletePost,
     getAllPosts,
-    addReply
+    searchPosts
 } from "../controllers/postControllers.js"
-import {isAuthenticated} from "./userRoutes.js";
+import {isAuthed} from "../server.js";
 
+router.use(express.json())
+router.use(express.urlencoded({ extended: false })); //url parser
 // get post by id
 router.get('/:id', getPost);
 
 // create new post
-router.post('/', createPost);
+router.post('/', isAuthed, createPost);
 
 // update post by id
 router.put('/:id', updatePost);
@@ -25,4 +27,5 @@ router.delete('/:id', deletePost);
 // get all posts
 router.get('/',getAllPosts);
 
+router.post('/search',searchPosts)
 export default router;
