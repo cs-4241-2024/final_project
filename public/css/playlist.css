@@ -1,0 +1,89 @@
+.playlistSection {
+	background-color: white;
+	margin-left: 5vw;
+	margin-right: 5vw;
+	margin-top: 20px;
+	border-radius: 20px;
+}
+
+.postTitle {
+	color: black;
+	font-size: 36px;
+	text-align: center;
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	margin: 0;
+}
+
+.postContent {
+	font-size: 24px;
+	padding-top: 5px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	margin: 0;
+}
+
+.postPageTitle {
+	color: black;
+	margin-left: 5vw;
+	margin-right: 5vw;
+}
+
+.postLink {
+	text-decoration: none;
+}
+
+.postLink:hover {
+	text-decoration: underline;
+}
+
+
+
+.playlist {
+	padding-top: 5px;
+	padding-left: 20px;
+	padding-right: 20px;
+	/* padding-bottom: 20px; */
+	margin: 0;
+
+}
+
+.solidDivider {
+	border-top: 2px;
+	border-style: solid;
+	border-color: rgb(160, 160, 160);
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.nameBox {
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+#submitButton {
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+
+.playlistAreaTitle {
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	font-size: 40px;
+	margin: 0;
+}
+
+.playlistSmallAreaTitle {
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	font-size: 27px;
+	margin: 0;
+}

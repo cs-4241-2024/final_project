@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<title>CS4241 Assignment 2</title>
+		<meta charset="utf-8">
+		<script src="js/main.js"></script>
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/playlist.css">
+
+		<!-- get rid of favicon error -->
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	</head>
+
+	<body>
+		<!-- Inserts the navbar into the page -->
+		<nav class="navbar"></nav>
+
+		<!-- This is where the playlists of a user would appear. There will be all the playlists that a user currently has
+		 as well as an option to create a new playlists for the user.
+		 
+		 For each existing playlist the is shown on the page, there will be an option to add a song to a specified playlist
+		 
+		 This would then prompt the user to choose what songs they would like to be put into the playlist-->
+		<div id="PlaylistsForUser">
+
+			<!-- Title of the page-->
+			<section class="playlistSection">
+				<h2 class="postTitle">Here Are your playlists!</h2>
+			</section>
+
+			<!-- Example Playlists that would show all playlists a user has, most likely use the getAllPlaylists -->
+			<section class="playlistSection">
+				<h1 class="playlistAreaTitle">Playlists:</h1>
+				<p class="playlist">Playlist name: Favorites</p>
+				<p class="playlist">into of song1:</p>
+				<p class="playlist">into of song2:</p>
+				<p class="playlist">into of song3:</p>
+				<button id="submitButton">Edit Playlist?</button>
+				<hr class="solidDivider">
+				<p class="playlist">Playlist name: Found these this week</p>
+				<p class="playlist">into of song1:</p>
+				<p class="playlist">into of song2:</p>
+				<button id="submitButton">Edit Playlist?</button>
+				<h2 class="postTitle"></h2>
+			</section>
+
+			<!--button to allow a user to create a new playlist, which after clicked and -->
+			<section class="playlistSection">
+				<h2 class="playlistSmallAreaTitle">Would you like to create a new playlist? If so, type your playlist's name and click sumbit when ready!</h2>
+				<!--button would most likely use onclick="createPlaylist()" 
+				NOT MANDITORY: check to be sure that a playlist isnt the same name as another playlist a user currenty has, but that is -->
+				<input class="nameBox" type="text" id="playlistNewName"><br><br>
+				<button id="submitButton">Create new Playlist</button>
+			</section>
+		</div>
+	</body>
+
+</html>
