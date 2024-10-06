@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<title>CS4241 Assignment 2</title>
+		<meta charset="utf-8">
+		<script src="js/main.js"></script>
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/profilePageStyling.css">
+
+
+		<!-- get rid of favicon error -->
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	</head>
+
+	<body>
+		<nav class="navbar"></nav> <!--don't put anything before navbar-->
+
+		<h1> This is [Username]'s profile page</h1>
+		<!--move create post button over-->
+		<div>
+			<table class="profilePageTable">
+				<!-- All of this would be added using innerHTML dynamically there would be an new paragraph with a link in it for each different song, playlist, etc. so that each section is not larger than it needs to be to fit the content-->
+				<tr class="contentArea">
+					<td class="contentColumn" id="songColumn">
+						<h2>Playlists</h2>
+						<p><a class="contentLink">Playlist 1</a></p>
+						<p><a class="contentLink">Playlist 2</a></p>
+					</td>
+					<td class="contentColumn" id="playlistColumn">
+						<h2>Favorite Songs</h2>
+						<p><a class="contentLink">Song 1</a></p>
+						<p><a class="contentLink">Song 2</a></p>
+					</td>
+					<td class="contentColumn" id="postColumn">
+						<h2>Posts</h2>
+						<p><a class="contentLink">Post 1</a></p>
+						<p><a class="contentLink">Post 1</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button id="createPlaylist">Create Playlist</button>
+					</td>
+					<td>
+						<button id="addFavoriteSongs">Add Favorite Songs</button>
+					</td>
+					<td>
+						<button id="createPostButton">Create Post</button>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+	</body>
+
+</html>
