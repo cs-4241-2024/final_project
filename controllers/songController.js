@@ -4,7 +4,6 @@ const { MongoClient, ObjectID } = pkg;
 import dotenv from 'dotenv';
 dotenv.config();
 
-
 const uri = `mongodb+srv://webwaresongsite:mongodb!@songsite.g4glr.mongodb.net/?retryWrites=true&w=majority&appName=SongSite`;
 const client = new MongoClient(uri);
 
@@ -34,6 +33,82 @@ export const addSong = async (req, res) => {
     }
 }
 
+
+export const getSongs = async (req, res) => {
+    try {
+        await client.connect();
+        const db = client.db('SongWebsite');
+        const songs = await db.collection('songs').find({}).toArray();
+        res.status(200).json(songs);
+    } catch (error) {
+        res.status(500).json({error: 'Error getting songs'});
+    } finally {
+        await client.close();
+    }
+}
+
+export const getSongByID = async (req, res) => {
+    try {
+        await client.connect();
+        const db = client.db('SongWebsite');
+        const song = await db.collection('songs').findOne({_id: ObjectID(req.params.id)});
+        if(!song) {
+            return res.status(404).json({error: 'Song not found'});
+        }
+        res.status(200).json(song);
+    } catch (error) {
+        res.status(500).json({error: 'Error getting song'});
+    } finally {
+        await client.close();
+    }
+}
+
+export const deleteSong = async (req, res) => {
+    try {
+        await client.connect();
+        const db = client.db('SongWebsite');
+        const result = await db.collection('songs').deleteOne({_id: ObjectID(req.params.id)});
+
+        if (result.deletedCount === 0) {
+            res.status(404).json({error: 'Song not found'});
+        }
+
+        res.status(200).json({message: 'Song deleted'});
+    } catch (error) {
+        res.status(500).json({error: 'Error deleting song'});
+    } finally {
+        await client.close();
+    }
+}
+
+export const updateSong = async (req, res) => {
+    try {
+        await client.connect();
+        const db = client.db('SongWebsite');
+
+        const updatedSong = await db.collection('songs').updateOne(
+            {_id: ObjectID(req.params.id)},
+            {$set: {
+                    name: req.body.name,
+                    artist: req.body.artist,
+                    album: req.body.album,
+                    duration: req.body.duration,
+                    genre: req.body.genre,
+                    releaseDate: req.body.releaseDate
+                }}
+        );
+
+        if(updatedSong.matchedCount === 0) {
+            return res.status(404).json({error: 'Song not found'});
+        }
+
+        res.status(200).json(updatedSong);
+    } catch (error) {
+        res.status(500).json({error: 'Error deleting song'});
+    } finally {
+        await client.close();
+    }
+}
 
 
 
