@@ -1,12 +1,12 @@
-import "./Editor.css";
+import "../css/Editor.css";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { createTheme } from '@mui/material/styles';
-import TableComponent from './tableComponent';
-import FileUploadButton from './FileUploadButton';
-import ClassComboBox from "./component/classComboBox";
+import ClassTable from '../components/ClassTable';
+import FileUploadButton from '../components/FileUploadButton';
+import ClassComboBox from "../components/ClassComboBox";
 // index.js
 import { useState } from "react";
 
@@ -75,10 +75,10 @@ const Editor: React.FC = () => {
         <div className="AutoComplete">
           <ClassComboBox />
         </div>
-        {/* <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
+        {/* <ClassTable name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
       </div>
-      {/* <TableComponent name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
-      <TableComponent name="My Table 2" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
+      {/* <ClassTable name="My Table" rowNum={rowNum} tableData={tableData} setTableData={setTableData} />
+      <ClassTable name="My Table 2" rowNum={rowNum} tableData={tableData} setTableData={setTableData} /> */}
     </div>
   );
 };

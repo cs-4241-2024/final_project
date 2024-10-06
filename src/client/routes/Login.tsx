@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './Login.css';
-import { Button } from '@mui/material';
+import '../css/Login.css';
+import {Button, Container} from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <Container>
       <form className="login-form" onSubmit={handleSubmit}>
         <h2>Login</h2>
         
@@ -67,7 +67,7 @@ const Login = () => {
           Login
         </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 

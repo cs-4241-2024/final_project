@@ -1,4 +1,4 @@
-import "./Home.css";
+import "../css/Home.css";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';

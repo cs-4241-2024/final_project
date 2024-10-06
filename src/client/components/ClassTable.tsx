@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const TableComponent: React.FC<{ name: string; rowNum: number; tableData: string[]; setTableData: React.Dispatch<React.SetStateAction<string[]>> }> = ({ name, rowNum, tableData, setTableData }) => {
+const ClassTable: React.FC<{ name: string; rowNum: number; tableData: string[]; setTableData: React.Dispatch<React.SetStateAction<string[]>> }> = ({ name, rowNum, tableData, setTableData }) => {
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
@@ -81,4 +81,4 @@ const TableComponent: React.FC<{ name: string; rowNum: number; tableData: string
   );
 };
 
-export default TableComponent;
+export default ClassTable;

@@ -1,4 +1,4 @@
-import "./App.css";
+import "../css/App.css";
 
 import { useState } from "react";
 
@@ -18,7 +18,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
         <a>
-          <a href="./Home.tsx" >
+          <a href="Home.tsx" >
             <text>Home</text>
           </a>
         </a>
