@@ -23,7 +23,7 @@ export const addSong = async (req, res) => {
             createdOn: new Date()
         };
 
-        const result = await db.collection('songs').insertOne(newSong);
+        const result = await db.collection('Songs').insertOne(newSong);
         res.status(201).json(result);
     } catch (error) {
         res.status(500).json({error: 'Error creating song'});
@@ -38,7 +38,7 @@ export const getSongs = async (req, res) => {
     try {
         await client.connect();
         const db = client.db('SongWebsite');
-        const songs = await db.collection('songs').find({}).toArray();
+        const songs = await db.collection('Songs').find({}).toArray();
         res.status(200).json(songs);
     } catch (error) {
         res.status(500).json({error: 'Error getting songs'});
@@ -51,7 +51,7 @@ export const getSongByID = async (req, res) => {
     try {
         await client.connect();
         const db = client.db('SongWebsite');
-        const song = await db.collection('songs').findOne({_id: new ObjectId(req.params.id)});
+        const song = await db.collection('Songs').findOne({_id: new ObjectId(req.params.id)});
         if(!song) {
             return res.status(404).json({error: 'Song not found'});
         }
@@ -67,7 +67,7 @@ export const deleteSong = async (req, res) => {
     try {
         await client.connect();
         const db = client.db('SongWebsite');
-        const result = await db.collection('songs').deleteOne({_id: new ObjectId(req.params.id)});
+        const result = await db.collection('Songs').deleteOne({_id: new ObjectId(req.params.id)});
 
         if (result.deletedCount === 0) {
             res.status(404).json({error: 'Song not found'});
@@ -86,7 +86,7 @@ export const updateSong = async (req, res) => {
         await client.connect();
         const db = client.db('SongWebsite');
 
-        const updatedSong = await db.collection('songs').updateOne(
+        const updatedSong = await db.collection('Songs').updateOne(
             {_id: new ObjectId(req.params.id)},
             {$set: {
                     name: req.body.name,

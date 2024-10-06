@@ -8,26 +8,37 @@ const uri = `mongodb+srv://${process.env.DbUser}:${process.env.DbPass}@${process
 const client = new MongoClient(uri);
 
 export const createReply = async (req, res) => {
+    const {content, createdBy} = req.body;
+    const postId = req.params.postId;
+
     try {
         await client.connect();
         const db = client.db('SongWebsite');
+        const postsCollection = db.collection('posts');
+        const repliesCollection = db.collection('replies');
 
         const newReply = {
             _id: new ObjectId(),
-            createdBy: req.body.createdBy,
-            content: req.body.content,
+            createdBy: createdBy,
+            content: content,
             createdOn: new Date()
         }
 
-        const result = await db.collection('Posts').updateOne(
+        const result = repliesCollection.insertOne(newReply);
+        if(result.insertedCount === 0) {
+            return res.status(500).json({error: 'Failed to add reply'});
+        }
+
+        const postUpdateResult = db.collection('Posts').updateOne(
             {_id: new ObjectId(postId)},
             {$push: {replies: newReply}}
         )
 
-        if(result.matchedCount === 0) {
-            res.status(404).json({error: 'No post found.'});
+        if(postUpdateResult.modifiedCount === 0) {
+            return res.status(404).json({error: 'Post not found'});
         }
-        res.status(201).json(newReply);
+
+        res.status(201).json({ message: 'Reply created', reply: newReply });
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'Error creating reply'});
@@ -52,7 +63,9 @@ export const getRepliesForPost = async (req, res) => {
             return res.status(404).json({error: 'No post found.'});
         }
 
-        res.status(200).json(post.replies);
+        const replies = await db.collection('replies').find({ _id: { $in: post.replies } }).toArray();
+
+        res.status(200).json(replies);
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'Error getting replies'});
@@ -69,12 +82,12 @@ export const updateReply = async (req, res) => {
         await client.connect();
         const db = client.db('SongWebsite');
 
-        const result = await db.collection('posts').updateOne(
-            {'replies._id': new ObjectId(replyId)},
-            {$set: {'replies.$.content': content}}
-        )
+        const updateResult = await db.collection('replies').updateOne(
+            { _id: new ObjectId(replyId) },
+            { $set: { content: content } }
+        );
 
-        if(result.matchedCount === 0) {
+        if(updateResult.matchedCount === 0) {
             res.status(404).json({error: 'No reply found.'});
         }
 
@@ -94,14 +107,16 @@ export const deleteReply = async (req, res) => {
         await client.connect();
         const db = client.db('SongWebsite');
 
-        const result = await db.collection('posts').updateOne(
-            { 'replies._id': new ObjectId(replyId) },
-            { $pull: { replies: { _id: new ObjectId(replyId) } } }
-        );
+        const deleteResult = await db.collection('replies').deleteOne({ _id: new ObjectId(replyId) });
 
-        if (result.matchedCount === 0) {
+        if (deleteResult.deletedCount === 0) {
             return res.status(404).json({ error: 'Reply not found' });
         }
+
+        await db.collection('posts').updateOne(
+            { replies: { $in: [new ObjectId(replyId)] } },
+            { $pull: { replies: new ObjectId(replyId) } }
+        );
 
         res.status(200).json({ message: 'Reply deleted successfully' });
     } catch (error) {
