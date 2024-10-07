@@ -53,10 +53,17 @@ function Home() {
                   }}>
                       About Page
                   </Button>
-
-              </div>
-          </div>
-      );
+      </div>
+      <div className="tracking-img">
+        <iframe
+          src="https://www.wpi.edu/sites/default/files/inline-image/Offices/Academic-Advising/CS%202025.pdf"
+          width="100%"
+          height="500px"
+          title="PDF Document"
+        />
+      </div>
+    </div>
+  );
 }
 
 export default Home;
