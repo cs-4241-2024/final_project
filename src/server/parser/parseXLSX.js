@@ -20,8 +20,16 @@ function parseXLSX(workbook) {
         // // Log the worksheet object directly for debugging
         // console.log('Worksheet:', JSON.stringify(worksheet, null, 2));
 
+        // const base = XLSX.utils.sheet_to_json(worksheet, {
+        //     header: 1,
+        //     blankrows: false,
+        //     raw: false
+        // });
+        // console.log(`base: ${base}`);
+
         //The XLSX has a merged first row which screws with the parsing
         const range = XLSX.utils.decode_range(worksheet['!ref']);
+        // console.log(`range: ${JSON.stringify(range)}`);
         const newWorksheet = {};
         for (let R = 1; R <= range.e.r; R++) {
             for (let C = range.s.c; C <= range.e.c; C++) {
@@ -42,6 +50,8 @@ function parseXLSX(workbook) {
             raw: false
         });
 
+        // console.log(rows);
+
         if (rows.length > 0) {
             const headers = rows[0];
             //console.log('Headers:', headers);
@@ -60,7 +70,7 @@ function parseXLSX(workbook) {
                 //Was debugging merged row parsing issue
                 //fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
                 // console.log('Data written to:', outputPath);
-                return JSON.stringify(result, null, 2); 
+                return JSON.stringify(result, null, 2);
             } else {
                 console.error('No data found to write.');
                 return null;    

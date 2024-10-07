@@ -5,10 +5,13 @@ import passportLocalMongoose from "passport-local-mongoose";
 import passport from "passport";
 import dotenv from "dotenv";
 import cookie from "cookie-session";
+import fileUpload, {UploadedFile} from "express-fileupload";
 dotenv.config();
 
 // @ts-ignore
 import parseXLSX from "./parser/parseXLSX.js"
+import XLSX from "xlsx";
+import groupRow from "./parser/groupRow.js";
 
 const app = express();
 
@@ -83,6 +86,31 @@ async function run() {
             req.session.user = user.user;
             res.sendStatus(204);
         }
+    });
+
+    app.post("/parseXlsx", fileUpload({
+        useTempFiles : true,
+        tempFileDir : '/tmp/'
+    }), async (req: express.Request, res: express.Response) => {
+        if (!req.files) {
+            res.sendStatus(400);
+            throw Error("Files not found!");
+        }
+        const file = req.files.file as UploadedFile;
+        console.log(file.tempFilePath);
+        const newPath = `${file.tempFilePath}.xlsx`
+        await file.mv(newPath);
+
+        const workbook = XLSX.readFile(newPath);
+
+        const parsed = parseXLSX(workbook);
+        if (parsed === null) {
+            res.sendStatus(400);
+        } else {
+            const grouped = groupRow(JSON.parse(parsed));
+            res.send(grouped);
+        }
+
     });
 
     app.get("/hello", (_, res) => {
