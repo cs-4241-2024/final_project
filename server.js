@@ -100,11 +100,13 @@ app.get('/get-session', async (req, res) => {
 
     try{
         const sessionCookie = req.cookies[sessionCookieName];
-        const user = await usersCollection.findOne({ _id: ObjectId(sessionCookie.userId) });
 
-        if (!sessionCookie){
+        if (!sessionCookie) {
             return res.status(401).json({ message: 'Access denied. Please login.' });
-        } 
+        }
+
+        // Find the user by userId in the session cookie
+        const user = await usersCollection.findOne({ _id: new ObjectId(sessionCookie.userId)});
 
         if (!user) {
             return res.status(401).json({ message: 'Access denied. Please login.' });
@@ -113,10 +115,10 @@ app.get('/get-session', async (req, res) => {
         // Exclude sensitive information (e.g., passwords) from the response
         const { password, ...userWithoutPassword } = user;
 
-        if(sessionCookie){
-            console.log('Session cookie:', sessionCookie);
-            return res.status(200).json(userWithoutPassword);
-        }
+        console.log('Session cookie:', sessionCookie);
+
+        // Return the user without the password
+        return res.status(200).json(userWithoutPassword);
 
     }catch(error){
         console.error('Error fetching session:', error);
@@ -176,7 +178,7 @@ app.post('/login', async (req, res) => {
         }
 
         // Set a cookie to track the session
-        res.cookie(sessionCookieName, { userId: user._id }, { httpOnly: true, maxAge: 3600000 }); // 1 hour expiration
+        res.cookie(sessionCookieName, { userId: user._id.toString() , username: user.username}, { httpOnly: true, maxAge: 3600000 }); // 1 hour expiration
 
         console.log('Login successful:', user.username);
 
@@ -251,9 +253,6 @@ app.post('/update-password', async (req, res) => {
         res.status(500).json({ message: 'Error changing password', error });
     }
 });
-
-
-
 
 //Logout
 app.post('/logout', (req, res) =>{

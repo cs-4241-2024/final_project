@@ -73,15 +73,16 @@ const checkAuth = async function () {
 async function fetchSessionUser(){
   try {
     const response = await fetch('/get-session', {
-      method: 'GET'
+      method: 'GET',
+        credentials: 'include'  // Include cookies in the request
     });
 
     if (response.ok) {
-      const data = await response.json();
-      console.log('Session user:', data);
-      document.getElementById('currentUsername').value = data.username;
+      const user = await response.json();
+      console.log('Session user:', user);
+      document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
     } else {
-      console.error('Error fetching session user:', response.status);
+      console.error('Failed to retrieve user');
     }
   } catch (error) {
     console.error('Error fetching session user:', error);
@@ -224,6 +225,8 @@ const addGroup = async function(event) {
 window.onload = async function (){
     //fetchUsers();
     checkAuth();
+    fetchSessionUser();
+
     console.log("Main.js Onload");
     generateGroupHTML(groupData);
     createGroupButtons(groupData);
