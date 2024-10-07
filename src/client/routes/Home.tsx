@@ -2,7 +2,7 @@ import "../css/Home.css";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { createTheme } from '@mui/material/styles';
 // index.js
 
@@ -38,7 +38,7 @@ function Home() {
                       navigate('/login');
                   }}
               >
-                  <ArrowBackIcon />
+                  <ExitToAppIcon />
               </IconButton>
               <div className="navigation">
                   <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
