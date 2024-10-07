@@ -50,6 +50,42 @@ const Editor: React.FC = () => {
     console.log("All components have been reset");
   };
 
+  const handleSaveData = async () => {
+    const allData = {
+        humanityData,
+        physicalEducationData,
+        socialScienceData,
+        iqpData,
+        mathematicsData,
+        freeElectivesData,
+        computerScienceData,
+        basicScienceData
+    };
+
+    try {
+        const response = await fetch('/saveData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(allData),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('File uploaded successfully:', data);
+            setUploadedData(data);
+        } else {
+            console.error('File upload failed:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error during file upload:', error);
+    }
+
+    console.log("Data saved");
+};
+
+
   useEffect(() => {
     if (uploadedData) {
       console.log('Uploaded data changed:', uploadedData);
@@ -147,6 +183,16 @@ const Editor: React.FC = () => {
           <SimpleTable title="Basic Science (5)" numInputs={5} clear={clearData} data={basicScienceData}/>
         </div>
       </div>
+      
+      <Button
+            variant="contained"
+            type="submit"
+            className="submit-button"
+            sx={{ backgroundColor: 'purple', color: 'white' }}
+            onClick={handleSaveData}
+          >
+            Save
+          </Button>
 
     </div >
 
