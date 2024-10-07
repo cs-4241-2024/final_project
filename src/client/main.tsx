@@ -4,7 +4,6 @@ import { createBrowserRouter, RouterProvider, redirect } from "react-router-dom"
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import Root from "./routes/Root";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 import About from "./routes/About";
@@ -13,11 +12,8 @@ import Editor from "./routes/Editor";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Root />,
         loader: async () => {
-            const res = await fetch("/checkLogin", {
-                method: "POST",
-            });
+            const res = await fetch("/checkLogin");
 
             if (res.status === 200) {
                 throw redirect("/home");
@@ -26,19 +22,39 @@ const router = createBrowserRouter([
             }
 
         },
-        children: [
-            {
-                path: "/home",
-                element: <Home />,
-                loader: async () => {
-                    // Fetch saved data
-                }
-            },
-            {
-                path: "/login",
-                element: <Login />
+    },
+    {
+        path: "/home",
+        element: <Home />,
+        loader: async () => {
+            const res = await fetch("/checkLogin");
+            if (res.status !== 200)  {
+                throw redirect("/login");
             }
-        ]
+
+            return 0;
+        }
+    },
+    {
+        path: "/editor",
+        element: <Editor />,
+        loader: async () => {
+            const res = await fetch("/checkLogin");
+            if (res.status !== 200)  {
+                throw redirect("/login");
+            }
+
+            // Load data
+            return 0;
+        }
+    },
+    {
+        path: "/login",
+        element: <Login />
+    },
+    {
+        path: "/about",
+        element: <About />
     }
 ]);
 

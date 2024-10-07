@@ -51,7 +51,7 @@ async function run() {
         const user = await User.authenticate()(req.body.username, req.body.password);
         console.log(user);
         if (user.user === false) {
-            res.sendStatus(403);
+            res.sendStatus(500);
         } else {
             req.session.user = user.user._id;
             // res.json(user.user._id);
@@ -64,14 +64,10 @@ async function run() {
             throw Error("Session not found!");
         }
         if (req.session.isPopulated) {
-            res.sendStatus(200);
+            res.sendStatus(204);
         } else {
             res.sendStatus(401);
         }
-    });
-
-    app.post("/checkLogin", async (req: express.Request, res: express.Response) => {
-
     });
 
     app.post("/login", express.json(), async (req: express.Request, res: express.Response) => {
@@ -81,9 +77,9 @@ async function run() {
         const user = await User.authenticate()(req.body.username, req.body.password);
         console.log(user);
         if (user.user === false) {
-            res.sendStatus(403);
+            res.sendStatus(401);
         } else {
-            res.json(user.user._id);
+            res.sendStatus(204);
         }
     });
 
