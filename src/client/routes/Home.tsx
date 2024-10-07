@@ -2,7 +2,7 @@ import "../css/Home.css";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { createTheme } from '@mui/material/styles';
 // index.js
 
@@ -27,27 +27,32 @@ theme = createTheme(theme, {
 
 
 function Home() {
-  const navigate = useNavigate();
-  return (
-    <div className="main">
-      <IconButton
-        className="back-button"
-        aria-label="back to home"
-        onClick={() => {
-          console.log("back button clicked");
-          navigate('/login');
-        }}
-      >
-        <ArrowBackIcon />
-      </IconButton>
-      <div className="navigation">
-        <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
-          console.log("Login button clicked");
-          navigate('/editor');
-        }}>
-          Create your own personal WPI Tracking Sheet here
-        </Button>
-
+      const navigate = useNavigate();
+      return (
+          <div className="main">
+              <IconButton
+                  className="back-button"
+                  aria-label="back to home"
+                  onClick={() => {
+                      console.log("back button clicked");
+                      navigate('/login');
+                  }}
+              >
+                  <ExitToAppIcon />
+              </IconButton>
+              <div className="navigation">
+                  <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+                      console.log("Editor clicked");
+                      navigate('/editor');
+                  }}>
+                      Create your own personal WPI Tracking Sheet here
+                  </Button>
+                  <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+                      console.log("About Page clicked");
+                      navigate('/about');
+                  }}>
+                      About Page
+                  </Button>
       </div>
       <div className="tracking-img">
         <iframe
