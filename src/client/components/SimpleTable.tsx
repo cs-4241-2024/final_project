@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './SimpleTable.css'; 
+import '../css/SimpleTable.css';
 
 interface SimpleTableProps {
   title: string;

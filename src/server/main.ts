@@ -70,6 +70,10 @@ async function run() {
         }
     });
 
+    app.post("/checkLogin", async (req: express.Request, res: express.Response) => {
+
+    });
+
     app.post("/login", express.json(), async (req: express.Request, res: express.Response) => {
         if (!req.session) {
             throw Error("Session not found!");

@@ -1,5 +1,5 @@
 import "./css/Root.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, redirect } from "react-router-dom";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -20,12 +20,27 @@ const router = createBrowserRouter([
             });
 
             if (res.status === 200) {
-
+                throw redirect("/home");
+            } else {
+                throw redirect("/login");
             }
 
-        }
+        },
+        children: [
+            {
+                path: "/home",
+                element: <Home />,
+                loader: async () => {
+                    // Fetch saved data
+                }
+            },
+            {
+                path: "/login",
+                element: <Login />
+            }
+        ]
     }
-])
+]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
