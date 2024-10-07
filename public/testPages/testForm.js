@@ -57,7 +57,7 @@ export async function loadPosts(){
     }
 }
 
-function createCell(row,content){
+export function createCell(row,content){
     let cell = document.createElement("td")
     cell.textContent = content
     cell.style.border="1px solid black"
