@@ -12,7 +12,7 @@ export async function createPost(req,res) {
     //console.log("newPost2")
     if(newPostIsVaild(newPost)) {
         try {
-            newPost.createdBy=req.user._id
+            newPost.createdBy=req.user._id.toString()
             newPost.createdOn=new Date()
             newPost.replies=[]
             let postTable = await client.db(Dbname).collection("Posts")
@@ -72,7 +72,7 @@ export async function updatePost(req, res) {
         let postTable = await client.db(Dbname).collection("Posts")
         let updateResult = await postTable.updateOne({
             _id: new ObjectId(idToUpdate),
-            createdBy: req.user._id
+            createdBy: req.user._id.toString()
             },updateScheme)
         if (updateResult) {
             res.status(200)
@@ -94,7 +94,7 @@ export async function deletePost(req, res) {
     try{
         let postTable = await client.db(Dbname).collection("Posts")
         let deleteResult =  postTable.deleteOne({_id: new ObjectId(idToDelete),
-            createdBy: req.user._id})
+            createdBy: req.user._id.toString()})
         if (deleteResult) {
             res.status(200)
             res.send("delete done")
