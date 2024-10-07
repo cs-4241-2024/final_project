@@ -73,7 +73,7 @@ app.post('/add-group', async (req,res) => {
         res.status(500).json({ message: 'Error adding group', error });
     }
 
-});
+}); 
 
 app.get('/get-users', async (req, res) => {
     try {
@@ -92,6 +92,35 @@ app.get('/get-users', async (req, res) => {
     } catch (error) {
         console.error('Error fetching users ligma:', error);
         res.status(500).json({ message: 'Error fetching users ligma', error });
+    }
+});
+
+// Send the user in session
+app.get('/get-session', async (req, res) => {
+
+    try{
+        const sessionCookie = req.cookies[sessionCookieName];
+        const user = await usersCollection.findOne({ _id: ObjectId(sessionCookie.userId) });
+
+        if (!sessionCookie){
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        } 
+
+        if (!user) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Exclude sensitive information (e.g., passwords) from the response
+        const { password, ...userWithoutPassword } = user;
+
+        if(sessionCookie){
+            console.log('Session cookie:', sessionCookie);
+            return res.status(200).json(userWithoutPassword);
+        }
+
+    }catch(error){
+        console.error('Error fetching session:', error);
+        res.status(500).json({ message: 'Error fetching session', error });
     }
 });
 
@@ -161,11 +190,9 @@ app.post('/login', async (req, res) => {
     }
 });
 
-//Check if the user logged in submitted the correct current password
+//Check if the user logged in submitted the correct current password to change their password
 app.post('/check-password', async (req, res) => {
     const { username, password } = req.body;
-
-    console.log('Request Body:', req.body); // Debug log
 
     try {
         // Find the user by username
@@ -224,6 +251,9 @@ app.post('/update-password', async (req, res) => {
         res.status(500).json({ message: 'Error changing password', error });
     }
 });
+
+
+
 
 //Logout
 app.post('/logout', (req, res) =>{

@@ -70,6 +70,24 @@ const checkAuth = async function () {
     }
 }
 
+async function fetchSessionUser(){
+  try {
+    const response = await fetch('/get-session', {
+      method: 'GET'
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Session user:', data);
+      document.getElementById('currentUsername').value = data.username;
+    } else {
+      console.error('Error fetching session user:', response.status);
+    }
+  } catch (error) {
+    console.error('Error fetching session user:', error);
+  }
+}
+
 async function fetchUsers() {
   try {
     const response = await fetch('/get-users');
@@ -291,6 +309,8 @@ const changePassword = async function(event) {
   const password = document.getElementById("currentPassword").value;
   const newPassword = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
+
+  console.log(fetchSessionUser());
 
   // Check if currentPassword is correct
   try {
