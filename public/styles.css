@@ -14,6 +14,97 @@ html, body {
     height: 100vh;
     width: 100vw;
 }
+
+.main-form {
+    z-index: 2;
+    text-align: center;
+    width: 70%;
+    margin: auto;
+    padding: 1em;
+    background-color: antiquewhite;
+    border-radius: 4px;
+}
+
+.custom-select {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.custom-select label {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 12px;
+    color: #999;
+    pointer-events: none; /* prevents interaction with the label */
+}
+
+.custom-select select {
+    width: 100%;
+    padding: 20px 10px 10px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+    /*appearance: none; /* removes the default dropdown arrow in some browsers */
+    background: white; /* Set background to match the rest of the form */
+}
+
+/* when focused, change border color */
+.custom-select select:focus {
+    border: 2px solid #726D2D; 
+}
+
+
+.floating-label {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-label input {
+    width: 100%;
+    padding: 20px 10px 10px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.floating-label label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #999;
+    pointer-events: none; 
+    transition: 0.2s ease all; 
+    
+}
+
+/* animates the label moving */
+.floating-label input:focus ~ label,
+.floating-label input:not(:placeholder-shown) ~ label {
+    top: 5px;
+    left: 10px;
+    font-size: 12px;
+    color: #726D2D; /* need to change this color */
+    transform: translateY(0);
+}
+
+/* when focused, change border color */
+.floating-label input:focus {
+    border: 2px solid #726D2D;
+}
+
+.floating-label input::placeholder {
+    color: transparent;
+}
+
+
     
 .div1 { 
     grid-area: 1 / 1 / 2 / 4; 
@@ -35,6 +126,9 @@ html, body {
 .div3 { 
     grid-area: 2 / 2 / 4 / 3; 
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .div4 { 
