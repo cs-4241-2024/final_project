@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'your secret option here',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false, sameSite: 'lax' }
