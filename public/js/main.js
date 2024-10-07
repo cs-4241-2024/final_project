@@ -1,4 +1,5 @@
 // FRONT-END (CLIENT) JAVASCRIPT HERE
+import { makeURLWithParams, getParam } from "./urlHelpers.js";
 
 function iloveClicking() {
 	alert("I LOVE CLICKING")
@@ -6,7 +7,7 @@ function iloveClicking() {
 
 //Adds the navigation bar to the location of the navbar classon each page.
 //To add the nav bar to a page just add the following HTML element <nav class="navbar"></nav>
-const nav = function () {
+export const nav = function () {
 	const navbar = document.querySelector('.navbar')
 	navbar.innerHTML = `
 	<table class=navbar>
@@ -16,7 +17,7 @@ const nav = function () {
 }
 
 //Sends the user to the search-results page with parameters in the url
-function search() {
+const search = function () {
 	const query = document.getElementById("searchInput");
 	if (query.value != "") {
 		const urlWithParams = makeURLWithParams("search-results", "query", query.value);
@@ -32,21 +33,6 @@ function search() {
 
 window.onload = function () {
 	nav()
-}
-
-//From urlHelpers.js
-// ---------------------------------------------------------------------------------------------
-//Returns a string of a url for the page you want to go to with the parameters it should have
-function makeURLWithParams(htmlFileName, paramName, paramValue) {
-	let urlString = window.location.href;
-	urlString = urlString.slice(0, -(window.location.pathname.length));
-	urlString += "/" + htmlFileName + ".html?" + paramName + "=" + paramValue;
-	return urlString;
-}
-
-//When you are on the page with a url with parameters you would get that url by passing in window.location.href as urlWithParams
-function getParam(urlWithParams, paramName) {
-	let url = new URL(urlWithParams);
-	let params = new URLSearchParams(url.search);
-	return params.get(paramName);
+	const searchButton = document.getElementById("searchButton");
+	searchButton.onclick = search;
 }

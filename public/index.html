@@ -4,7 +4,8 @@
     <head>
         <title>CS4241 Assignment 2</title>
         <meta charset="utf-8">
-        <script src="js/main.js"></script>
+        <script src="js/main.js" type="module"></script>
+        <script src="js/urlHelpers.js" type="module"></script>
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/homepageForumStyling.css">
 
@@ -16,15 +17,13 @@
         <nav class="navbar"></nav> <!--don't put anything before navbar-->
 
         <input type="text" id="searchInput" placeholder="Enter a playlist, post, song, or user."> </input>
+        <button id="searchButton">Search</button>
 
-
-        <button id="searchButton" onclick="search()">Search</button>
-        <!--edit the iloveClicking when backend finishes. something that gives title to new forum posts.-->
         <div class="container">
             <h1 class="newForumPostsTitle">New Forum Posts</h1>
-            <button id="createPostButton" onclick="iloveClicking()">Create Post</button>
-            <button id="addSongButton" onclick="iloveClicking()">Add Song</button>
-            <button id="addSongButton" onclick="iloveClicking()">Create Playlist</button>
+            <button id="createPostButton">Create Post</button>
+            <button id="addSongButton">Add Song</button>
+            <button id="addSongButton">Create Playlist</button>
 
         </div>
         <!--move create post button over-->
