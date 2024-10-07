@@ -42,10 +42,16 @@ function Home() {
               </IconButton>
               <div className="navigation">
                   <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
-                      console.log("Login button clicked");
+                      console.log("Editor clicked");
                       navigate('/editor');
                   }}>
                       Create your own personal WPI Tracking Sheet here
+                  </Button>
+                  <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+                      console.log("About Page clicked");
+                      navigate('/about');
+                  }}>
+                      About Page
                   </Button>
 
               </div>
