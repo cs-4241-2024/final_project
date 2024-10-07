@@ -375,7 +375,28 @@ async function deleteTask(group, assIndex){
   }
 }
 
-// Function to generate and inject HTML into the DOM
+
+async function completeTask(group, assIndex){
+  console.log("completing task with group  " +group +" index " + assIndex)
+  try {
+    const response = await fetch('/completeTask', {
+      method: 'POST',
+      body: JSON.stringify({groupName: group, assignmentIndex: assIndex}),
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (response.ok) {
+      //TODO change the generate html so that we see completed and incomplete tasks
+      console.log("response is ok")
+      // location.reload();
+      // showContent(group)
+    }
+  } catch (error) {
+    console.error('Error completing task:', error);
+    alert('There was an error completing the task. Please try again.');
+  }
+}
+
 // Function to generate and inject HTML into the DOM
 function generateGroupHTML(data) {
   console.log('This is the data' + data);
@@ -385,16 +406,31 @@ function generateGroupHTML(data) {
     // Group Members Names
     const userNames = group.users.map(user => user.username).join(", ");
 
-    // Only generate assignments if they exist
-    const assignmentsHTML = group.assignments && group.assignments.length > 0
-    ? group.assignments.map((assignment, assIndex) => `
-      <li>
-        ${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})
-        <button class="finish-task-btn" data-taskid="${assIndex}" onclick = "deleteTask('${group.groupName}', ${assIndex})">Finish</button>
-        <button class="delete-task-btn" data-taskid="${assIndex}" onclick = "deleteTask('${group.groupName}', ${assIndex})">Delete</button>
-      </li>
-    `).join("")
-    : "<li>No assignments available</li>";
+    // Separate assignments into completed and incomplete
+    const completedAssignments = group.assignments?.filter(assignment => assignment.status === "complete") || [];
+    const incompleteAssignments = group.assignments?.filter(assignment => assignment.status !== "complete") || [];
+
+    // Generate HTML for incomplete assignments
+    const incompleteAssignmentsHTML = incompleteAssignments.length > 0
+      ? incompleteAssignments.map((assignment, assIndex) => {
+        const originalIndex = group.assignments.findIndex(a => a.title === assignment.title && a.assignedTo === assignment.assignedTo);
+        return `
+        <li>
+          ${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})
+          <button class="complete-task-btn" onclick="completeTask('${group.groupName}', ${originalIndex})">Complete</button>
+          <button class="delete-task-btn" onclick="deleteTask('${group.groupName}', ${originalIndex})">Delete</button>
+        </li>
+      `}).join("")
+      : "<li>No incomplete assignments available</li>";
+
+    // Generate HTML for completed assignments
+    const completedAssignmentsHTML = completedAssignments.length > 0
+      ? completedAssignments.map(assignment => `
+        <li>
+          ${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})
+        </li>
+      `).join("")
+      : "<li>No completed assignments available</li>";
 
 
     // Construct the dynamic HTML content
@@ -415,11 +451,19 @@ function generateGroupHTML(data) {
             </div>
 
             <div class="all-tasks-section">
-              <h3>All Tasks</h3>
+              <h3>All Incomplete Tasks</h3>
               <ul class="all-tasks-list">
-                ${assignmentsHTML}
+                ${incompleteAssignmentsHTML}
               </ul>
             </div>
+
+            <div class="completed-tasks-section">
+              <h3>Completed Tasks</h3>
+              <ul class="completed-tasks-list">
+                ${completedAssignmentsHTML}
+              </ul>
+            </div>
+
             <div>
               <form id="addTask">
                   <label>Add new task</label>

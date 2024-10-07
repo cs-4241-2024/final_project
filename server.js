@@ -111,6 +111,42 @@ app.post('/deleteTask', async (req, res) => {
     }
 });
 
+app.post('/completeTask', async (req, res) => {
+    const { groupName, assignmentIndex } = req.body;
+
+    console.log("trying to complete task group " + groupName + " index " + assignmentIndex
+    )
+
+    try {
+        const group = await groupCollection.findOne({ groupName });
+
+        if (!group) {
+            return res.status(404).json({ success: false, message: 'Group not found' });
+        }
+
+        // Check if assignmentIndex is valid
+        if (assignmentIndex < 0 || assignmentIndex >= group.assignments.length) {
+            return res.status(400).json({ success: false, message: 'Invalid assignment index' });
+        }
+
+        // Update the status of the assignment at the given index to "complete"
+        group.assignments[assignmentIndex].status = "complete";
+
+        // Update the group with the modified assignments array
+        await groupCollection.updateOne(
+            { groupName },
+            { $set: { assignments: group.assignments } }
+        );
+
+        res.json({ success: true, message: 'Task status updated to complete successfully' });
+    } catch (error) {
+        console.error('Error updating task status:', error);
+        res.status(500).json({ success: false, message: 'Error updating task status' });
+    }
+});
+
+
+
 
 // Get information about a specific group
 app.get('/get-group-info', async (req, res) => {
@@ -137,9 +173,9 @@ app.post('/add-assignment', async (req, res) => {
         if (!group) {
             return res.status(404).json({ message: 'Group not found' });
         }
-
+        const status = 'incomplete'
         // Add the assignment
-        const newAssignment = { title, assignedTo, dueDate: new Date(dueDate) };
+        const newAssignment = { title, assignedTo, dueDate: new Date(dueDate), status};
         const result = await groupCollection.updateOne(
             { _id: new ObjectId(groupId) },
             { $push: { assignments: newAssignment } }
