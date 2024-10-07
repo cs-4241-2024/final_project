@@ -9,7 +9,7 @@ import FileUploadButton from '../components/FileUploadButton';
 import SimpleTable from "../components/SimpleTable";
 import ClassComboBox from "../components/ClassComboBox";
 // index.js
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { set } from "mongoose";
 
 let theme = createTheme({
@@ -34,7 +34,7 @@ const Editor: React.FC = () => {
   const [clearData, setClearData] = useState(false);
   const [uploadedData, setUploadedData] = useState<any>(null);
 
-  const [humanityDepthData, setHumanityData] = useState<string[]>([]);
+  const [humanityData, setHumanityData] = useState<string[]>([]);
   const [physicalEducationData, setPhysicalEducationData] = useState<string[]>([]);
   const [socialScienceData, setSocialScienceData] = useState<string[]>([]);
   const [iqpData, setIqpData] = useState<string[]>([]);
@@ -53,48 +53,50 @@ const Editor: React.FC = () => {
   useEffect(() => {
     if (uploadedData) {
       console.log('Uploaded data changed:', uploadedData);
-      uploadedData.forEach((section : any) => {
+      uploadedData.forEach((section: any) => {
         const data: string[] = [];
         const requirement = section.requirement.toLowerCase().replace(/\s+/g, '');
         section.rows.forEach((row: any) => {
           const registrationsUsed = row["Registrations Used"];
           data.push(registrationsUsed);
           console.log('Registrations used:', registrationsUsed);
-      })
-      if (requirement.includes("Major Qualifying Project")){
-        setComputerScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Interactive Qualifying Project")){
-        setIqpData(data);
-      } else if (requirement.includes("Humanities and Arts Requirement")){
-        setHumanityData(data);
-      } else if (requirement.includes("Social Science Requirement")){
-        setSocialScienceData(data);
-      } else if (requirement.includes("Physical Education Requirement")){
-        setPhysicalEducationData(data);
-      } else if (requirement.includes("Probability and Statistics Requirement")){
-        setMathematicsData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Mathematics Requirement")){
-        setMathematicsData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Basic Science Discipline")){
-        setBasicScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Basic and/or Engineering Science")){
-        setBasicScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Core Requirement")){
-        setComputerScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Systems Requirement")){
-        setComputerScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Theory and Languages Requirement")){
-        setComputerScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Design Requirement")){
-        setComputerScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Social Implications")){
-        setComputerScienceData(prevData => [...prevData, ...data]);
-      } else if (requirement.includes("Free Elective")){
-        setFreeElectivesData(data);
-      } else{}
-      
-    }, [uploadedData]);
-  }
+        })
+        if (requirement.includes("Major Qualifying Project")) {
+          setComputerScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Interactive Qualifying Project")) {
+          setIqpData(data);
+        } else if (requirement.includes("Humanities and Arts Requirement")) {
+          setHumanityData(data);
+        } else if (requirement.includes("Social Science Requirement")) {
+          setSocialScienceData(data);
+        } else if (requirement.includes("Physical Education Requirement")) {
+          setPhysicalEducationData(data);
+        } else if (requirement.includes("Probability and Statistics Requirement")) {
+          setMathematicsData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Mathematics Requirement")) {
+          setMathematicsData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Basic Science Discipline")) {
+          setBasicScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Basic and/or Engineering Science")) {
+          setBasicScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Core Requirement")) {
+          setComputerScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Systems Requirement")) {
+          setComputerScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Theory and Languages Requirement")) {
+          setComputerScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Design Requirement")) {
+          setComputerScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Social Implications")) {
+          setComputerScienceData(prevData => [...prevData, ...data]);
+        } else if (requirement.includes("Free Elective")) {
+          setFreeElectivesData(data);
+        } else {
+        }
+
+      }, [uploadedData]);
+    }
+  });
 
 
 
