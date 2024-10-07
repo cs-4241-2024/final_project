@@ -33,12 +33,12 @@
                     <!-- Multi-select dropdown for users -->
                     <label for="userSearch">Select Users:</label>
                         <div class="dropdown-container">
-                            <div class="selected-options" id="selected-options">
+                            <div class="selected-options" id="group-selected-list">
                                 <!-- Selected options will appear here -->
                             </div>
                             <div class="dropdown">
-                                <input type="text" placeholder="Search..." id="search-bar">
-                                <div class="options-list" id="options-list">
+                                <input class="search-bar"  type="text" placeholder="Search..." id="group-search-bar" required>
+                                <div class="options-list" id="group-options-list">
                                     <!-- has all users-->
                                 </div>
                             </div>
@@ -53,6 +53,7 @@
                 <p>Are you sure you want to log out?</p>
                 <button type="button" id="logoutBtn">Log out</button>
             </div>
+            
 
             <!-- Settings Content -->
             <div id="settings" class="content">

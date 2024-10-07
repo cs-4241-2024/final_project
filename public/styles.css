@@ -91,7 +91,7 @@ body {
 }
 
 .fc-daygrid-day:hover {
-    background-color: #d4edda;
+    background-color: #D08F8F;
     cursor: pointer; 
   }
   
@@ -160,7 +160,7 @@ body {
     width: 100%;
 }
 
-#search-bar {
+.search-bar {
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
@@ -198,3 +198,13 @@ body {
     position: absolute;
     bottom: 20px;
 }
+
+/* Logout Button Container */
+.logout-container {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    align-items: center; /* Center the button vertically */
+    height: calc(100vh - 40px); /* Adjust height to avoid overflow with footer */
+    padding: 20px;
+}
+

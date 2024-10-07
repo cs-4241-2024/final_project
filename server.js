@@ -80,22 +80,50 @@ app.post('/add-group', async (req, res) => {
     }
 });
 
+app.post('/deleteTask', async (req, res) => {
+    const { groupName, assignmentIndex } = req.body;
+
+    try {
+        const group = await groupCollection.findOne({ groupName });
+
+        if (!group) {
+            return res.status(404).json({ success: false, message: 'Group not found' });
+        }
+
+        // Check if assignmentIndex is valid
+        if (assignmentIndex < 0 || assignmentIndex >= group.assignments.length) {
+            return res.status(400).json({ success: false, message: 'Invalid assignment index' });
+        }
+
+        // Remove the assignment at the given index
+        const updatedAssignments = group.assignments.filter((_, index) => index !== assignmentIndex);
+
+        // Update the group with the new assignments array
+        await groupCollection.updateOne(
+            { groupName },
+            { $set: { assignments: updatedAssignments } }
+        );
+
+        res.json({ success: true, message: 'Task deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting task:', error);
+        res.status(500).json({ success: false, message: 'Error deleting task' });
+    }
+});
+
+
 // Get information about a specific group
 app.get('/get-group-info', async (req, res) => {
     try {
-        const { groupId } = req.query;
+        const groups = await groupCollection.find({}).toArray();
 
-        // Find the group by ID
-        const group = await groupCollection.findOne({ _id: new ObjectId(groupId) });
-
-        if (!group) {
-            return res.status(404).json({ message: 'Group not found' });
+        if (!groups || groups.length === 0) {
+            return res.status(404).json({ message: 'No groups found' });
         }
-
-        res.status(200).json(group);
+        res.status(200).json(groups);
     } catch (error) {
-        console.error('Error fetching group information:', error);
-        res.status(500).json({ message: 'Error fetching group information', error });
+        console.error('Error fetching groups:', error);
+        res.status(500).json({ message: 'Error fetching groups', error });
     }
 });
 
@@ -145,7 +173,7 @@ app.get('/get-users', async (req, res) => {
 
 // Basic route to send the index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 // User registration
