@@ -207,6 +207,37 @@ app.get('/get-users', async (req, res) => {
     }
 });
 
+// Send the user in session
+app.get('/get-session', async (req, res) => {
+
+    try{
+        const sessionCookie = req.cookies[sessionCookieName];
+
+        if (!sessionCookie) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Find the user by userId in the session cookie
+        const user = await usersCollection.findOne({ _id: new ObjectId(sessionCookie.userId)});
+
+        if (!user) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Exclude sensitive information (e.g., passwords) from the response
+        const { password, ...userWithoutPassword } = user;
+
+        console.log('Session cookie:', sessionCookie);
+
+        // Return the user without the password
+        return res.status(200).json(userWithoutPassword);
+
+    }catch(error){
+        console.error('Error fetching session:', error);
+        res.status(500).json({ message: 'Error fetching session', error });
+    }
+});
+
 // Basic route to send the index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
@@ -253,19 +284,21 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
-        res.cookie(sessionCookieName, { userId: user._id }, { httpOnly: true, maxAge: 3600000 });
+        // Set a cookie to track the session
+        res.cookie(sessionCookieName, { userId: user._id.toString() , username: user.username}, { httpOnly: true, maxAge: 3600000 }); // 1 hour expiration
 
-        res.status(200).json({ message: 'Login successful' });
+        console.log('Login successful:', user.username);
+
+        // If login is successful, return a success message
+        return res.status(200).json({ message: 'Login successful' });
     } catch (error) {
         res.status(500).json({ message: 'Error logging in', error });
     }
 });
 
-//Check if the user logged in submitted the correct current password
+//Check if the user logged in submitted the correct current password to change their password
 app.post('/check-password', async (req, res) => {
     const { username, password } = req.body;
-
-    console.log('Request Body:', req.body); // Debug log
 
     try {
         // Find the user by username

@@ -64,6 +64,25 @@ const checkAuth = async function () {
     }
 }
 
+async function fetchSessionUser(){
+  try {
+    const response = await fetch('/get-session', {
+      method: 'GET',
+        credentials: 'include'  // Include cookies in the request
+    });
+
+    if (response.ok) {
+      const user = await response.json();
+      console.log('Session user:', user);
+      document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
+    } else {
+      console.error('Failed to retrieve user');
+    }
+  } catch (error) {
+    console.error('Error fetching session user:', error);
+  }
+}
+
 async function fetchUsers() {
   console.log("Fetch Users")
   try {
@@ -214,6 +233,9 @@ async function addGroup(event) {
 
 window.onload = async function () {
   checkAuth();
+  fetchSessionUser();
+
+
   console.log("Main.js Onload");
 
   fetchUsers(); //If authenticated, fetch users
@@ -249,6 +271,8 @@ const changePassword = async function(event) {
   const password = document.getElementById("currentPassword").value;
   const newPassword = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
+
+  console.log(fetchSessionUser());
 
   // Check if currentPassword is correct
   try {
