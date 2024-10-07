@@ -5,16 +5,25 @@ interface SimpleTableProps {
   title: string;
   numInputs: number;
   clear: boolean;
+  data: string[];
 }
 
-const SimpleTable: React.FC<SimpleTableProps> = ({ title, numInputs, clear }) => {
+const SimpleTable: React.FC<SimpleTableProps> = ({ title, numInputs, clear, data }) => {
   const [inputValues, setInputValues] = useState<string[]>(Array(numInputs).fill(''));
 
   useEffect(() => {
     if (clear) {
       setInputValues(Array(numInputs).fill(''));
+    } else {
+      const newValues = Array(numInputs).fill('');
+      data.forEach((value, index) => {
+        if(index < numInputs) {
+        newValues[index] = value;
+        }
+      });
+      setInputValues(newValues);
     }
-  }, [clear, numInputs]);
+  }, [clear, numInputs, data]);
 
   const handleInputChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValues = [...inputValues];
