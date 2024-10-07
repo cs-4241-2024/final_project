@@ -60,6 +60,14 @@ const Editor: React.FC = () => {
 
   const handleClearData = () => {
     setClearData(true);
+    setHumanityData([]);
+    setPhysicalEducationData([]);
+    setSocialScienceData([]);
+    setIqpData([]);
+    setMathematicsData([]);
+    setFreeElectivesData([]);
+    setComputerScienceData([]);
+    setBasicScienceData([]);
     setTimeout(() => { setClearData(false); }, 0);
     console.log("All components have been reset");
   };
@@ -102,6 +110,7 @@ const Editor: React.FC = () => {
 
   useEffect(() => {
     if (uploadedData) {
+      handleClearData();
       console.log('Uploaded data changed:', uploadedData);
       uploadedData.forEach((section: any) => {
         const data: string[] = [];
