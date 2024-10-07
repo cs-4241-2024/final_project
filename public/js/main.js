@@ -1,44 +1,40 @@
 let currentGroup = null; // To store the active group
 
 function showContent(groupId) {
-  console.log("Show content works")
-  // Hide all content sections
   const contents = document.querySelectorAll('.content');
-  contents.forEach(content => {
-    content.style.display = 'none'
-  });
-  // Show the selected content section
+  contents.forEach(content => content.style.display = 'none');
+  
   const selectedContent = document.getElementById(groupId);
   selectedContent.style.display = 'block';
 
   if (groupId.replace(/\d+$/, '') === 'group') {
-    groupIndex = (parseInt(groupId.match(/\d+/)[0], 10));
-    groupIndex = groupIndex - 1;
-    console.log("group index: " + groupIndex);
-    currentGroup = groupData.groups[groupIndex].groupName
+    let groupIndex = parseInt(groupId.match(/\d+/)[0], 10) - 1;
+    currentGroup = groupData.groups[groupIndex].groupName;
+    
     const calendarEl = document.getElementById('calendar' + (groupIndex + 1));
     if (calendarEl) {
       calendarEl.innerHTML = '';
     }
+    
     const groupAssignments = groupData.groups[groupIndex].assignments.map(assignment => ({
       title: `${assignment.title} (Assigned to: ${assignment.assignedTo})`,
       start: assignment.dueDate
     }));
+    
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       events: groupAssignments,
-      dateClick: function (info) {
-        const selectedDate = info.dateStr;
-        showTasksForDate(selectedDate, groupData.groups[groupIndex].assignments);
-      }
+      dateClick: (info) => showTasksForDate(info.dateStr, groupData.groups[groupIndex].assignments)
     });
+    
     calendar.render();
   }
 }
 
+
 function showTasksForDate(selectedDate, assignments) {
   const tasksForDate = assignments.filter(assignment => assignment.dueDate === selectedDate);
-
+  
   const tasksListEl = document.querySelector('.tasks-list');
   tasksListEl.innerHTML = tasksForDate.length > 0
     ? tasksForDate.map(assignment => `
@@ -46,6 +42,7 @@ function showTasksForDate(selectedDate, assignments) {
         `).join("")
     : '<li>No tasks due on this date</li>';
 }
+
 
 async function fetchUsers() {
   try {
@@ -62,55 +59,47 @@ async function fetchUsers() {
 function populateUserDropdown(users) {
   const optionsList = document.getElementById('options-list');
   const searchBar = document.getElementById('search-bar');
-
-  // Clear any previous options
-  optionsList.innerHTML = '';
-
-  // Loop through the users and create checkbox elements for each
+  
+  optionsList.innerHTML = ''; // Clear previous options
+  
   users.forEach(user => {
-    // Create label element
     const label = document.createElement('label');
-    
-    // Create checkbox element
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.value = user.username; // Assuming 'username' is a field in your user data
-    
-    // Append checkbox and username to the label
+    checkbox.value = user.username;
     label.appendChild(checkbox);
     label.appendChild(document.createTextNode(user.username));
-
-    // Append the label to the options list
     optionsList.appendChild(label);
   });
-
-  // Set up the search filter event listener
-  searchBar.addEventListener('input', filterUsers);
   
-  // Reapply event listeners to checkboxes after they are added to the DOM
-  updateCheckboxListeners();
+  searchBar.addEventListener('input', filterUsers);
+  updateCheckboxListeners(); // Reapply listeners
 }
+
 
 function filterUsers() {
   const filter = document.getElementById('search-bar').value.toLowerCase();
   const checkboxes = document.querySelectorAll('#options-list label');
 
-  checkboxes.forEach(function (label) {
+  checkboxes.forEach(label => {
     const text = label.textContent.toLowerCase();
     label.style.display = text.includes(filter) ? 'block' : 'none';
   });
 }
+
 
 function updateCheckboxListeners() {
   const optionsList = document.getElementById('options-list');
   const checkboxes = optionsList.querySelectorAll('input[type="checkbox"]');
   const selectedOptionsContainer = document.getElementById('selected-options');
 
-  checkboxes.forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
       if (checkbox.checked) {
+        console.log('Checkbox selected:', checkbox.value); // Log checkbox selection
         addSelectedOption(checkbox.value);
       } else {
+        console.log('Checkbox deselected:', checkbox.value); // Log deselection
         removeSelectedOption(checkbox.value);
       }
     });
@@ -122,18 +111,18 @@ function addSelectedOption(value) {
   selectedOption.className = 'option';
   selectedOption.textContent = value;
   selectedOption.dataset.value = value;
+  document.getElementById('selected-options').appendChild(selectedOption);
 
-  const selectedOptionsContainer = document.getElementById('selected-options');
-  selectedOptionsContainer.appendChild(selectedOption);
+  console.log('Added user:', value); // Log selected users
 }
 
 function removeSelectedOption(value) {
-  const selectedOptionsContainer = document.getElementById('selected-options');
-  const selectedOption = selectedOptionsContainer.querySelector(`[data-value="${value}"]`);
+  const selectedOption = document.querySelector(`[data-value="${value}"]`);
   if (selectedOption) {
     selectedOption.remove();
   }
 }
+
 
 const showGroup = async function (event) {
   await fetchUsers();
@@ -154,59 +143,49 @@ const showGroup = async function (event) {
   });
 };
 
-// add group
-const addGroup = async function (event) {
-  const groupName = document.getElementById("groupNameInput").value; // generate specific group id in server
-  const selectedUsersDiv = document.getElementById("selected-options"); // list of user with each an id, email, name, password, group id access to
+async function addGroup(event) {
+  const groupName = document.getElementById("groupNameInput").value;
+  const selectedUsersDiv = document.getElementById("selected-options");
   const selectedUsers = Array.from(selectedUsersDiv.children).map(div => div.textContent);
-  
+
   if (!selectedUsers.length || !groupName) {
     alert('Please fill in all the required fields');
     return;
   }
 
-  const data = {
-    groupName: groupName,
-    users: selectedUsers
-  };
+  const data = { groupName, users: selectedUsers };
 
   try {
-    const response = await fetch('/add-group', { //endpoint to add group to server
+    const response = await fetch('/add-group', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     });
 
     if (response.ok) {
+      // Dynamically add the new group button and content section
       const result = await response.json();
       const groupButtons = document.getElementById("groupButtons");
       const newGroupButton = document.createElement("button");
       newGroupButton.innerText = groupName;
-      newGroupButton.onclick = function () {
-        showContent(groupName);
-      };
-
-
+      newGroupButton.onclick = () => showContent(groupName);
       groupButtons.appendChild(newGroupButton);
-
-      // Create a new content section for the new group
+      
       const mainContent = document.querySelector(".main");
       const newGroupContent = document.createElement("div");
       newGroupContent.className = "content";
-      newGroupContent.id = groupName; // Unique ID for the new group content
-
-      // Clear the form fields
+      newGroupContent.id = groupName;
+      mainContent.appendChild(newGroupContent);
+      
       document.getElementById("groupForm").reset();
-
-      // Optionally switch to the new group view
       showContent(groupName);
     }
-
   } catch (error) {
     console.error('Error adding group:', error);
     alert('There was an error adding the group. Please try again.');
   }
 }
+
 
 window.onload = async function () {
   fetchUsers();
@@ -384,55 +363,38 @@ function createGroupButtons(data) {
 }
 
 async function addNewTask() {
-  // Get the values from the input fields
   const task = document.getElementById('addTaskInput').value;
   const assignedUser = document.getElementById('assignUserInput').value;
   const dueDate = document.getElementById('dateInput').value;
-
-  
 
   if (!currentGroup) {
     alert("No group selected. Please select a group before adding a task.");
     return;
   }
 
-  // Validate inputs (ensure none are empty)
   if (!task || !assignedUser || !dueDate) {
     alert("Please fill in all the fields.");
     return;
   }
 
-  // Create a new task object
-  const newTask = {
-    title: task,
-    user: assignedUser,
-    date: dueDate,
-    groupName: currentGroup
-  };
+  const newTask = { title: task, user: assignedUser, date: dueDate, groupName: currentGroup };
 
-  console.log("Making a new task name = " + task + " assigned user = " + assignedUser + " due date = " + dueDate)
+  try {
+    const response = await fetch('/addTask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ newTask })
+    });
 
-  // TODO update the database with the task list 
-
-    try{
-        const response = await fetch('/addTask', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ newTask}) // Send the username and password in JSON format
-        });
-
-        if (response.ok) {
-          alert('Task added successfully');
-        } else {
-          alert('Failed to add task');
-        }
-      } 
-    catch (error) {
-      console.error('Error adding task:', error);
-      alert('An error occurred. Please try again.');
+    if (response.ok) {
+      alert('Task added successfully');
+    } else {
+      alert('Failed to add task');
     }
+  } catch (error) {
+    console.error('Error adding task:', error);
+    alert('An error occurred. Please try again.');
+  }
 }
 
 

@@ -1,7 +1,7 @@
 // Import the express module
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
-// Import Middlewares (for login functionality and security purposes)
+// Import Middlewares
 const path = require('path');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
@@ -16,8 +16,7 @@ require("dotenv").config();
 const app = express();
 const dbName = "FinalDB";
 const usersCollectionName = "users";
-const groupCollectionName = "group";
-const taskCollectionName = 'task';
+const groupCollectionName = "groups"; // Groups will include members and assignments
 const sessionCookieName = 'userSession';
 const CONNECT = process.env.MONGO_URL;
 // Define a port
@@ -36,20 +35,21 @@ app.use(morgan('tiny'));
 
 // Connect to Mongo DB
 const client = new MongoClient(CONNECT);
-let db, usersCollection, groupCollection, taskCollection;
+let db, usersCollection, groupCollection;
 
 client.connect().then(() => {
-    db = client.db(dbName)
+    db = client.db(dbName);
     usersCollection = db.collection(usersCollectionName); // Users collection
-    groupCollection = db.collection(groupCollectionName); // Group Collection
-    taskCollection = db.collection(taskCollectionName); //Task Collection
+    groupCollection = db.collection(groupCollectionName); // Groups collection
     console.log('Connected to MongoDB');
 }).catch(err => {
     console.error('Failed to connect to MongoDB', err);
 });
 
+// Add a new group with members and assignments
 app.post('/add-group', async (req, res) => {
-    const { groupName, users } = req.body; // 'users' should be an array of userIds
+    const { groupName, users, assignments } = req.body;
+    console.log('Received group data:', groupName, users); // Log received data
 
     try {
         // Check if the group already exists
@@ -58,18 +58,14 @@ app.post('/add-group', async (req, res) => {
             return res.status(400).json({ message: 'Group name already exists' });
         }
 
-        // Generate a unique groupID using MongoDB's ObjectId
-        const groupID = new ObjectId();
-
-        // Create the new group with empty taskIds and the provided userIds
+        // Create the new group object
         const newGroup = {
-            groupID,
             groupName,
-            userIds: users,  // List of user IDs provided
-            taskIds: []      // Initialize as empty since no tasks are added yet
+            users,  // List of users with their details
+            assignments  // List of assignments with titles, assignedTo, and dueDates
         };
 
-        // Insert the group into the 'group' collection
+        // Insert the group into the 'groups' collection
         const result = await groupCollection.insertOne(newGroup);
 
         res.status(201).json({
@@ -84,34 +80,51 @@ app.post('/add-group', async (req, res) => {
     }
 });
 
+// Get information about a specific group
 app.get('/get-group-info', async (req, res) => {
     try {
         const { groupId } = req.query;
 
-        const group = await groupCollection.findOne({ groupID: groupId });
+        // Find the group by ID
+        const group = await groupCollection.findOne({ _id: new ObjectId(groupId) });
 
         if (!group) {
             return res.status(404).json({ message: 'Group not found' });
         }
 
-        const { userIds, taskIds, groupName } = group;
-
-        const users = await userCollection.find({ userId: { $in: userIds } }).toArray();
-        const tasks = await taskCollection.find({ taskId: { $in: taskIds } }).toArray();
-
-        res.status(200).json({
-            groupID: groupId,
-            groupName: groupName,
-            users: users,
-            tasks: tasks,
-        });
+        res.status(200).json(group);
     } catch (error) {
         console.error('Error fetching group information:', error);
         res.status(500).json({ message: 'Error fetching group information', error });
     }
 });
 
+// Add an assignment to a group
+app.post('/add-assignment', async (req, res) => {
+    const { groupId, title, assignedTo, dueDate } = req.body;
 
+    try {
+        // Find the group
+        const group = await groupCollection.findOne({ _id: new ObjectId(groupId) });
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        // Add the assignment
+        const newAssignment = { title, assignedTo, dueDate: new Date(dueDate) };
+        const result = await groupCollection.updateOne(
+            { _id: new ObjectId(groupId) },
+            { $push: { assignments: newAssignment } }
+        );
+
+        res.status(200).json({ message: 'Assignment added successfully' });
+    } catch (error) {
+        console.error('Error adding assignment:', error);
+        res.status(500).json({ message: 'Error adding assignment', error });
+    }
+});
+
+// Get all users
 app.get('/get-users', async (req, res) => {
     try {
         const users = await usersCollection.find({}).toArray();
@@ -123,12 +136,10 @@ app.get('/get-users', async (req, res) => {
         // Exclude sensitive information (e.g., passwords) from the response
         const usersWithoutPasswords = users.map(({ password, ...user }) => user);
 
-        // Send the users list as a response
         res.status(200).json(usersWithoutPasswords);
-
     } catch (error) {
-        console.error('Error fetching users ligma:', error);
-        res.status(500).json({ message: 'Error fetching users ligma', error });
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Error fetching users', error });
     }
 });
 
@@ -137,30 +148,21 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-//Register User
+// User registration
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Check if the username already exists
         const existingUser = await usersCollection.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ message: 'Username already exists' });
         }
 
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Generate a unique userId
-        const userId = new ObjectId();
-
-        // Insert new user into the database
         const newUser = { 
-            userId, 
             username, 
             password: hashedPassword, 
-            groupIDs: [], 
-            taskIDs: [] 
+            groupIDs: [] 
         };
         await usersCollection.insertOne(newUser);
 
@@ -170,201 +172,28 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.put('/tasks/finish/:taskId', async (req, res) => {
-    const { taskId } = req.params;
-  
-    try {
-      const result = await taskCollection.updateOne(
-        { taskId },
-        { $set: { status: 'finished' } }
-      );
-  
-      if (result.modifiedCount === 0) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
-  
-      res.status(200).json({ message: 'Task finished successfully' });
-    } catch (error) {
-      console.error('Error finishing task:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  });
-  app.delete('/tasks/delete/:taskId', async (req, res) => {
-    const { taskId } = req.params;
-  
-    try {
-      const result = await taskCollection.deleteOne({ taskId });
-  
-      if (result.deletedCount === 0) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
-  
-      res.status(200).json({ message: 'Task deleted successfully' });
-    } catch (error) {
-      console.error('Error deleting task:', error);
-      res.status(500).json({ message: 'Server error' });
-    }
-  });
-    
-
-app.post('/addTask', async (req, res) => {
-    const { taskName, groupId, userId, date } = req.body;
-    const status = "todo"
-
-    // Validate required fields
-    if (!taskName || !groupId || !userId || !date) {
-        return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    try {
-        // Check if the group exists
-        const group = await groupCollection.findOne({ _id: groupId });
-        if (!group) {
-            return res.status(404).json({ message: 'Group not found' });
-        }
-
-        // Check if the user exists
-        const user = await userCollection.findOne({ _id: userId });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Generate a unique taskId using MongoDB's ObjectId
-        const taskId = new ObjectId();
-
-        // Create the task object
-        const newTask = {
-            taskId,
-            taskName,
-            groupId,
-            userId,
-            date: new Date(date), // Ensure the date is properly formatted
-            status
-        };
-
-        // Insert the task into the 'task' collection
-        await taskCollection.insertOne(newTask);
-
-        res.status(200).json({ message: 'Task added successfully', taskId });
-    } catch (error) {
-        console.error('Error adding task:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-  
-
+// User login
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    console.log('Request Body:', req.body); // Debug log
-
     try {
-        // Find the user by username
         const user = await usersCollection.findOne({ username });
 
         if (!user) {
-            // If no user found, return an error
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
-        // Compare the provided password with the hashed password in the database
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            // If password doesn't match, return an error
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
-        // Set a cookie to track the session
-        res.cookie(sessionCookieName, { userId: user._id }, { httpOnly: true, maxAge: 3600000 }); // 1 hour expiration
+        res.cookie(sessionCookieName, { userId: user._id }, { httpOnly: true, maxAge: 3600000 });
 
-        console.log('Login successful:', user.username);
-
-        // If login is successful, return a success message
-        return res.status(200).json({ message: 'Login successful' });
-
+        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
-        // Handle any errors
-        console.error('Error logging in:', error);
         res.status(500).json({ message: 'Error logging in', error });
-    }
-});
-
-//Check if the user logged in submitted the correct current password
-app.post('/check-password', async (req, res) => {
-    const { username, password } = req.body;
-
-    console.log('Request Body:', req.body); // Debug log
-
-    try {
-        // Find the user by username
-        const user = await usersCollection.findOne({ username });
-
-        if (!user) {
-            // If no user found, return an error
-            return res.status(400).json({ message: 'Invalid username or password' });
-        }
-
-        // Hash the provided password
-        // const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Compare the provided password with the hashed password in the database
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            // If password doesn't match, return an error
-            return res.status(400).json({ message: 'Invalid username or password' });
-        }
-
-        console.log('Login successful:', user.username);
-        
-        // If login is successful, return a success message
-        return res.status(200).json({ message: 'Login successful' });
-
-    } catch (error) {
-        // Handle any errors
-        console.error('Error logging in:', error);
-        res.status(500).json({ message: 'Error logging in', error });
-    }
-});
-
-//Change password
-app.post('/update-password', async (req, res) => {
-    const { username, password } = req.body;
-
-    console.log('Request Body:', req.body); // Debug log
-
-    try {
-        // Hash the new password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Update the user's password in the database
-        await usersCollection.updateOne(
-            { username: username },
-            { $set: { password: hashedPassword } }
-        );
-
-        // Return a success message
-        return res.status(200).json({ message: 'Success' });
-
-    } catch (error) {
-        // Handle any errors
-        console.error('Error changing password:', error);
-        res.status(500).json({ message: 'Error changing password', error });
-    }
-});
-
-//Logout
-app.post('/logout', (req, res) =>{
-    try {
-        // Clear the session cookie
-        res.clearCookie(sessionCookieName);
-
-        // Redirect to the homepage or return a success message
-        res.redirect('/');
-    } catch (error) {
-        res.status(500).json({ message: 'Error logging out', error });
     }
 });
 
