@@ -1,50 +1,49 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<title>CS4241 Assignment 2</title>
-		<meta charset="utf-8">
-		<script src="js/main.js"></script>
-		<link rel="stylesheet" href="css/main.css">
-		<link rel="stylesheet" href="css/songs.css">
+<head>
+	<title>CS4241 Assignment 2</title>
+	<meta charset="utf-8">
+	<script src="js/songs.js" type="module"></script>
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/songs.css">
 
-		<!-- get rid of favicon error -->
-		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
-	</head>
+	<!-- get rid of favicon error -->
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
 
-	<body>
-		<!-- Inserts the navbar into the page -->
-		<nav class="navbar"></nav>
+<body>
+	<!-- Inserts the navbar into the page -->
+	<nav class="navbar"></nav>
 
-		<!-- Has one playlists, each song in the playlist have hyperlinks to a song page-->
-		<div id="PlaylistsForUser">
+	<!-- Has one playlists, each song in the playlist have hyperlinks to a song page-->
+	<div id="PlaylistsForUser">
 
-			<!-- Title of the page-->
-			<section class="playlistSection">
-				<h2 class="postTitle">Song: (Song name)</h2>
-			</section>
+		<!-- Title of the page-->
+		<section class="playlistSection">
+			<h2 class="postTitle" id="SongTitle">Song: (Song name)</h2>
+		</section>
 
-			<!-- Example Playlists that would show all playlists a user has, most likely use the getAllPlaylists -->
-			<section class="playlistSection">
-				<p class="playlistAreaTitle"></p>
-				<h1 class="playlist">Info of song</h1>
-                <p class="playlist">Name: (Song Name) </p>
-                <p class="playlist">Artist: (Artist Name) </p>
-                <p class="playlist">Album: (Album Name if it exists) </p>
-                <p class="playlist">Duration: (Minute:seconds aka 3:23) </p>
-                <p class="playlist">Genre: (Genre Type) </p>
-                <p class="playlist">Release Date: (Month then year then day) </p>
-                <!--Created by seems redudnant-->
-				<h2 class="postTitle"></h2>
-			</section>
+		<!-- Example Playlists that would show all playlists a user has, most likely use the getAllPlaylists -->
+		<section class="playlistSection">
+			<p class="playlistAreaTitle"></p>
+			<h1 class="playlist">Info of song</h1>
+			<p class="playlist" id="ARTIST">Artist: (Artist Name) </p>
+			<p class="playlist" id="ALBUM">Album: (Album Name if it exists) </p>
+			<p class="playlist" id="DUR">Duration: (Minute:seconds aka 3:23) </p>
+			<p class="playlist" id="GENRE">Genre: (Genre Type) </p>
+			<p class="playlist" id="DATE">Release Date: (Month then year then day) </p>
+			<!--Created by seems redudnant-->
+			<h2 class="postTitle"></h2>
+		</section>
 
-			<!--button to allow a user to create a new playlist, which after clicked and 
+		<!--button to allow a user to create a new playlist, which after clicked and 
 			<section class="playlistSection">
 				<h2 class="playlistSmallAreaTitle">Would you like to create a new playlist? If so, type your playlist's name and click sumbit when ready!</h2>
 				<input class="nameBox" type="text" id="playlistNewName"><br><br>
 				<button id="submitButton">Create new Playlist</button>
 			</section>-->
-		</div>
-	</body>
+	</div>
+</body>
 
 </html>
