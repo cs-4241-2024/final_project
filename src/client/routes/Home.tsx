@@ -35,7 +35,7 @@ function Home() {
                   aria-label="back to home"
                   onClick={() => {
                       console.log("back button clicked");
-                      navigate('/Login');
+                      navigate('/login');
                   }}
               >
                   <ArrowBackIcon />
@@ -43,7 +43,7 @@ function Home() {
               <div className="navigation">
                   <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
                       console.log("Login button clicked");
-                      navigate('/Editor');
+                      navigate('/editor');
                   }}>
                       Create your own personal WPI Tracking Sheet here
                   </Button>

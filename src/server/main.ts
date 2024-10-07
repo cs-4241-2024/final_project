@@ -74,11 +74,13 @@ async function run() {
         if (!req.session) {
             throw Error("Session not found!");
         }
+        console.log(req.body);
         const user = await User.authenticate()(req.body.username, req.body.password);
         console.log(user);
         if (user.user === false) {
             res.sendStatus(401);
         } else {
+            req.session.user = user.user;
             res.sendStatus(204);
         }
     });

@@ -33,9 +33,16 @@ const Login = () => {
         const response = await fetch("/login", {
             method: 'POST',
             body: JSON.stringify({ username: username, password: password }),
+            headers: {
+              'Content-Type': 'application/json',
+            }
         });
 
-        if (response.ok) {}
+        if (response.ok) {
+          navigate("/home");
+        } else {
+          alert("Incorrect username or password");
+        }
     };
 
     return (

@@ -109,7 +109,7 @@ const Editor: React.FC = () => {
           aria-label="back to home"
           onClick={() => {
             console.log("back button clicked");
-            navigate('/Home');
+            navigate('/home');
           }}
         >
           <ArrowBackIcon />

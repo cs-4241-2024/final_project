@@ -15,7 +15,7 @@ const router = createBrowserRouter([
         loader: async () => {
             const res = await fetch("/checkLogin");
 
-            if (res.status === 200) {
+            if (res.ok) {
                 throw redirect("/home");
             } else {
                 throw redirect("/login");
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         element: <Home />,
         loader: async () => {
             const res = await fetch("/checkLogin");
-            if (res.status !== 200)  {
+            if (!res.ok)  {
                 throw redirect("/login");
             }
 
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         element: <Editor />,
         loader: async () => {
             const res = await fetch("/checkLogin");
-            if (res.status !== 200)  {
+            if (!res.ok)  {
                 throw redirect("/login");
             }
 
@@ -61,15 +61,5 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <RouterProvider router={router} />
-    {/*<Router>*/}
-    {/*  <Routes>*/}
-    {/*    <Route path="/" element={<Login />} />*/}
-    {/*    <Route path="/Home" element={<Home />} />*/}
-    {/*    /!*<Route path="/Root" element={<Root />} />*!/*/}
-    {/*    <Route path="/Login" element={<Login />} />*/}
-    {/*    <Route path="/About" element={<About />} />*/}
-    {/*    <Route path="/Editor" element={<Editor />} />*/}
-    {/*  </Routes>*/}
-    {/*</Router>*/}
     </React.StrictMode>
 );
