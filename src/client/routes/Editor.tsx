@@ -1,6 +1,6 @@
 import "../css/Editor.css";
 import { Button } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLoaderData } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { createTheme } from '@mui/material/styles';
@@ -29,19 +29,33 @@ theme = createTheme(theme, {
   },
 });
 
+interface InitialData {
+  humanityData: string[];
+  physicalEducationData: string[];
+  socialScienceData: string[];
+  iqpData: string[];
+  mathematicsData: string[];
+  freeElectivesData: string[];
+  computerScienceData: string[];
+  basicScienceData: string[];
+}
+
+
 const Editor: React.FC = () => {
   const navigate = useNavigate();
+
+  const initialData = useLoaderData() as InitialData;
   const [clearData, setClearData] = useState(false);
   const [uploadedData, setUploadedData] = useState<any>(null);
 
-  const [humanityData, setHumanityData] = useState<string[]>([]);
-  const [physicalEducationData, setPhysicalEducationData] = useState<string[]>([]);
-  const [socialScienceData, setSocialScienceData] = useState<string[]>([]);
-  const [iqpData, setIqpData] = useState<string[]>([]);
-  const [mathematicsData, setMathematicsData] = useState<string[]>([]);
-  const [freeElectivesData, setFreeElectivesData] = useState<string[]>([]);
-  const [computerScienceData, setComputerScienceData] = useState<string[]>([]);
-  const [basicScienceData, setBasicScienceData] = useState<string[]>([]);
+  const [humanityData, setHumanityData] = useState<string[]>(initialData?.humanityData || []);
+  const [physicalEducationData, setPhysicalEducationData] = useState<string[]>(initialData?.physicalEducationData || []);
+  const [socialScienceData, setSocialScienceData] = useState<string[]>(initialData?.socialScienceData || []);
+  const [iqpData, setIqpData] = useState<string[]>(initialData?.iqpData || []);
+  const [mathematicsData, setMathematicsData] = useState<string[]>(initialData?.mathematicsData || []);
+  const [freeElectivesData, setFreeElectivesData] = useState<string[]>(initialData?.freeElectivesData || []);
+  const [computerScienceData, setComputerScienceData] = useState<string[]>(initialData?.computerScienceData || []);
+  const [basicScienceData, setBasicScienceData] = useState<string[]>(initialData?.basicScienceData || []);
 
 
   const handleClearData = () => {
