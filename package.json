@@ -4,6 +4,7 @@
   "description": "Simple Task Logging",
   "author": "Owen Rago",
   "scripts": {
+    "prestart": "tsc --outDir public/js public/ts/main.ts",
     "start": "tsx server.ts"
   },
   "type": "module",
