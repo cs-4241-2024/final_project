@@ -27,30 +27,38 @@ theme = createTheme(theme, {
 
 
 function Home() {
-      const navigate = useNavigate();
-      return (
-          <div className="main">
-              <IconButton
-                  className="back-button"
-                  aria-label="back to home"
-                  onClick={() => {
-                      console.log("back button clicked");
-                      navigate('/login');
-                  }}
-              >
-                  <ArrowBackIcon />
-              </IconButton>
-              <div className="navigation">
-                  <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
-                      console.log("Login button clicked");
-                      navigate('/editor');
-                  }}>
-                      Create your own personal WPI Tracking Sheet here
-                  </Button>
+  const navigate = useNavigate();
+  return (
+    <div className="main">
+      <IconButton
+        className="back-button"
+        aria-label="back to home"
+        onClick={() => {
+          console.log("back button clicked");
+          navigate('/login');
+        }}
+      >
+        <ArrowBackIcon />
+      </IconButton>
+      <div className="navigation">
+        <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+          console.log("Login button clicked");
+          navigate('/editor');
+        }}>
+          Create your own personal WPI Tracking Sheet here
+        </Button>
 
-              </div>
-          </div>
-      );
+      </div>
+      <div className="tracking-img">
+        <iframe
+          src="https://www.wpi.edu/sites/default/files/inline-image/Offices/Academic-Advising/CS%202025.pdf"
+          width="100%"
+          height="500px"
+          title="PDF Document"
+        />
+      </div>
+    </div>
+  );
 }
 
 export default Home;
