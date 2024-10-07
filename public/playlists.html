@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<title>CS4241 Assignment 2</title>
+		<meta charset="utf-8">
+		<script src="js/main.js"></script>
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/playlist.css">
+
+		<!-- get rid of favicon error -->
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	</head>
+
+	<body>
+		<!-- Inserts the navbar into the page -->
+		<nav class="navbar"></nav>
+
+		<!-- Has one playlists, each song in the playlist have hyperlinks to a song page-->
+		<div id="PlaylistsForUser">
+
+			<!-- Title of the page-->
+			<section class="playlistSection">
+				<h2 class="postTitle">Playlist: (Playlist name)</h2>
+			</section>
+
+			<!-- Example Playlists that would show all playlists a user has, most likely use the getAllPlaylists -->
+			<section class="playlistSection">
+				<p class="playlistAreaTitle"></p>
+				<p class="playlist">info of song1: (Artist), (Song Name)</p>
+				<p class="playlist">info of song2: (Artist), (Song Name)</p>
+				<button id="submitButton">Delete Existing Song?</button>
+				<button id="submitButton">Add Song?</button>
+				<h2 class="postTitle"></h2>
+			</section>
+
+			<!--button to allow a user to create a new playlist, which after clicked and 
+			<section class="playlistSection">
+				<h2 class="playlistSmallAreaTitle">Would you like to create a new playlist? If so, type your playlist's name and click sumbit when ready!</h2>
+				<input class="nameBox" type="text" id="playlistNewName"><br><br>
+				<button id="submitButton">Create new Playlist</button>
+			</section>-->
+		</div>
+	</body>
+
+</html>
