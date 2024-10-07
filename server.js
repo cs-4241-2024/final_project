@@ -20,12 +20,11 @@ mongoose.connect(
 
 // User schema
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true }, // Username is required
-  googleId: { type: String, unique: true }, // Google ID will be used if logging in with Google
+  username: { type: String, required: true },
+  googleId: { type: String, unique: true },
   password: {
     type: String,
     required: function () {
-      // Only require password if Google ID is not provided
       return !this.googleId;
     },
   },
@@ -33,17 +32,7 @@ const userSchema = new mongoose.Schema({
   profilePhoto: { type: String },
 });
 
-// Cocktail schema
-const cocktailSchema = new mongoose.Schema({
-  cocktail: String,
-  rating: Number,
-  review: String,
-  username: String, // Associated with the user
-});
-
-// Models
 const User = mongoose.model("User", userSchema);
-const Cocktail = mongoose.model("Cocktail", cocktailSchema);
 
 // Middleware
 app.use(express.json());
@@ -52,10 +41,10 @@ app.use(express.static(path.join(__dirname, "public")));
 // Session middleware setup
 app.use(
   session({
-    secret: "your_secret_key", // Replace this with a secure secret key
+    secret: "your_secret_key",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set secure: true if using HTTPS
+    cookie: { secure: false },
   })
 );
 
@@ -63,7 +52,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Passport serialize and deserialize user
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -81,13 +69,11 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID:
-        "414493278145-een95ctp3iqpm8uvv90l70emb827f3bn.apps.googleusercontent.com",
-      clientSecret: "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",
+      clientID: "your-client-id",
+      clientSecret: "your-client-secret",
       callbackURL: "http://localhost:3000/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
-      // Extract user's email, handle case when emails array is missing or undefined
       const email =
         profile.emails && profile.emails.length > 0
           ? profile.emails[0].value
@@ -97,12 +83,11 @@ passport.use(
         if (existingUser) {
           return done(null, existingUser);
         } else {
-          // If the user doesn't exist, create a new user
           new User({
-            username: profile.displayName, // Use Google profile name as the username
-            googleId: profile.id, // Google ID for future logins
-            profilePhoto: profile.photos[0].value, // Save profile picture (if available)
-            email: email, // Save email (if available)
+            username: profile.displayName,
+            googleId: profile.id,
+            profilePhoto: profile.photos[0].value,
+            email: email,
           })
             .save()
             .then((newUser) => {
@@ -114,86 +99,46 @@ passport.use(
   )
 );
 
-// Middleware to ensure user is authenticated
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/"); // If not authenticated, redirect to login page
+  res.redirect("/");
 }
 
-// Routes
-app.get("/", (req, res) => {
-  res.send("Home Page");
-});
-
-// Serve index.html for unauthenticated users (login screen)
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
-    return res.redirect("/home"); // Redirect to home if already logged in
+    return res.redirect("/home");
   }
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-// Serve home.html for authenticated users
 app.get("/home", isLoggedIn, (req, res) => {
   res.sendFile(path.join(__dirname, "public/home.html"));
 });
 
-// Google Auth Routes for Login/Registration
 app.get(
   "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-    prompt: "select_account", // Force account selection
-  })
+  passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    // Ensure session.username is set for Google login users
-    req.session.username = req.user.username; // Set username for session
-    // Successful authentication, redirect to home
+    req.session.username = req.user.username;
     res.redirect("/home");
   }
 );
 
-// Serve user reviews only if authenticated
-app.get("/cocktails", isLoggedIn, (req, res) => {
-  Cocktail.find({ username: req.user.username })
-    .then((cocktails) => res.json(cocktails))
-    .catch((err) => res.status(500).json({ error: "An error occurred", err }));
-});
-
-// Google Auth Routes for Login/Registration
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile"] })
-);
-
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => {
-    // Successful authentication, redirect to main application
-    res.redirect("/home.html");
-  }
-);
-
-// Registration route
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
-
   try {
-    // Check if username is already taken
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ message: "Username is already taken" });
     }
 
-    // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
@@ -205,7 +150,6 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
-
   try {
     const user = await User.findOne({ username });
     if (!user) {
@@ -217,7 +161,6 @@ app.post("/login", async (req, res, next) => {
       return res.status(400).json({ message: "Invalid username or password" });
     }
 
-    // Log the user in and redirect
     req.login(user, function (err) {
       if (err) {
         return next(err);
@@ -229,17 +172,144 @@ app.post("/login", async (req, res, next) => {
   }
 });
 
-// Logout route
+// Cocktail schema and model
+const cocktailSchema = new mongoose.Schema({
+  idDrink: Number,
+  strDrink: String,
+  strDrinkAlternate: String,
+  strTags: String,
+  strVideo: String,
+  strCategory: String,
+  strIBA: String,
+  strAlcoholic: String,
+  strGlass: String,
+  strInstructions: String,
+  strInstructionsES: String,
+  strInstructionsDE: String,
+  strInstructionsFR: String,
+  strInstructionsIT: String,
+  strInstructionsZH_HANS: String,
+  strInstructionsZH_HANT: String,
+  strDrinkThumb: String,
+  strIngredient1: String,
+  strIngredient2: String,
+  strIngredient3: String,
+  strIngredient4: String,
+  strIngredient5: String,
+  strIngredient6: String,
+  strIngredient7: String,
+  strIngredient8: String,
+  strIngredient9: String,
+  strIngredient10: String,
+  strIngredient11: String,
+  strIngredient12: String,
+  strIngredient13: String,
+  strIngredient14: String,
+  strIngredient15: String,
+  strMeasure1: String,
+  strMeasure2: String,
+  strMeasure3: String,
+  strMeasure4: String,
+  strMeasure5: String,
+  strMeasure6: String,
+  strMeasure7: String,
+  strMeasure8: String,
+  strMeasure9: String,
+  strMeasure10: String,
+  strMeasure11: String,
+  strMeasure12: String,
+  strMeasure13: String,
+  strMeasure14: String,
+  strMeasure15: String,
+  strImageSource: String,
+  strImageAttribution: String,
+  strCreativeCommonsConfirmed: String,
+  dateModified: String,
+});
+
+const Cocktail = mongoose.model("Cocktails", cocktailSchema);
+
+module.exports = Cocktail;
+
+// API to get all cocktails
+app.get("/api/cocktails", async (req, res) => {
+  try {
+    const cocktails = await Cocktail.find();
+
+    const formattedCocktails = cocktails.map((cocktail) => {
+      const ingredients = [];
+      for (let i = 1; i <= 5; i++) {
+        // Adjust based on how many ingredients you expect
+        if (cocktail[`strIngredient${i}`]) {
+          ingredients.push(
+            `${cocktail[`strMeasure${i}`] || ""} ${
+              cocktail[`strIngredient${i}`]
+            }`.trim()
+          );
+        }
+      }
+
+      return {
+        idDrink: cocktail.idDrink,
+        name: cocktail.strDrink,
+        instructions: cocktail.strInstructions,
+        ingredients: ingredients,
+        image: cocktail.strDrinkThumb,
+      };
+    });
+
+    res.json(formattedCocktails);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// API to get cocktail by name
+app.get("/api/cocktails/:name", async (req, res) => {
+  try {
+    const cocktail = await Cocktail.findOne({ name: req.params.name });
+    if (cocktail) {
+      res.json(cocktail);
+    } else {
+      res.status(404).json({ error: "Cocktail not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// API to get unique ingredients
+app.get("/api/ingredients", async (req, res) => {
+  try {
+    const ingredients = await Cocktail.distinct("ingredients");
+    res.json(ingredients);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// API to search cocktails by ingredients
+app.get("/api/cocktails", async (req, res) => {
+  const ingredients = req.query.ingredients.split(",");
+  try {
+    const cocktails = await Cocktail.find({
+      ingredients: { $in: ingredients },
+    });
+    res.json(cocktails);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) {
-      return next(err); // Pass error to the next middleware
+      return next(err);
     }
-    res.redirect("/"); // Redirect to login page
+    res.redirect("/");
   });
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

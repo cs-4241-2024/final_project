@@ -8,7 +8,7 @@
     <title>Document</title>
   </head>
   <body>
-    <div class="parent">
+    <!-- <div class="parent">
       <div class="div1">
         <h1>cocktail combo</h1>
       </div>
@@ -25,6 +25,29 @@
       <div class="div6">
         <div class="barstools"></div>
       </div>
+    </div> -->
+    <div class="container">
+      <h2>Search for a Drink</h2>
+      <div class="input-field col s12">
+        <select id="drink-select">
+          <option value="" disabled selected>Choose your drink</option>
+          <!-- Options will be populated dynamically -->
+        </select>
+        <label>Search for a Drink by Name</label>
+      </div>
+      <button id="drink-submit" class="btn">Get Drink Details</button>
+      <div id="drink-details"></div>
+
+      <h2>Search by Ingredients</h2>
+      <div class="input-field col s12">
+        <select id="ingredient-select" multiple>
+          <option value="" disabled>Choose ingredients</option>
+          <!-- Options will be populated dynamically -->
+        </select>
+        <label>Search for a Drink by Ingredients</label>
+      </div>
+      <button id="ingredient-submit" class="btn">Find Cocktails</button>
+      <ul id="cocktail-list"></ul>
     </div>
 
     <script src="./main.js"></script>
