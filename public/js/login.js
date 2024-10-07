@@ -30,6 +30,14 @@ window.onload = async function () {
 
 
                 alert(data.message);
+                if (data.message === 'Invalid username or password') {
+                    const register = confirm('User does not exist. Would you like to create an account?');
+                    if (register) {
+                        registerUser(username, password); // Call the registration function
+                    }
+                } else {
+                    alert(data.message);
+                }
             }
         } catch (error) {
             console.error('Error during login:', error);

@@ -43,6 +43,26 @@ function showTasksForDate(selectedDate, assignments) {
     : '<li>No tasks due on this date</li>';
 }
 
+const checkAuth = async function () {
+    try {
+        const response = await fetch('/protected', {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Not authenticated');
+        }
+        console.log('Current User is authenticated')
+
+        fetchUsers(); //If authenticated, fetch users
+
+    }catch (error){
+        console.error('User not authenticated:', error);
+        // Redirect to login page if not authenticated
+        window.location.href = 'login.html';
+    }
+}
 
 async function fetchUsers() {
   try {
