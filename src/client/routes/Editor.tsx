@@ -114,7 +114,7 @@ const Editor: React.FC = () => {
         // console.log(data);
 
         if (requirement.includes("wpimajorqualifyingproject(")) {
-          setComputerScienceData(data);
+          setComputerScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
           // console.log("data", data);
           // console.log(computerScienceData);
         } else if (requirement.includes("interactivequalifyingproject")) {
@@ -125,16 +125,17 @@ const Editor: React.FC = () => {
           setSocialScienceData(data);
         } else if (requirement.includes("physicaleducationrequirement")) {
           setPhysicalEducationData(data);
-        } //else if (requirement.includes("probabilityandstatisticsrequirement") || requirement.includes("mathematicsrequirement")) {
-        //   setMathematicsData(data);
+        } 
+        else if (requirement.includes("probabilityandstatisticsrequirement") || requirement.includes("mathematicsrequirement")) {
+         setMathematicsData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
         //   console.log("Mathematics data", mathematicsData);
-        // } else if (requirement.includes("basicsciencediscipline") || requirement.includes("basicand/orengineeringscience")) {
-        //   setBasicScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
+         } else if (requirement.includes("basicsciencediscipline") || requirement.includes("basicand/orengineeringscience")) {
+           setBasicScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
         //   console.log("Basic Science data", basicScienceData);
-        // } else if (requirement.includes("corerequirement") || requirement.includes("systemsrequirement") || requirement.includes("theoryandlanguagesrequirement") || requirement.includes("designrequirement") || requirement.includes("socialimplications")) {
-        //   setComputerScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
+         } else if (requirement.includes("corerequirement") || requirement.includes("systemsrequirement") || requirement.includes("theoryandlanguagesrequirement") || requirement.includes("designrequirement") || requirement.includes("socialimplications")) {
+           setComputerScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
         //   console.log("Computer Science data", computerScienceData);
-        // } 
+         } 
         else if (requirement.includes("freeelective")) {
           setFreeElectivesData(data);
         }
