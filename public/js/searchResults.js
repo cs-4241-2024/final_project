@@ -66,13 +66,20 @@ async function searchPosts(query) {
 			songPlaylist = JSON.parse(await responseSong.text());
 		}
 
+		//Getting the username
+		let userID = resultPost[i]["createdBy"];
+		const responseUsername = await fetch(`/api/users/userName/${userID}`, {
+			method: 'GET'
+		})
+		let username = await responseUsername.text()
+
 		//Make href link using makeURLWithParams
 		const linkString = makeURLWithParams("forum", "id", resultPost[i]["_id"]);
 
 		innerHTML += `
 			<section class="postSection">
 				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + resultPost[i]["title"] + ` - ` + songPlaylist[0]["name"] + `</a></h2>
-				<p class="postContent">`+ `User` + ` - ` + resultPost[i]["content"] + `</p >
+				<p class="postContent">`+ username + ` - ` + resultPost[i]["content"] + `</p >
 			</section >
 			`;
 	}
