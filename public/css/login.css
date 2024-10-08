@@ -1,0 +1,52 @@
+body {
+    background: #92C99A;
+    margin: 0;
+}
+
+/*googleFont*/
+* {
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+}
+
+#searchInput {
+    margin-top: 10px;
+    margin-left: 5vw;
+    font-size: 20px;
+    width: 350px;
+}
+
+button {
+    font-size: 20px;
+    margin: 20px;
+}
+
+.navbar {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.navbarItem {
+    background-color: rgb(56, 129, 255);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 20px;
+}
+
+.navbarItem:hover {
+    background-color: rgb(47, 101, 193);
+}
+
+.navbarLink {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.Title {
+    text-align: 'center';
+}
