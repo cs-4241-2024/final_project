@@ -569,16 +569,16 @@ function generateGroupHTML(data) {
               </ul>
             </div>
 
-            <div class="completed-tasks-section">
+            <div class="all-tasks-section">
               <h3>Completed Tasks</h3>
-              <ul class="completed-tasks-list">
+              <ul class="all-tasks-list">
                 ${completedAssignmentsHTML}
               </ul>
             </div>
 
-            <div>
+            <div class="all-tasks-section">
               <form id="addTask">
-                  <label>Add new task</label>
+                  <h3>Add New Task</h3>
                   <input type="text" id="addTaskInput" placeholder="New Task" required>
                   <div class="dropdown-container">
                       <div class="selected-options" id="task-selected-list">
@@ -592,7 +592,7 @@ function generateGroupHTML(data) {
                       </div>
                   </div>
                   <input type="date" id="dateInput" placeholder="Date" required>
-                  <button type="button" onclick="addNewTask()">Add new task</button>
+                  <button type="button" onclick="addNewTask()">Add Task</button>
               </form>
             </div>
           </div>
