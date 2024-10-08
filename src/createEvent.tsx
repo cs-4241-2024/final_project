@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
     Button,
     CalendarCell,
@@ -21,14 +21,16 @@ import {
 } from "react-aria-components";
 
 export default function CreateEvent() {
-    let [submitted, setSubmitted] = React.useState(null);
+    const [submitted, setSubmitted] = useState<{
+        [key: string]: FormDataEntryValue;
+    }>({});
 
-    let onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         // Prevent default browser page refresh.
         e.preventDefault();
 
         // Get form data as an object.
-        let data = Object.fromEntries(new FormData(e.currentTarget));
+        const data = Object.fromEntries(new FormData(e.currentTarget));
 
         // Submit to your backend API...
         setSubmitted(data);

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const range = (keyCount) => [...Array(keyCount).keys()]
+const range = (keyCount: number) => [...Array(keyCount).keys()]
 
 const areDatesSame = (first: Date, second: Date) => {
   return first.getFullYear() === second.getFullYear() &&
@@ -25,7 +25,7 @@ const HOUR_MARGIN_TOP = 15;
 
 export default function WeeklyCalendar() {
     const [sundayDate, setSundayDate] = useState(getSunday());
-    const [events, setEvents] = useState([
+    const [events] = useState([
         { date: new Date(2022, 11, 20, 10), text: "first hi", howLong: 3 },
         { date: new Date(2022, 11, 22, 15), text: "second", howLong: 2 },
         { date: new Date(2022, 11, 27, 11), text: "third", howLong: 2 },
