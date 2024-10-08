@@ -1,4 +1,5 @@
 // FRONT-END (CLIENT) JAVASCRIPT HERE
+import { makeURLWithParams, getParam } from "./urlHelpers.js";
 
 
 function iloveClicking() {
@@ -18,6 +19,23 @@ export const nav = function () {
 	</table>`
 }
 
+//Sends the user to the search-results page with parameters in the url
+const search = function () {
+	const query = document.getElementById("searchInput");
+	if (query.value != "") {
+		const urlWithParams = makeURLWithParams("search-results", "query", query.value);
+		console.log(urlWithParams);
+		const paramValue = getParam(urlWithParams, "query");
+		console.log(paramValue);
+		location.assign(urlWithParams);
+	}
+	else {
+		alert("Please enter something to search for!");
+	}
+}
+
 window.onload = function () {
 	nav()
+	const searchButton = document.getElementById("searchButton");
+	searchButton.onclick = search;
 }

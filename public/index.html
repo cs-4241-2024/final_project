@@ -1,48 +1,45 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <title>CS4241 Assignment 2</title>
-    <meta charset="utf-8">
-    <script src="js/main.js" type="module"></script>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/homepageForumStyling.css">
+    <head>
+        <title>CS4241 Assignment 2</title>
+        <meta charset="utf-8">
+        <script src="js/main.js" type="module"></script>
+        <script src="js/urlHelpers.js" type="module"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/homepageForumStyling.css">
 
-    <!-- get rid of favicon error -->
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-</head>
+        <!-- get rid of favicon error -->
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    </head>
 
-<body>
-    <nav class="navbar"></nav> <!--don't put anything before navbar-->
+    <body>
+        <nav class="navbar"></nav> <!--don't put anything before navbar-->
 
-    <input type="text" id="searchInput" placeholder="Enter a playlist, post, song, or user."> </input>
+        <input type="text" id="searchInput" placeholder="Enter a playlist, post, song, or user."> </input>
+        <button class="button" id="searchButton">Search</button>
 
+        <div class="container">
+            <h1 class="newForumPostsTitle">New Forum Posts</h1>
+            <button class="button" id="createPostButton">Create Post</button>
+            <button class="button" id="addSongButton">Create Song</button>
+            <button class="button" id="addSongButton">Create Playlist</button>
 
-    <button onclick="iloveClicking()">Search</button>
-    <!--edit the iloveClicking when backend finishes. something that gives title to new forum posts.-->
-    <div class="container">
-        <h1 class="newForumPostsTitle">New Forum Posts</h1>
-        <button id="createPostButton" onclick="iloveClicking()">Create Post</button>
-        <button id="addSongButton" onclick="iloveClicking()">Add Song</button>
-        <button id="addSongButton" onclick="iloveClicking()">Create Playlist</button>
+        </div>
+        <!--move create post button over-->
+        <div>
+            <!-- Example post about playlist -->
+            <section class="postSection">
+                <h2 class="postTitle"><a class="postLink">Post Title - Playlist Name</a></h2>
+                <p class="postContent">Post Content</p>
+            </section>
 
-    </div>
-    <!--move create post button over-->
-    <div>
-        <!-- Example post about playlist -->
-        <section class="postSection">
-            <h2 class="postTitle"><a class="postLink">Post Title -
-                    Playlist Name</a></h2>
-            <p class="postContent">Post Content</p>
-        </section>
-
-        <!-- Example song -->
-        <section class="postSection">
-            <h2 class="postTitle"><a class="postLink" href="/songs.html?song=6702d4731df75b948af11b08">Song Title by
-                    Artist Name</a></h2>
-            <p class="postContent">Type: Song</p>
-        </section>
-    </div>
-</body>
+            <!-- Example post about song -->
+            <section class="postSection">
+                <h2 class="postTitle"><a class="postLink">Post Title - Song Name</a></h2>
+                <p class="postContent">Type: Song</p>
+            </section>
+        </div>
+    </body>
 
 </html>

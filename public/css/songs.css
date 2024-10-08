@@ -25,11 +25,11 @@
 	margin: 0;
 }
 
-#editSongButton {
+.button {
 	border-radius: 10px;
 	border-width: 1px;
 	margin: 0;
 	margin-left: 5vw;
-	margin-right: 5vw;
+	margin-bottom: 5px;
 	font-size: 15px;
 }

@@ -3,7 +3,7 @@ import passport from 'passport'
 import {
     addFavoriteSong,
     getDBid, getUserFavorites,
-    getUserName,
+    getUserName, getUserNameByID,
     getUserPlaylist,
     getUserPosts, getUserReplies, getUserUploadedSongs,
     gitHubCallBack,
@@ -25,6 +25,8 @@ router.get('/uploadedSongs',isAuthed,getUserUploadedSongs)
 router.get('/replies',isAuthed,getUserReplies)
 
 router.post('/favorites/:id',isAuthed,addFavoriteSong)
+
+router.get('/userName/:id',getUserNameByID)
 
 router.get('/auth/github', passport.authenticate('github'),function (req,res){
     console.log("should not run")
