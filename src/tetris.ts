@@ -38,15 +38,15 @@ export class tetris {
     }
 
     drawBoard() {
-        this.board.forEach((row, y) => {
-            row.forEach((value, x) => {
-                this.ctx.fillStyle = this.colors[value]
-                this.ctx.fillRect(x, y, 1, 1)
+        for (let i = 0; i < this.board.length; i++) {
+            for (let j = 0; j < this.board[i].length; j++) {
+                this.ctx.fillStyle = this.colors[this.board[i][j]]
+                this.ctx.fillRect(j, i, 1, 1)
                 this.ctx.lineWidth = 0.02
                 this.ctx.strokeStyle = 'black'
-                this.ctx.strokeRect(x, y, 1, 1)
-            })
-        })
+                this.ctx.strokeRect(j, i, 1, 1)
+            }
+        }
         if (!this.tetromino) {
             this.tetromino = this.randomTetromino()
         }
@@ -55,15 +55,18 @@ export class tetris {
 
     drawTetromino() {
         if (this.tetromino) {
-            this.tetromino.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    this.ctx.fillStyle = this.colors[value]
-                    this.ctx.fillRect(x + this.column, y + this.row, 1, 1)
+            for (let i = 0; i < this.tetromino.length; i++) {
+                for (let j = 0; j < this.tetromino[i].length; j++) {
+                    if (this.tetromino[i][j] === 0) {
+                        continue
+                    }
+                    this.ctx.fillStyle = this.colors[this.tetromino[i][j]]
+                    this.ctx.fillRect(j + this.column, i + this.row, 1, 1)
                     this.ctx.lineWidth = 0.02
                     this.ctx.strokeStyle = 'black'
-                    this.ctx.strokeRect(x + this.column, y + this.row, 1, 1)
-                })
-            })
+                    this.ctx.strokeRect(j + this.column, i + this.row, 1, 1)
+                }
+            }
         }
     }
 
@@ -92,6 +95,24 @@ export class tetris {
         }
     }
 
+    rotate() {
+        if (!this.tetromino) {
+            return
+        }
+        let tempTetromino: number[][] = []
+        for (let i = 0; i < this.tetromino[0].length; i++) {
+            tempTetromino[i] = []
+            for (let j = 0; j < this.tetromino.length; j++) {
+                tempTetromino[i][j] = this.tetromino[this.tetromino.length - 1 - j][i]
+            }
+        }
+        let oldTetromino = this.tetromino
+        this.tetromino = tempTetromino
+        if (this.collision()) {
+            this.tetromino = oldTetromino
+        }
+    }
+
     collision() {
         if (this.tetromino) {
             for (let y = 0; y < this.tetromino.length; y++) {
@@ -117,6 +138,21 @@ export class tetris {
                         console.log(this.board[y + this.row][x + this.column])
                         this.board[y + this.row][x + this.column] = this.tetromino[y][x]
                     }
+                }
+            }
+        }
+        this.checkRows()
+    }
+
+    checkRows() {
+        for (let i = 0; i < this.ROWS; i++) {
+            for (let j = 0; j < this.COLS; j++) {
+                if (this.board[i][j] === 0) {
+                    break
+                }
+                if (j === this.COLS - 1) {
+                    this.board.splice(i, 1)
+                    this.board.unshift(Array(this.COLS).fill(0))
                 }
             }
         }

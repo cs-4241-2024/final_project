@@ -25,10 +25,10 @@ document.addEventListener('keydown', (e) => {
         board.moveLeft()
     }
     if (e.key === 'ArrowDown') {
-        console.log('down')
+        board.moveDown()
     }
     if (e.key === 'ArrowUp') {
-        console.log('up')
+        board.rotate()
     }
 })
 
