@@ -8,6 +8,10 @@ export interface Food {
   unitPrice: number;
 }
 
+export interface FoodWithLocationName extends Food {
+  location: string;
+}
+
 export interface Location {
   id: number;
   name: string;

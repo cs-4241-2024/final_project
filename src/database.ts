@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import crypto from "crypto";
 import { promisify } from 'util';
-import { Food, Location } from "./types";
+import { Food, FoodWithLocationName, Location } from "./types";
 
 const pbkdf2 = promisify(crypto.pbkdf2);
 
@@ -234,6 +234,32 @@ export async function getFoods(userID: number, locationID: number): Promise<Food
     return foods;
   } catch (error) {
     console.error("Error fetching foods:", error);
+    return [];
+  }
+}
+
+export async function getFoodsToOrder(userID: number): Promise<FoodWithLocationName[]> {
+  const stmt = db.prepare(`
+    SELECT id, name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
+    FROM foods
+    WHERE user_id = ? AND quantity < wanted_quantity
+  `);
+
+  try {
+    const foods = stmt.all(userID) as Food[];
+    const locations = await getLocations(userID);
+
+    const foodsWithLocationName: FoodWithLocationName[] = foods.map(food => {
+      const location = locations.find(location => location.id === food.locationID);
+      return {
+        ...food,
+        location: location ? location.name : 'Unknown Location'
+      };
+    });
+
+    return foodsWithLocationName;
+  } catch (error) {
+    console.error("Error fetching foods to order:", error);
     return [];
   }
 }

@@ -58,6 +58,15 @@ app.get("/", async (req, res, next) => {
 
   res.render("home", { username, locations });
 });
+app.get("/toorder", async (req, res, next) => {
+  const userID = pageHandleAuth(req, res);
+  if (!userID) return;
+
+  const username = await db.getUsername(userID);
+  const foods = await db.getFoodsToOrder(userID);
+
+  res.render("toorder", { username, foods });
+});
 
 async function renderLocation(
   res,
