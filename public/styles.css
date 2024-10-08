@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #F5E0E0;
 }
 
@@ -23,6 +23,7 @@ body {
     align-items: center;
     justify-content: space-between; /* Align content within sidebar vertically */
     padding-top: 10px; /* Optional: add some spacing at the top */
+    transition: all 0.3s ease;
 }
 
 #groupButtons {
@@ -32,7 +33,7 @@ body {
 }
 
 .sidebar button {
-    background-color: #D08F8F;
+    background-color: #FF6B6B;
     border: none;
     border-radius: 50%;
     width: 60px;
@@ -40,6 +41,12 @@ body {
     margin: 10px 0;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sidebar button:hover {
+    background-color: #FF4A4A;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar .footer {
@@ -57,7 +64,7 @@ body {
 /* Main content */
 .main {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
 }
 
 .group-header {
@@ -65,6 +72,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .group-header h1 {
@@ -87,7 +95,8 @@ body {
     max-height: 700px;
     width: 100%;       
     height: 100%;      
-    overflow: hidden;  
+    overflow: hidden;
+    transition: background-color 0.3s ease;
 }
 
 .fc-daygrid-day:hover {
@@ -132,8 +141,14 @@ body {
     margin-bottom: 10px;
     padding: 10px;
     background-color: #f9f9f9;
-    border-left: 4px solid #de9696; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #de9696;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.tasks-list li:hover, .all-tasks-list li:hover {
+    background-color: #FFEBEB;
 }
 
 .dropdown-container {
