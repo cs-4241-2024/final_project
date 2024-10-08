@@ -42,9 +42,27 @@ export async function searchPosts(req,res) {
         searchParms.content = {$regex:searchParms.content, $options: 'i' }
     }
 
+    let finalSearch = {
+        $or:[]
+    }
+
+    for (const [key, value] of Object.entries(searchParms)) {
+        console.log(`${key}: ${value}`);
+        finalSearch.$or.push({[key]:value})
+    }
+
+    if(Object.entries(searchParms).length===0){
+        finalSearch={}
+    }
+
+    console.log("final Search")
+    console.log(finalSearch)
+    console.log(finalSearch.$or[0])
+    console.log(finalSearch.$or[1])
+
     try {
         let postTable = await client.db(Dbname).collection("Posts")
-        let foundPosts = await postTable.find(searchParms).toArray()
+        let foundPosts = await postTable.find(finalSearch).toArray()
         console.log("foundPosts")
         console.log(foundPosts)
         res.status(200)
