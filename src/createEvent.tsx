@@ -1,34 +1,34 @@
-import React from "react";
+import { useState } from "react";
 import {
-  Button,
-  CalendarCell,
-  CalendarGrid,
-  DateInput,
-  DateRangePicker,
-  DateSegment,
-  Dialog,
-  Form,
-  Group,
-  Heading,
-  Input,
-  Label,
-  Popover,
-  RangeCalendar,
-  Text,
-  TextArea,
-  TextField,
-  TimeField,
+    Button,
+    CalendarCell,
+    CalendarGrid,
+    DateInput,
+    DateRangePicker,
+    DateSegment,
+    Dialog,
+    Form,
+    Group,
+    Heading,
+    Input,
+    Label,
+    Popover,
+    RangeCalendar,
+    Text,
+    TextArea,
+    TextField,
+    TimeField,
 } from "react-aria-components";
 
 export default function CreateEvent() {
-  let [submitted, setSubmitted] = React.useState({});
+  const [submitted, setSubmitted] = useState({});
 
-  let onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh
     e.preventDefault();
 
     // Get form data as an object
-    let data = Object.fromEntries(new FormData(e.currentTarget));
+    const data = Object.fromEntries(new FormData(e.currentTarget));
 
     setSubmitted(data);
   };
