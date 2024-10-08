@@ -107,16 +107,46 @@ function populateUserDropdownTask(users, dropdownId, searchBarId, selectedOption
   
   users.forEach(user => {
     const label = document.createElement('label');
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.value = user.username;
-    label.appendChild(checkbox);
+    const radioButton = document.createElement('input');
+    radioButton.type = 'radio';
+    radioButton.name = 'task-assignee';
+    radioButton.value = user.username;
+    label.appendChild(radioButton);
     label.appendChild(document.createTextNode(user.username));
     optionsList.appendChild(label);
   });
   
-  searchBar.addEventListener('input', filterUsers(searchBarId, dropdownId));
-  updateCheckboxListeners(dropdownId, selectedOptionsId); // Reapply listeners
+  searchBar.addEventListener('input', () => filterUsers(searchBarId, dropdownId));
+  updateRadioListeners(dropdownId, selectedOptionsId); // Reapply listeners
+}
+
+function updateRadioListeners(dropdownId, selectedOptionsId) {
+  const optionsList = document.getElementById(dropdownId);
+  const radios = optionsList.querySelectorAll('input[type="radio"]');
+  const selectedOptionsContainer = document.getElementById(selectedOptionsId);
+
+  radios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.checked) {
+        const selectedValue = radio.value;
+        console.log('Selected user:', selectedValue); // Log selection
+        updateSelectedOption(selectedValue, selectedOptionsId);
+      }
+    });
+  });
+}
+
+function updateSelectedOption(value, selectedOptionsId) {
+  const selectedOptionsContainer = document.getElementById(selectedOptionsId);
+  selectedOptionsContainer.innerHTML = ''; // Clear existing selection
+
+  const selectedOption = document.createElement('div');
+  selectedOption.className = 'option';
+  selectedOption.textContent = value;
+  selectedOption.dataset.value = value;
+  selectedOptionsContainer.appendChild(selectedOption);
+
+  console.log('Updated user to:', value); // Log updated selection
 }
 
 function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptionsId) {
@@ -135,7 +165,7 @@ function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptio
     optionsList.appendChild(label);
   });
   
-  searchBar.addEventListener('input', filterUsers(searchBarId, dropdownId));
+  searchBar.addEventListener('input', () => filterUsers(searchBarId, dropdownId));
   updateCheckboxListeners(dropdownId, selectedOptionsId); // Reapply listeners
 }
 
@@ -217,7 +247,7 @@ const showGroup = async function (event) {
 
 async function addGroup(event) {
   const groupName = document.getElementById("groupNameInput").value;
-  const selectedUsersDiv = document.getElementById("selected-options");
+  const selectedUsersDiv = document.getElementById("group-selected-list");
   const selectedUsers = Array.from(selectedUsersDiv.children).map(div => {
     return { username: div.textContent };  // Store user as an object with "username"
   });
@@ -340,8 +370,10 @@ const changePassword = async function(event) {
 
 async function addNewTask() {
   const task = document.getElementById('addTaskInput').value;
-  const assignedUser = document.getElementById('assignUserInput').value;
+  const assignedUser = document.querySelector('input[name="task-assignee"]:checked').value;
   const dueDate = document.getElementById('dateInput').value;
+
+  console.log(`${task} ${assignedUser} ${dueDate} ${currentGroup}`);
 
   if (!currentGroup) {
     alert("No group selected. Please select a group before adding a task.");
@@ -512,13 +544,13 @@ function generateGroupHTML(data) {
                           <!-- Selected options will appear here -->
                       </div>
                       <div class="dropdown">
-                          <input class="search-bar" type="text" placeholder="Assign User" id="task-search-bar" required>
+                          <input class="search-bar" type="text" placeholder="Assign User" id="task-search-bar">
                           <div class="options-list" id="task-options-list">
                               <!-- has all users -->
                           </div>
                       </div>
                   </div>
-                  <input type="text" id="dateInput" placeholder="Date" required>
+                  <input type="date" id="dateInput" placeholder="Date" required>
                   <button type="button" onclick="addNewTask()">Add new task</button>
               </form>
             </div>

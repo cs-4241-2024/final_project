@@ -80,6 +80,36 @@ app.post('/add-group', async (req, res) => {
     }
 });
 
+app.post('/addTask', async (req, res) => {
+    const { newTask } = req.body;
+    const { title, user, date, groupName } = newTask;
+
+    console.log('Received new task data:', newTask); 
+
+    try {
+        const newAssignment = {
+            title,
+            assignedTo: user,
+            dueDate: date,
+            status: 'incomplete' 
+        };
+       
+        await groupCollection.updateOne(
+            { groupName },
+            { $push: { assignments: newAssignment } } 
+        );
+
+        res.status(201).json({
+            success: true,
+            message: 'Task added successfully',
+            assignment: newAssignment 
+        });
+    } catch (error) {
+        console.error('well fugma:', error);
+        res.status(500).json({ success: false, message: 'Error adding task', error });
+    }
+});
+
 app.post('/deleteTask', async (req, res) => {
     const { groupName, assignmentIndex } = req.body;
 
