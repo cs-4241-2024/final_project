@@ -17,13 +17,14 @@ const SimpleTable: React.FC<SimpleTableProps> = ({ title, numInputs, clear, data
     } else {
       const newValues = Array(numInputs).fill('');
       data.forEach((value, index) => {
-        if(index < numInputs) {
-        newValues[index] = value;
+        if (index < numInputs && typeof value === 'string') {
+          newValues[index] = value;
         }
       });
       setInputValues(newValues);
     }
   }, [clear, numInputs, data]);
+  
 
   const handleInputChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValues = [...inputValues];

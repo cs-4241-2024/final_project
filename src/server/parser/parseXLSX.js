@@ -50,7 +50,7 @@ function parseXLSX(workbook) {
             raw: false
         });
 
-        // console.log(rows);
+        console.log(rows);
 
         if (rows.length > 0) {
             const headers = rows[0];
