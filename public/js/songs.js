@@ -19,26 +19,24 @@ async function getSong() {
     let song = await response.json();
     console.log(song);
 
-
-    let title = document.getElementById("SongTitle");
+    let title = document.getElementById("songTitle");
     title.textContent = song.name;
 
-    let artist = document.getElementById("ARTIST");
+    let artist = document.getElementById("artist");
     artist.textContent = "Artist: " + song.artist;
 
-    let album = document.getElementById("ALBUM");
+    let album = document.getElementById("album");
     album.textContent = "Album: " + song.album;
 
-    let duration = document.getElementById("DUR");
+    let duration = document.getElementById("duration");
     duration.textContent = "Duration: " + song.duration;
 
-    let genre = document.getElementById("GENRE");
+    let genre = document.getElementById("genre");
     genre.textContent = "Genre: " + song.genre;
 
-    let date = document.getElementById("DATE");
-    date.textContent = "Date created: " + song.releaseDate;
+    let releaseDate = document.getElementById("releaseDate");
+    releaseDate.textContent = "Release Date: " + song.releaseDate;
 }
-
 
 function getSongName() {
 
