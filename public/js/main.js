@@ -1,9 +1,12 @@
 // FRONT-END (CLIENT) JAVASCRIPT HERE
 import { makeURLWithParams, getParam } from "./urlHelpers.js";
 
+
 function iloveClicking() {
 	alert("I LOVE CLICKING")
 }
+
+
 
 //Adds the navigation bar to the location of the navbar classon each page.
 //To add the nav bar to a page just add the following HTML element <nav class="navbar"></nav>
