@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import '../css/Login.css';
+import '../css/Registration.css';
 import {Button, Container} from '@mui/material';
 import {createTheme} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
@@ -21,7 +21,7 @@ theme = createTheme(theme, {
     },
 });
 
-const Login = () => {
+const Registration = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ const Login = () => {
         e.preventDefault();
         console.log('Username:', username);
         console.log('Password:', password);
-        const response = await fetch("/login", {
+        const response = await fetch("/addUser", {
             method: 'POST',
             body: JSON.stringify({ username: username, password: password }),
             headers: {
@@ -39,16 +39,16 @@ const Login = () => {
         });
 
         if (response.ok) {
-          navigate("/home");
+          navigate("/login");
         } else {
-          alert("Incorrect username or password");
+          alert("Unable to create account with these credentials.");
         }
     };
 
     return (
         <Container className="login-container">
             <form className="login-form" onSubmit={handleSubmit}>
-                <h2>Login</h2>
+                <h2>Create Tracking Sheet Login Info</h2>
 
                 <div className="input-group">
                     <label htmlFor="username">Username</label>
@@ -71,29 +71,18 @@ const Login = () => {
                         required
                     />
                 </div>
-                
+
                 <Button variant="contained" type="submit" className="login-button"
                         sx={{backgroundColor: 'purple', color: 'white'}} onClick={() => {
                     console.log("Login button clicked");
                 }}>
-                    Login
+                    Create Account
                 </Button>
-
-                <Button variant="contained" type="submit" className="login-button"
-                                sx={{backgroundColor: 'purple', color: 'white', mt: 3}} onClick={() => {
-                            console.log("Registration button clicked");
-                            navigate("/registration");
-                        }}>
-                            Registration
-                </Button>
-              
             </form>
 
-
+            
         </Container>
-
-        
     );
 };
 
-export default Login;
+export default Registration;
