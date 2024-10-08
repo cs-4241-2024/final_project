@@ -67,7 +67,7 @@ async function searchPosts(query) {
 		}
 
 		//Make href link using makeURLWithParams
-		const linkString = makeURLWithParams("playlists", "id", resultPost[i]["_id"]);
+		const linkString = makeURLWithParams("forum", "id", resultPost[i]["_id"]);
 
 		innerHTML += `
 			<section class="postSection">
@@ -103,7 +103,6 @@ async function searchSongs(query) {
 	searchResultsArea.innerHTML = searchResultsArea.innerHTML + innerHTML;
 }
 
-//TODO: Done except waiting on the ability to get the usernames by id which then needs to be rendered
 async function searchPlaylists(query) {
 	const searchResultsArea = document.getElementById("searchResultsArea");
 	let innerHTML = "";
