@@ -39,13 +39,17 @@ const router = createBrowserRouter([
         path: "/editor",
         element: <Editor />,
         loader: async () => {
-            const res = await fetch("/checkLogin");
+            let res = await fetch("/checkLogin");
             if (!res.ok)  {
                 throw redirect("/login");
             }
 
-            // Load data
-            return 0;
+            res = await fetch("/loadData");
+            if (!res.ok)  {
+                console.log("Data could not be loaded");
+                return [];
+            }
+            return await res.json();
         }
     },
     {

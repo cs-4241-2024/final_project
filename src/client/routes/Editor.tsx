@@ -29,7 +29,7 @@ theme = createTheme(theme, {
   },
 });
 
-interface InitialData {
+interface SheetData {
   humanityData: string[];
   physicalEducationData: string[];
   socialScienceData: string[];
@@ -44,7 +44,7 @@ interface InitialData {
 const Editor: React.FC = () => {
   const navigate = useNavigate();
 
-  const initialData = useLoaderData() as InitialData;
+  const initialData = useLoaderData() as SheetData;
   const [clearData, setClearData] = useState(false);
   const [uploadedData, setUploadedData] = useState<any>(null);
 
