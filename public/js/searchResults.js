@@ -1,6 +1,7 @@
 import { nav } from "./main.js";
 import { makeURLWithParams, getParam } from "./urlHelpers.js";
 // TODO: Make it so links direct you to pages with the id as a parameter
+//TODO: Make it diplay the username
 function setup() {
 	//Setting the title
 	const query = getParam(window.location.href, "query");
@@ -71,12 +72,15 @@ async function searchPosts(query) {
 			console.log(songPlaylist);
 		}
 
+		//Make href link using makeURLWithParams
+		const linkString = makeURLWithParams("playlists", "id", resultTitle[i]["_id"]);
+
 		innerHTML += `
 			<section class="postSection">
-				<h2 class="postTitle"><a class="postLink">`+ resultTitle[i]["title"] + ` - ` + songPlaylist[0]["name"] + `</a></h2>
+				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + resultTitle[i]["title"] + ` - ` + songPlaylist[0]["name"] + `</a></h2>
 				<p class="postContent">`+ `User` + ` - ` + resultTitle[i]["content"] + `</p >
 			</section >
-			`
+			`;
 	}
 
 	//Searching posts based off of content
@@ -90,8 +94,7 @@ async function searchPosts(query) {
 	})
 
 	//Contains all the posts from the query
-	let resultContent = JSON.parse(await responseContent.text())
-	// console.log(resultContent);
+	let resultContent = JSON.parse(await responseContent.text());
 
 	for (let i = 0; i < resultContent.length; i++) {
 		if (postIds.indexOf(resultContent[i]["_id"]) == -1) {
@@ -99,9 +102,9 @@ async function searchPosts(query) {
 			//TODO: innerHTML here
 			let songPlaylist;
 
-			if (resultTitle[i]["isPlaylist"]) {
+			if (resultContent[i]["isPlaylist"]) {
 				//It's a playlist
-				let playlistID = resultTitle[i]["idOfTopic"];
+				let playlistID = resultContent[i]["idOfTopic"];
 				let searchParams = {};
 				searchParams['_id'] = playlistID;
 
@@ -117,7 +120,7 @@ async function searchPosts(query) {
 			}
 			else {
 				//It's a song
-				let songID = resultTitle[i]["idOfTopic"];
+				let songID = resultContent[i]["idOfTopic"];
 
 				// Request to get a song by ID
 				const responseSong = await fetch(`/api/songs/${songID}`, {
@@ -129,10 +132,13 @@ async function searchPosts(query) {
 				songPlaylist = JSON.parse(await responseSong.text());
 			}
 
+			//Make href link using makeURLWithParams
+			const linkString = makeURLWithParams("playlists", "id", resultContent[i]["_id"]);
+
 			innerHTML += `
 			<section class="postSection">
-				<h2 class="postTitle"><a class="postLink">`+ resultTitle[i]["title"] + ` - ` + songPlaylist[0]["name"] + `</a></h2>
-				<p class="postContent">`+ `User` + ` - ` + resultTitle[i]["content"] + `</p >
+				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + resultContent[i]["title"] + ` - ` + songPlaylist[0]["name"] + `</a></h2>
+				<p class="postContent">`+ `User` + ` - ` + resultContent[i]["content"] + `</p >
 			</section >
 			`;
 		}
