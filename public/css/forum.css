@@ -52,3 +52,7 @@
 	margin: 0;
 	text-decoration: underline;
 }
+
+#commentBox {
+	width: 100%;
+}
