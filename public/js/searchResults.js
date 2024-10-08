@@ -89,7 +89,6 @@ async function searchSongs(query) {
 	});
 
 	let results = JSON.parse(await response.text());
-	console.log(results);
 
 	for (let i = 0; i < results.length; i++) {
 		//Make href link using makeURLWithParams
@@ -104,10 +103,28 @@ async function searchSongs(query) {
 	searchResultsArea.innerHTML = searchResultsArea.innerHTML + innerHTML;
 }
 
-//TODO: Make it display search results for playlists with url
+//TODO: Done except waiting on the ability to get the usernames by id which then needs to be rendered
 async function searchPlaylists(query) {
 	const searchResultsArea = document.getElementById("searchResultsArea");
 	let innerHTML = "";
+	const response = await fetch('/api/playlists/search', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ name: query })
+	})
+
+	let results = JSON.parse(await response.text())
+	for (let i = 0; i < results.length; i++) {
+		//Make href link using makeURLWithParams
+		const linkString = makeURLWithParams("songs", "id", results[i]["_id"]);
+
+		innerHTML += `
+			<section class="postSection">
+				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + results[i]["name"] + ` by ` + `User` + `</a></h2>
+				<p class="postContent">Type: Playlist</p>
+			</section>`;
+	}
+
 	searchResultsArea.innerHTML = searchResultsArea.innerHTML + innerHTML;
 }
 
