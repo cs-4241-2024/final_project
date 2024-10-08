@@ -25,8 +25,11 @@
 	margin: 0;
 }
 
-#submitButton {
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-bottom: 20px;
+#editSongButton {
+	border-radius: 10px;
+	border-width: 1px;
+	margin: 0;
+	margin-left: 5vw;
+	margin-right: 5vw;
+	font-size: 15px;
 }
