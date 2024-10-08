@@ -62,7 +62,7 @@ app.use(passport.initialize())
 app.use(passport.session({}));
 
 export function isAuthed(req, res, next) {
-    console.log(req)
+    //console.log(req)
     if (req.isAuthenticated()) { return next(); }
     else{
         res.sendStatus(400)

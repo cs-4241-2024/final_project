@@ -22,7 +22,7 @@ export async function loadPosts(){
     const response = await fetch('/api/posts/search', {
         method: 'POST',
         headers:{'Content-Type': 'application/json'},
-        body: JSON.stringify({})
+        body: JSON.stringify({title:"hello",content:"hello"})
     })
 
     let posts = JSON.parse(await response.text())
@@ -47,7 +47,6 @@ export async function loadPosts(){
         newTableRow.append(editCell)
         let deleteCell = document.createElement("td")
         deleteCell.textContent = "Delete"
-        deleteCell.className="border-4 border-collapse border-stone-100 bg-red-800 hover:bg-red-900 text-white font-bold p-1.5 text-center"
         deleteCell.addEventListener("click",handleDelete)
         deleteCell.style.cursor="pointer"
         deleteCell.dbId = posts[i]["_id"]
@@ -55,6 +54,14 @@ export async function loadPosts(){
         newTableRow.append(deleteCell)
         tableBody.append(newTableRow)
     }
+
+
+    const response2 = await fetch('/api/songs/6702d4731df75b948af11b08', {
+        method: 'GET',
+        headers:{'Content-Type': 'application/json'},
+    })
+    console.log("Stryder")
+    console.log(response2)
 }
 
 export function createCell(row,content){
