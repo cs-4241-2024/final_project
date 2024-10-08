@@ -44,7 +44,7 @@ export const createReply = async (req, res) => {
         console.error(error);
         res.status(500).json({error: 'Error creating reply'});
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -71,7 +71,7 @@ export const getRepliesForPost = async (req, res) => {
         console.error(error);
         res.status(500).json({error: 'Error getting replies'});
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -97,7 +97,7 @@ export const updateReply = async (req, res) => {
         console.error(error);
         res.status(500).json({error: 'Error updating reply'});
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -124,6 +124,6 @@ export const deleteReply = async (req, res) => {
         console.error('Error deleting reply:', error);
         res.status(500).json({ error: 'Error deleting reply' });
     } finally {
-        await client.close();
+        //await client.close();
     }
 };
