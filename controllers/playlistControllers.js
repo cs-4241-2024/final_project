@@ -39,6 +39,10 @@ export async function searchPlaylists(req,res) {
         searchParms.name = {$regex: searchParms.name, $options: 'i'}
     }
 
+    if (searchParms._id !== undefined) {
+        searchParms._id = new ObjectId(searchParms._id)
+    }
+
     let finalSearch = {
         $or: []
     }
@@ -53,8 +57,8 @@ export async function searchPlaylists(req,res) {
     }
 
     console.log("final Search")
-    console.log(finalSearch)
-    console.log(finalSearch.$or[0])
+    // console.log(finalSearch)
+    // console.log(finalSearch.$or[0])
 
     try {
         let playlistTable = await client.db(Dbname).collection("Playlists")

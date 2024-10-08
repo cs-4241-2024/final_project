@@ -42,6 +42,10 @@ export async function searchPosts(req,res) {
         searchParms.content = {$regex:searchParms.content, $options: 'i' }
     }
 
+    if (searchParms._id !== undefined) {
+        searchParms._id = new ObjectId(searchParms._id)
+    }
+
     let finalSearch = {
         $or:[]
     }
@@ -57,8 +61,8 @@ export async function searchPosts(req,res) {
 
     console.log("final Search")
     console.log(finalSearch)
-    console.log(finalSearch.$or[0])
-    console.log(finalSearch.$or[1])
+    // console.log(finalSearch.$or[0])
+    // console.log(finalSearch.$or[1])
 
     try {
         let postTable = await client.db(Dbname).collection("Posts")

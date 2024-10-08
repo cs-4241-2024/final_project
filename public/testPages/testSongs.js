@@ -4,7 +4,7 @@ export async function loadSongs(){
     const response = await fetch('/api/songs/search', {
         method: 'POST',
         headers:{'Content-Type': 'application/json'},
-        body: JSON.stringify({})
+        body: JSON.stringify({_id:"66fad67d7c666b549aef4189"})
     })
 
     let songs = JSON.parse(await response.text())

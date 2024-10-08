@@ -127,6 +127,11 @@ export async function searchSong(req, res) {
     if (searchParms.genre !== undefined) {
         searchParms.genre = {$regex: searchParms.genre, $options: 'i'}
     }
+
+    if (searchParms._id !== undefined) {
+        searchParms._id = new ObjectId(searchParms._id)
+    }
+
     let finalSearch = {
         $or: []
     }
@@ -140,10 +145,12 @@ export async function searchSong(req, res) {
         finalSearch = {}
     }
 
+
+
     console.log("final Search songs")
     console.log(finalSearch)
-    console.log(finalSearch.$or[0])
-    console.log(finalSearch.$or[1])
+    // console.log(finalSearch.$or[0])
+    // console.log(finalSearch.$or[1])
 
     try {
         let songTable = await client.db("SongWebsite").collection("Songs")
