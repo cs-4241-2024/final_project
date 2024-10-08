@@ -74,13 +74,15 @@ async function fetchSessionUser(){
   try {
     const response = await fetch('/get-session', {
       method: 'GET',
-        credentials: 'include'  // Include cookies in the request
+      credentials: 'include'  // Include cookies in the request
     });
 
     if (response.ok) {
       const user = await response.json();
       console.log('Session user:', user);
       document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
+      document.getElementById('currentUsername').value = user.username; // Pre-fill username
+      document.getElementById('currentUsername').disabled = true; // Disable editing
     } else {
       console.error('Failed to retrieve user');
     }
@@ -307,61 +309,54 @@ function generateGroupHTML(data) {
 }
 
 const changePassword = async function(event) {
-  // Get password input value
-  const username = document.getElementById("currentUsername").value;
-  const password = document.getElementById("currentPassword").value;
+  const currentPassword = document.getElementById("currentPassword").value;
   const newPassword = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
-  console.log(fetchSessionUser());
+  if (newPassword !== confirmPassword) {
+    alert('New password and confirm password do not match.');
+    return;
+  }
 
-  // Check if currentPassword is correct
   try {
+    // Check if the current password is correct
     const response = await fetch('/check-password', {
       method: 'POST',
-      body: JSON.stringify({ username: username, password: password }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      body: JSON.stringify({ currentPassword }),
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     });
 
-    // Check if the user is authenticated
     if (response.ok) {
-      console.log('Password is correct');
 
-      // Check if newPassword and confirmPassword match
-      if (newPassword === confirmPassword) {
-        // Update the password
-        try{
-          const updateResponse = await fetch('/update-password', {
-          method: 'POST',
-          body: JSON.stringify({ username: username, password: newPassword }),
-          headers: {
-            'Content-Type': 'application/json'
-          }});
-          
-          if (updateResponse.ok) {
-            alert('Password updated successfully');
-          } else {
-            alert('Error updating password. Please try again.');
-          }
-        } catch (error) {
-          console.error('Error updating password:', error);
-          alert('There was an error updating the password. Please try again.');
-        };
-        
+      console.log('Sending new password:', newPassword);
+      // Update the password
+      const updateResponse = await fetch('/update-password', {
+        method: 'POST',
+        body: JSON.stringify({ newPassword }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+      // Clear out the input fields
+      document.getElementById("currentPassword").value = '';
+      document.getElementById("newPassword").value = '';
+      document.getElementById("confirmPassword").value = '';
 
-      
-      // If the user entered the wrong username or password
-    }else{
-      alert('bruh you entered the wrong password');
-  
-      }  
+      if (updateResponse.ok) {
+        alert('Password updated successfully');
+
+      } else {
+        const updateData = await updateResponse.json();
+        alert('Error updating password: ' + (updateData.message || 'Please try again.'));
+      }
+    } else {
+      const data = await response.json();
+      alert(data.message || 'Error checking current password.');
     }
   } catch (error) {
-    console.error('Error checking password:', error);
-    alert('There was an error checking the password. Please try again.');
-  } 
+    console.error('Error updating password:', error);
+    alert('An error occurred. Please try again.');
+  }
 }
 
 // Function to create buttons for each group in the sidebar

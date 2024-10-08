@@ -194,58 +194,70 @@ app.post('/login', async (req, res) => {
 
 //Check if the user logged in submitted the correct current password to change their password
 app.post('/check-password', async (req, res) => {
-    const { username, password } = req.body;
+    const { currentPassword } = req.body;
 
     try {
-        // Find the user by username
-        const user = await usersCollection.findOne({ username });
+        const sessionCookie = req.cookies[sessionCookieName];
+        if (!sessionCookie) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Find the user by userId in the session cookie
+        const user = await usersCollection.findOne({ _id: new ObjectId(sessionCookie.userId) });
 
         if (!user) {
-            // If no user found, return an error
-            return res.status(400).json({ message: 'Invalid username or password' });
+            return res.status(400).json({ message: 'Invalid session. Please log in again.' });
         }
-
-        // Hash the provided password
-        // const hashedPassword = await bcrypt.hash(password, 10);
 
         // Compare the provided password with the hashed password in the database
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
 
         if (!isMatch) {
-            // If password doesn't match, return an error
-            return res.status(400).json({ message: 'Invalid username or password' });
+            return res.status(400).json({ message: 'Incorrect current password' });
         }
 
-        console.log('Login successful:', user.username);
-        
-        // If login is successful, return a success message
-        return res.status(200).json({ message: 'Login successful' });
+        return res.status(200).json({ message: 'Password is correct' });
+
+
 
     } catch (error) {
         // Handle any errors
-        console.error('Error logging in:', error);
-        res.status(500).json({ message: 'Error logging in', error });
+        console.error('Error Checking Password:', error);
+        res.status(500).json({ message: 'Error Checking Password', error });
     }
 });
 
 //Change password
 app.post('/update-password', async (req, res) => {
-    const { username, password } = req.body;
+    const { newPassword } = req.body;
 
     console.log('Request Body:', req.body); // Debug log
+    console.log('Received new password for update:', req.body);
+
+    if (!newPassword) {
+        return res.status(400).json({ message: 'New password is required' });
+    }
 
     try {
+        const sessionCookie = req.cookies[sessionCookieName];
+        if (!sessionCookie) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
         // Hash the new password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         // Update the user's password in the database
         await usersCollection.updateOne(
-            { username: username },
+            { _id: new ObjectId(sessionCookie.userId) },
             { $set: { password: hashedPassword } }
         );
 
         // Return a success message
-        return res.status(200).json({ message: 'Success' });
+        console.log('Password updated successfully');
+
+        return res.status(200).json({ message: 'Password updated successfully' });
+
 
     } catch (error) {
         // Handle any errors
