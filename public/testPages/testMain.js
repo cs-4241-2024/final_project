@@ -9,7 +9,7 @@ import {
 } from "./testAuth.js"
 import {loadPosts, submitNewPost} from "./testForm.js"
 import {loadSongs} from "./testSongs.js";
-import {loadPlaylists} from "./testPlaylists.js";
+import {addSongToPlayList, loadPlaylists, playListSongs, submitNewPlaylist} from "./testPlaylists.js";
 
 window.onload = function () {
     getLoggedInUser().then()
@@ -28,4 +28,11 @@ window.onload = function () {
     logOut.onclick = logout;
     const fav = document.getElementById("addFav");
     fav.onclick = addFav;
+    const addPlaylist = document.getElementById("submitNewPlaylist");
+    addPlaylist.onclick = submitNewPlaylist
+
+    const addSongToPlay = document.getElementById("addSongToPlaylist");
+    addSongToPlay.onclick = addSongToPlayList
+
+    playListSongs().then()
 }
