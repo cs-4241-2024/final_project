@@ -5,6 +5,8 @@
 		<title>CS4241 Assignment 2</title>
 		<meta charset="utf-8">
 		<script src="js/main.js" type="module"></script>
+		<script src="js/urlHelpers.js" type="module"></script>
+		<script src="js/forum.js" type="module"></script>
 		<link rel="stylesheet" href="css/main.css">
 		<link rel="stylesheet" href="css/forum.css">
 
@@ -17,34 +19,37 @@
 		<nav class="navbar"></nav>
 
 		<!-- This is where the post and all of the different replies would appear. Each section (example below) would be inserted using innerHTML. This way it can be dynamically updated as the post content is based off the database data and there could be an unlimited amount of replies.-->
-		<div id="postAndRepliesArea">
 
-			<!-- Example post about song -->
-			<section class="postSection">
-				<h2 class="postTitle"><a class="postLink">Post Title - Song Name</a></h2>
-				<p class="postContent">User - Post Content</p>
-			</section>
 
-			<!-- Example Reply -->
-			<section class="postSection">
-				<p class="replyAreaTitle">Replies</p>
+		<!-- Example post about song -->
+		<section class="postSection">
+			<h2 class="postTitle">Post Title</h2>
+			<p class="postContent"><a class="postLink">Song/Playlist Name</a></p>
+			<p class="postContent">User - Post Content</p>
+		</section>
+
+		<!-- Example Reply -->
+		<section class="postSection">
+			<p class="replyAreaTitle">Replies</p>
+			<div id="postAndRepliesArea">
 				<p class="reply">User - Reply</p>
 				<hr class="solidDivider">
 				<p class="reply">User - Reply</p>
 				<hr class="solidDivider">
-				<p class="reply">Leave a comment!</p>
-				<textarea class="commentBox"></textarea>
-				<br>
-				<button id="submitCommentButton">Submit</button>
-			</section>
+			</div>
+			<p class="reply">Leave a comment!</p>
+			<textarea class="commentBox"></textarea>
+			<br>
+			<button id="submitCommentButton">Submit</button>
+		</section>
 
-			<!-- Example post about playlist. Same thing as above but with playlist labeling. The replies would also be the same as above -->
-			<!-- <section class="postSection">
+		<!-- Example post about playlist. Same thing as above but with playlist labeling. The replies would also be the same as above -->
+		<!-- <section class="postSection">
 				<h2 class="postTitle"><a class="postLink">Post Title - Playlist Name</a></h2>
 				<p class="postContent">User - Post Content</p>
 			</section> -->
 
-		</div>
+
 	</body>
 
 </html>
