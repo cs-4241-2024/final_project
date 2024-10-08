@@ -116,6 +116,48 @@ export async function addSongToPlaylist(req,res) {
         res.send('error connecting to db')
     }
 }
+
+export async function deleteSongFromPlaylist(req,res) {
+    let userID = req.user._id.toString()
+    let playlistID = req.params.id
+    let songToDelete = req.body.songID
+    console.log("songToDelete")
+    console.log(userID)
+    console.log(playlistID)
+    console.log(songToDelete)
+    try {
+
+        let playlistTable = await client.db(Dbname).collection("Playlists")
+        let playlist = await playlistTable.findOne({_id: new ObjectId(playlistID),createdBy: userID})
+        let playlistSongs = playlist.songs
+        let indexToRemove = playlistSongs.indexOf(songToDelete)
+        if(indexToRemove !== -1) {
+            playlistSongs.splice(indexToRemove, 1)
+        }
+        else{
+            res.status(400)
+            res.send('song not found in db')
+            return
+        }
+
+        let updateStrat = {
+            $set: {
+                songs: playlistSongs
+            }
+        }
+
+        let playListUpdate = await playlistTable.findOneAndUpdate({_id: new ObjectId(playlistID),createdBy: userID}, updateStrat)
+
+
+        res.status(200)
+        res.send("song deleted")
+    } catch (e) {
+        console.log(e)
+        res.status(404)
+        res.send('error connecting to db')
+    }
+}
+
 export async function getSongsInPlaylist(req,res) {
     let playlistID = req.params.id
     console.log(playlistID)

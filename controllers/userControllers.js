@@ -147,7 +147,7 @@ export function getUserName(req,res){
 export function getDBid(req,res){
     console.log("sent id+")
     res.status(200)
-    res.send(req.user._id)
+    res.send(req.user._id.toString())
 }
 
 
