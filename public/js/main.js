@@ -74,7 +74,8 @@ async function fetchSessionUser(){
     if (response.ok) {
       const user = await response.json();
       console.log('Session user:', user);
-      document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
+      document.getElementById('currentUser').innerText = `Welcome to your settings ${user.username}!`;
+      document.getElementById('currentUser').style.color = 'black';
     } else {
       console.error('Failed to retrieve user');
     }
