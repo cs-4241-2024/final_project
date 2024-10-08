@@ -1,11 +1,11 @@
 import { nav } from "./main.js";
 
-export async function getSong() {
+async function getSong() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     // ID of song in database (string)
-    //let songID = "66fad67d7c666b549aef4189";http://localhost:3000/songs.html/?song=66fad67d7c666b549aef4189
-    let songID = urlParams.get('song');
+    //let songID = "66fad67d7c666b549aef4189";http://localhost:3000/songs.html/?id=66fad67d7c666b549aef4189
+    let songID = urlParams.get('id');
     console.log(queryString);
     console.log(urlParams["song"]);
 
@@ -44,4 +44,7 @@ function getSongName() {
 
 }
 
-window.onload = function () { nav(); getSong().then() }
+window.onload = function () {
+    nav();
+    getSong();
+}
