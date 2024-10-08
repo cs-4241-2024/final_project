@@ -8,6 +8,8 @@ import {
     logout
 } from "./testAuth.js"
 import {loadPosts, submitNewPost} from "./testForm.js"
+import {loadSongs} from "./testSongs.js";
+import {loadPlaylists} from "./testPlaylists.js";
 
 window.onload = function () {
     getLoggedInUser().then()
@@ -18,6 +20,8 @@ window.onload = function () {
     loadUsersUploadedSongs().then()
     loadUsersReplies().then()
     loadUsersFavorites().then()
+    loadSongs().then()
+    loadPlaylists().then()
     const button = document.getElementById("submitNewPost");
     button.onclick = submitNewPost;
     const logOut = document.getElementById("logout");

@@ -7,11 +7,16 @@ import {
     deletePlaylist,
     getAllPlaylists,
     addSongToPlaylist,
-    getSongsInPlaylist
+    getSongsInPlaylist, searchPlaylists
 } from "../controllers/playlistControllers.js"
 
+
+//COMBINE INTO SEARCH
 // get playlist by id
 router.get('/:id', getPlaylist);
+
+// get all playlist
+router.get('/', getAllPlaylists);
 
 // create new playlist
 router.post('/', createPlaylist);
@@ -22,13 +27,12 @@ router.put('/:id', updatePlaylist);
 // delete playlist by id
 router.delete('/:id', deletePlaylist);
 
-// get all playlist
-router.get('/', getAllPlaylists);
-
 // add song to playlist
 router.post('/:id/add-song', addSongToPlaylist);
 
 // get all songs in a playlist by id
 router.get('/:playlistId/songs', getSongsInPlaylist);
+
+router.post('/search', searchPlaylists);
 
 export default router;
