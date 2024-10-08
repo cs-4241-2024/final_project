@@ -4,10 +4,10 @@
   "description": "Simple Task Logging",
   "author": "Owen Rago",
   "scripts": {
-    "prestart": "tsc --outDir public/js public/ts/main.ts",
-    "start": "tsx server.ts"
+    "dev": "vite & tsx server.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "type": "module",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -16,7 +16,8 @@
     "jsonwebtoken": "^9.0.2",
     "mime": "^2.6.0",
     "mongodb": "^6.9.0",
-    "tsx": "^4.19.1"
+    "tsx": "^4.19.1",
+    "vite": "^5.4.8"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",

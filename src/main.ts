@@ -1,3 +1,4 @@
+import { tetris } from './tetris'
 const COLS = 10
 const ROWS = 20
 const SIZE = 25
@@ -10,3 +11,9 @@ ctx.canvas.height = ROWS * SIZE
 
 ctx.scale(SIZE, SIZE)
 
+playTetris(ctx)
+
+function playTetris(ctx: CanvasRenderingContext2D) {
+    let board = new tetris(ctx)
+    console.log(board)
+}
