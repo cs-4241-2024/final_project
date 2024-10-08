@@ -49,7 +49,7 @@ html, body {
     outline: none;
     box-sizing: border-box;
     /*appearance: none; /* removes the default dropdown arrow in some browsers */
-    background: white; /* Set background to match the rest of the form */
+    background: white; 
 }
 
 /* when focused, change border color */
