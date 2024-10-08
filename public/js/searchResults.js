@@ -1,6 +1,6 @@
 import { nav } from "./main.js";
 import { makeURLWithParams, getParam } from "./urlHelpers.js";
-//TODO: Make it diplay the username
+
 function setup() {
 	//Setting the title
 	const query = getParam(window.location.href, "query");
@@ -8,9 +8,8 @@ function setup() {
 	seachResultsPageTitle.textContent = "Search Results for " + query;
 
 	searchPosts(query);
-
-	//TODO: Make it display search results for songs with url
-	//TODO: Make it display search results for playlists with url
+	searchSongs(query);
+	searchPlaylists(query);
 }
 
 //TODO: Done except waiting on the ability to get the usernames by id which then needs to be rendered
@@ -77,7 +76,39 @@ async function searchPosts(query) {
 			</section >
 			`;
 	}
-	searchResultsArea.innerHTML = innerHTML;
+	searchResultsArea.innerHTML = searchResultsArea.innerHTML + innerHTML;
+}
+
+async function searchSongs(query) {
+	const searchResultsArea = document.getElementById("searchResultsArea");
+	let innerHTML = "";
+	const response = await fetch('/api/songs/search', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ name: query, artist: query })
+	});
+
+	let results = JSON.parse(await response.text());
+	console.log(results);
+
+	for (let i = 0; i < results.length; i++) {
+		//Make href link using makeURLWithParams
+		const linkString = makeURLWithParams("songs", "id", results[i]["_id"]);
+
+		innerHTML += `
+			<section class="postSection">
+				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + results[i]["name"] + ` by ` + results[i]["artist"] + `</a></h2>
+				<p class="postContent">Type: Song</p>
+			</section>`;
+	}
+	searchResultsArea.innerHTML = searchResultsArea.innerHTML + innerHTML;
+}
+
+//TODO: Make it display search results for playlists with url
+async function searchPlaylists(query) {
+	const searchResultsArea = document.getElementById("searchResultsArea");
+	let innerHTML = "";
+	searchResultsArea.innerHTML = searchResultsArea.innerHTML + innerHTML;
 }
 
 window.onload = function () {
