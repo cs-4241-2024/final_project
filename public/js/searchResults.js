@@ -115,12 +115,19 @@ async function searchPlaylists(query) {
 
 	let results = JSON.parse(await response.text())
 	for (let i = 0; i < results.length; i++) {
+		//Getting the username
+		let userID = results[i]["createdBy"];
+		const responseUsername = await fetch(`/api/users/userName/${userID}`, {
+			method: 'GET'
+		})
+		let username = await responseUsername.text()
+
 		//Make href link using makeURLWithParams
-		const linkString = makeURLWithParams("songs", "id", results[i]["_id"]);
+		const linkString = makeURLWithParams("playlists", "id", results[i]["_id"]);
 
 		innerHTML += `
 			<section class="postSection">
-				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + results[i]["name"] + ` by ` + `User` + `</a></h2>
+				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + results[i]["name"] + ` by ` + username + `</a></h2>
 				<p class="postContent">Type: Playlist</p>
 			</section>`;
 	}
