@@ -29,7 +29,7 @@ export const addSong = async (req, res) => {
         res.status(500).json({error: 'Error creating song'});
         console.error('Error creating song:', error);
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -43,7 +43,7 @@ export const getSongs = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: 'Error getting songs'});
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -59,7 +59,7 @@ export const getSongByID = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: 'Error getting song'});
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -77,7 +77,7 @@ export const deleteSong = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: 'Error deleting song'});
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -106,7 +106,7 @@ export const updateSong = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: 'Error deleting song'});
     } finally {
-        await client.close();
+        //await client.close();
     }
 }
 
@@ -153,6 +153,7 @@ export async function searchSong(req, res) {
     // console.log(finalSearch.$or[1])
 
     try {
+        await client.connect();
         let songTable = await client.db("SongWebsite").collection("Songs")
         let foundSongs = await songTable.find(finalSearch).toArray()
         console.log("foundSongs")
@@ -163,6 +164,8 @@ export async function searchSong(req, res) {
         console.log(e)
         res.status(400)
         res.send('bad search parameters')
+    }finally {
+        //await client.close();
     }
 }
 

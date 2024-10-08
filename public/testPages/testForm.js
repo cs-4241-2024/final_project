@@ -47,7 +47,6 @@ export async function loadPosts(){
         newTableRow.append(editCell)
         let deleteCell = document.createElement("td")
         deleteCell.textContent = "Delete"
-        deleteCell.className="border-4 border-collapse border-stone-100 bg-red-800 hover:bg-red-900 text-white font-bold p-1.5 text-center"
         deleteCell.addEventListener("click",handleDelete)
         deleteCell.style.cursor="pointer"
         deleteCell.dbId = posts[i]["_id"]
