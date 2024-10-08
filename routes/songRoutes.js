@@ -5,7 +5,7 @@ import {
     getSongs,
     getSongByID,
     updateSong,
-    deleteSong
+    deleteSong, searchSong
 } from "../controllers/songController.js";
 // add new song
 router.post('/', addSong);
@@ -21,5 +21,7 @@ router.put('/:id', updateSong);
 
 // delete song by id
 router.delete('/:id', deleteSong);
+
+router.post('/search', searchSong);
 
 export default router
