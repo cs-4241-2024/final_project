@@ -284,7 +284,7 @@ window.onload = async function () {
   console.log("Main.js Onload");
 
   fetchUsers(); //If authenticated, fetch users
-  fetchGroups(); //If authenticated, fetch groups
+  newFetchGroups(); //If authenticated, fetch groups
 
   showContent("profile");
 
@@ -424,6 +424,47 @@ async function fetchGroups() {
     console.error('Error fetching users:', error);
   }
 }
+
+async function newFetchGroups() {
+  console.log("New Fetch groups");
+  try {
+    const response = await fetch('/get-session', {
+      method: 'GET',
+      credentials: 'include'  // Include cookies in the request
+    });
+
+    if (response.ok) {
+      const user = await response.json();
+      const username = user.username
+      console.log('Session user:', user);
+
+      try {
+        // Use query parameters to pass user data
+        const groupResponse = await fetch(`/get-user-groups/${username}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (groupResponse.ok) {
+          const groups = await groupResponse.json();
+          window.allGroups = groups;
+          generateGroupHTML(groups);
+          createGroupButtons(groups);
+          console.log(`groups are ${JSON.stringify(groups)}`);
+        } else {
+          console.error('Failed to fetch groups:', groupResponse.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+      }
+    } else {
+      console.error('Failed to retrieve user');
+    }
+  } catch (error) {
+    console.error('Error fetching session user:', error);
+  }
+}
+
 
 async function deleteTask(group, assIndex){
   console.log("deleting task with group  " +group +" index " + assIndex)

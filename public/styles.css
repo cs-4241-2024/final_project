@@ -13,6 +13,7 @@ body {
     display: flex;
 }
   
+
 /* Sidebar */
 .sidebar {
     background-color: #EABDBD;
@@ -21,19 +22,24 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between; /* Align content within sidebar vertically */
-    padding-top: 10px; /* Optional: add some spacing at the top */
+    justify-content: space-between;
+    padding-top: 10px;
     transition: all 0.3s ease;
 }
 
+/* Group Buttons Scrollable */
 #groupButtons {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
+    max-height: calc(100vh - 180px); /* Space for footer */
+    overflow-y: auto; /* Allow scrolling when group buttons exceed the height */
+    padding: 10px 0;
 }
 
 .sidebar button {
-    background-color: #FF6B6B;
+    background-color: #e78b8b;
     border: none;
     border-radius: 50%;
     width: 60px;
@@ -45,7 +51,7 @@ body {
 }
 
 .sidebar button:hover {
-    background-color: #FF4A4A;
+    background-color: #c51313;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -53,7 +59,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
+    position: relative;
 }
 
 .sidebar button img {

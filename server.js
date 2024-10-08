@@ -193,6 +193,28 @@ app.get('/get-group-info', async (req, res) => {
     }
 });
 
+
+// Get information about the groups a specific user is in
+app.get('/get-user-groups/:username', async (req, res) => {
+    const { username } = req.params; // Get the username from the request parameters
+
+    try {
+        // Find groups where the users array contains an object with the matching username
+        const groups = await groupCollection.find({ 'users.username': username }).toArray();
+
+        if (!groups || groups.length === 0) {
+            return res.status(404).json({ message: `No groups found for user ${username}` });
+        }
+
+        res.status(200).json(groups);
+    } catch (error) {
+        console.error('Error fetching groups:', error);
+        res.status(500).json({ message: 'Error fetching groups', error });
+    }
+});
+
+
+
 // Add an assignment to a group
 app.post('/add-assignment', async (req, res) => {
     const { groupId, title, assignedTo, dueDate } = req.body;
