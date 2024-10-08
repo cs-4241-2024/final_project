@@ -91,14 +91,35 @@ async function fetchUsers() {
     console.log(`users are ${JSON.stringify(users)}`);
     window.allUsers = users;
 
-    populateUserDropdown(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
-    populateUserDropdown(window.allUsers, 'task-options-list', 'task-search-bar', 'task-selected-list');
+    populateUserDropdownTask(window.allUsers, 'task-options-list', 'task-search-bar', 'task-selected-list');
+    populateUserDropdownGroup(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
+
   } catch (error) {
     console.error('Error fetching users:', error);
   }
 }
 
-function populateUserDropdown(users, dropdownId, searchBarId, selectedOptionsId) {
+function populateUserDropdownTask(users, dropdownId, searchBarId, selectedOptionsId) {
+  const optionsList = document.getElementById(dropdownId);
+  const searchBar = document.getElementById(searchBarId);
+  
+  optionsList.innerHTML = ''; // Clear previous options
+  
+  users.forEach(user => {
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = user.username;
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(user.username));
+    optionsList.appendChild(label);
+  });
+  
+  searchBar.addEventListener('input', filterUsers(searchBarId, dropdownId));
+  updateCheckboxListeners(dropdownId, selectedOptionsId); // Reapply listeners
+}
+
+function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptionsId) {
   const optionsList = document.getElementById(dropdownId);
   const searchBar = document.getElementById(searchBarId);
   
@@ -169,9 +190,6 @@ function removeSelectedOption(value, selectedOptionsId) {
 const showGroup = async function (event) {
   await fetchUsers();
   
-  populateUserDropdown(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
-  populateUserDropdown(window.allUsers, 'task-options-list', 'task-search-bar', 'task-selected-list');
-
   showContent("addGroup");
 
   // Show/Hide the options list when clicking on the search bar
@@ -179,6 +197,7 @@ const showGroup = async function (event) {
   const taskSearchBar = document.getElementById('task-search-bar');
   const groupOptionsList = document.getElementById('group-options-list');
   const taskOptionsList = document.getElementById('task-options-list');
+  
   groupSearchBar.addEventListener('focus', () => {
     groupOptionsList.style.display = 'block';
   });
@@ -191,10 +210,6 @@ const showGroup = async function (event) {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.dropdown')) {
       taskOptionsList.style.display = 'none';
-    }
-  });
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.dropdown')) {
       groupOptionsList.style.display = 'none';
     }
   });
