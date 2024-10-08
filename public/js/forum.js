@@ -3,12 +3,12 @@ import { makeURLWithParams, getParam } from "./urlHelpers.js";
 
 async function setup() {
 	//Setting the title
-	const query = getParam(window.location.href, "id");
+	const id = getParam(window.location.href, "id");
 	const postTitle = document.getElementById("postTitle");
 	// seachResultsPageTitle.textContent = "Search Results for " + query;
 
 	let searchParams = {};
-	searchParams['_id'] = query;
+	searchParams['_id'] = id;
 
 	const responsePost = await fetch('/api/posts/search', {
 		method: 'POST',
@@ -49,9 +49,12 @@ async function setup() {
 		});
 		songPlaylist = JSON.parse(await responseSong.text());
 	}
+
+	//Sets the text to the name of the song/playlist
 	const songPlaylistName = document.getElementById("songPlaylistName");
 	songPlaylistName.textContent = songPlaylist[0]["name"];
 
+	//Gets the username of person that wrote the reply
 	let userID = post[0]["createdBy"];
 	const responseUsername = await fetch(`/api/users/userName/${userID}`, {
 		method: 'GET'
@@ -59,6 +62,28 @@ async function setup() {
 	let username = await responseUsername.text()
 	const usernameContent = document.getElementById("usernameContent");
 	usernameContent.textContent = username + " - " + post[0]["content"];
+
+	const postAndRepliesArea = document.getElementById("postAndRepliesArea");
+
+	// Request to get all replies for the post
+	const response = await fetch(`/api/replies/${id}`, {
+		method: 'GET',
+		headers: { 'Content-Type': 'application/json' }
+	});
+
+	// Array of replies from the server
+	let replies = await response.json();
+
+	for (let i = 0; i < replies.length; i++) {
+		let userID = post[0]["createdBy"];
+		const responseReplyUsername = await fetch(`/api/users/userName/${userID}`, {
+			method: 'GET'
+		})
+		let replyUsername = await responseReplyUsername.text();
+		postAndRepliesArea.innerHTML += `
+		<p class="reply">` + replyUsername + ` - ` + replies[i]["content"] + `</p>
+		<hr class="solidDivider">`
+	}
 
 }
 
