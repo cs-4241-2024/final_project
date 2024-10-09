@@ -1,0 +1,56 @@
+.contentColumn {
+	text-align: center;
+	width: 33.33%;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	border-radius: 20px;
+}
+
+.contentArea {
+	background-color: white;
+}
+
+.profilePageTable {
+	border-spacing: 5vw 0px;
+	border-radius: 10px;
+	width: 100%;
+}
+
+h1 {
+	color: black;
+	margin-left: 5vw;
+	margin-right: 5vw;
+}
+
+.contentLink {
+	text-decoration: none;
+}
+
+.contentLink:hover {
+	text-decoration: underline;
+}
+
+p {
+	margin: 0;
+}
+
+h2 {
+	margin: 0;
+}
+
+td {
+	text-align: center;
+}
+
+button {
+	border-radius: 10px;
+	border-width: 1px;
+	margin: 0;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size: 20px;
+}
+
+a {
+	text-decoration: none;
+}

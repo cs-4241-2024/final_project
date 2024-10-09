@@ -1,0 +1,58 @@
+.postSection {
+	background-color: white;
+	margin-left: 5vw;
+	margin-right: 5vw;
+	margin-top: 20px;
+	border-radius: 20px;
+	padding: 20px;
+}
+
+#postTitle {
+	color: black;
+	font-size: 32px;
+	margin: 0;
+}
+
+.postLink {
+	text-decoration: none;
+}
+
+.postLink:hover {
+	text-decoration: underline;
+}
+
+.postContent {
+	font-size: 24px;
+	margin: 0;
+}
+
+.reply {
+	padding-top: 5px;
+	margin: 0;
+
+}
+
+.solidDivider {
+	border-top: 2px;
+	border-style: solid;
+	border-color: rgb(160, 160, 160);
+}
+
+#submitCommentButton {
+	border-radius: 10px;
+	border-width: 1px;
+	margin: 0;
+	margin-top: 5px;
+	font-size: 15px;
+}
+
+.replyAreaTitle {
+	padding-bottom: 10px;
+	font-size: 22px;
+	margin: 0;
+	text-decoration: underline;
+}
+
+#commentBox {
+	width: 100%;
+}

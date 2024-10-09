@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<title>CS4241 Assignment 2</title>
+		<meta charset="utf-8">
+		<script src="js/playlistPage.js" type="module"></script>
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/playlist.css">
+
+	</head>
+
+	<body>
+		<!-- Inserts the navbar into the page -->
+		<nav class="navbar"></nav>
+
+		<!-- Title of the playlist -->
+		<div id="titleContainer">
+			<h1 id="playlistTitle">Playlist: (Playlist name)</h1>
+		</div>
+
+		<!-- Has a new section for each song in the playlist. This will be dynamically inserted using innerHTML-->
+		<div id="playlistSongsArea">
+		</div>
+
+		<div id="divForAdd" class="songDropDownContainer">
+			<button id="toggleButton" class="addSongButton">Add Song</button>
+			<button id="editTitleButton" class="addSongButton">Edit Title</button>
+			<div id="songDropDown" class="addSongDropDown-hidden" >
+				<input type="text" placeholder="Search.." id="songSearch" class="songSearch" value="">
+
+			</div>
+		</div>
+	</body>
+
+</html>

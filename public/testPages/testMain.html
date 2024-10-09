@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./testForm.js" type="module"></script>
+    <script src="./testAuth.js" type="module"></script>
+    <script src="./testMain.js" type="module"></script>
+</head>
+<body>
+
+<p id="pUser" ></p>
+<p id="pID"></p>
+<button id="logout">logOut</button>
+<form>
+    <label for="title">title</label><input id="title">
+    <label for="content">content</label><input id="content">
+    <label for="isSong">isSong</label><input id="isSong" type="checkbox">
+    <label for="isPlaylist">isPlaylist</label><input id="isPlaylist" type="checkbox">
+    <label for="idOfTopic">idOfTopic</label><input id="idOfTopic">
+    <button id="submitNewPost">add post</button>
+</form>
+<table>
+    <tbody id="postsTable">
+
+    </tbody>
+</table>
+
+<p>Users Posts</p>
+<table>
+    <tbody id="userPostsTable">
+
+    </tbody>
+</table>
+
+<p>Users Playlists</p>
+<table>
+    <tbody id="userPlaylistsTable">
+
+    </tbody>
+</table>
+
+<p>Users Uploaded Songs</p>
+<table>
+    <tbody id="userUploadedSongsTable">
+
+    </tbody>
+</table>
+
+<p>Users replies</p>
+<table>
+    <tbody id="userRepliesTable">
+
+    </tbody>
+</table>
+<form>
+    <label for="favID">favID</label><input id="favID">
+    <button id="addFav">add fav</button>
+</form>
+<p>Users favorites</p>
+<table>
+    <tbody id="userFavoritesTable">
+
+    </tbody>
+</table>
+
+<p>Songs </p>
+<table>
+    <tbody id="songsTable">
+
+    </tbody>
+</table>
+<form>
+    <label for="playlistName">name</label><input id="playlistName">
+    <button id="submitNewPlaylist">add playlist</button>
+</form>
+<form>
+    <label for="playlistID">playlistID</label><input id="playlistID">
+    <label for="songID">songID</label><input id="songID">
+    <button id="addSongToPlaylist">add song to playlist</button>
+</form>
+<p>Playlists </p>
+<table>
+    <tbody id="playlistTable">
+
+    </tbody>
+</table>
+
+</body>
+</html>

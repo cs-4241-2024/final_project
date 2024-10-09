@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<title>CS4241 Assignment 2</title>
+		<meta charset="utf-8">
+		<script src="js/main.js" type="module"></script>
+		<script src="js/songs.js" type="module"></script>
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/songs.css">
+
+		<!-- get rid of favicon error -->
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	</head>
+
+	<body>
+		<!-- Inserts the navbar into the page -->
+		<nav class="navbar"></nav>
+
+		<!-- Title of the song-->
+		<h1 id="songTitle">Song: (Song name)</h1>
+
+		<!-- Example Playlists that would show all playlists a user has, most likely use the getAllPlaylists -->
+		<section id="songInfoSection">
+			<h2 id="songInfoTitle">Song Information</h2>
+			<p class="songInfo" id="artist">Artist: (Artist Name) </p>
+			<p class="songInfo" id="album">Album: (Album Name if it exists) </p>
+			<p class="songInfo" id="duration">Duration: (Minute:seconds) </p>
+			<p class="songInfo" id="genre">Genre: (Genre Type) </p>
+			<p class="songInfo" id="releaseDate">Release Date: (Month then year then day) </p>
+		</section>
+
+		<!-- Should only be displayed if the user logged in is the one that created the song -->
+		<button class="button" id="addToFavoritesButton">Add to Favorites</button>
+	</body>
+
+</html>

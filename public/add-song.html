@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Add Song</title>
+        <script src="js/main.js" type="module"></script>
+        <script src="js/urlHelpers.js" type="module"></script>
+        <script src="js/addSong.js" type="module"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/addSong.css">
+    </head>
+
+    <body>
+        <nav class="navbar"></nav>
+        <h2>Add a Song</h2>
+
+        <form id="addSongForm">
+            <label for="name">Song Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="artist">Artist:</label>
+            <input type="text" id="artist" name="artist" required>
+
+            <label for="album">Album:</label>
+            <input type="text" id="album" name="album" required>
+
+            <label for="duration">Duration (sec):</label>
+            <input type="number" id="duration" name="duration" required>
+
+            <label for="genre">Genre:</label>
+            <input type="text" id="genre" name="genre" required>
+
+            <label for="releaseDate">Release Date:</label>
+            <input type="date" id="releaseDate" name="releaseDate" required>
+
+            <button type="submit">Add Song</button>
+        </form>
+
+    </body>
+
+</html>
