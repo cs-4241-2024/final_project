@@ -27,35 +27,41 @@ theme = createTheme(theme, {
 
 
 function Home() {
-      const navigate = useNavigate();
-      return (
-          <div className="main">
-              <IconButton
-                  className="logout-button"
-                  aria-label="logout"
-                  onClick={async () => {
-                      console.log("logout button clicked");
+  const navigate = useNavigate();
+  return (
+    <div className="main-home">
+      <IconButton
+        className="logout-button"
+        aria-label="logout"
+        onClick={async () => {
+          console.log("logout button clicked");
                       await fetch("/logout", {
                           method: "POST",
                       });
-                      navigate('/login');
-                  }}
-              >
-                  <ExitToAppIcon />
-              </IconButton>
-              <div className="navigation">
-                  <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
-                      console.log("Editor clicked");
-                      navigate('/editor');
-                  }}>
-                      Create your own personal WPI Tracking Sheet here
-                  </Button>
-                  <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
-                      console.log("About Page clicked");
-                      navigate('/about');
-                  }}>
-                      About Page
-                  </Button>
+          navigate('/login');
+        }}
+      >
+        <ExitToAppIcon />
+      </IconButton>
+      <div className="navigation">
+        <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+          console.log("Editor clicked");
+          navigate('/editor');
+        }}>
+          Create your own personal WPI Tracking Sheet here
+        </Button>
+        <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+          console.log("About Page clicked");
+          navigate('/about');
+        }}>
+          About Page
+        </Button>
+        <Button variant="contained" type="submit" className="navigation-button" sx={{ backgroundColor: 'purple', color: 'white' }} onClick={() => {
+          console.log("About Page clicked");
+          navigate('/instructions');
+        }}>
+          Instructions
+        </Button>
       </div>
       <div className="tracking-img">
         <iframe
