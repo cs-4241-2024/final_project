@@ -10,13 +10,16 @@ const app = express();
 const port = 3000;
 
 // MongoDB connection
-mongoose.connect(
-  "mongodb+srv://azzhang3:eGPDbrMNzogUpygL@cluster0.iuxm8.mongodb.net/",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose
+  .connect(
+    "mongodb+srv://azzhang3:eGPDbrMNzogUpygL@cluster0.iuxm8.mongodb.net/",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log("MongoDB connection error:", err));
 
 // User schema
 const userSchema = new mongoose.Schema({
@@ -172,24 +175,14 @@ app.post("/login", async (req, res, next) => {
   }
 });
 
-// Cocktail schema and model
+// Define a schema for the cocktail data
 const cocktailSchema = new mongoose.Schema({
   idDrink: Number,
   strDrink: String,
-  strDrinkAlternate: String,
-  strTags: String,
-  strVideo: String,
   strCategory: String,
-  strIBA: String,
   strAlcoholic: String,
   strGlass: String,
   strInstructions: String,
-  strInstructionsES: String,
-  strInstructionsDE: String,
-  strInstructionsFR: String,
-  strInstructionsIT: String,
-  strInstructionsZH_HANS: String,
-  strInstructionsZH_HANT: String,
   strDrinkThumb: String,
   strIngredient1: String,
   strIngredient2: String,
@@ -221,83 +214,74 @@ const cocktailSchema = new mongoose.Schema({
   strMeasure13: String,
   strMeasure14: String,
   strMeasure15: String,
-  strImageSource: String,
-  strImageAttribution: String,
-  strCreativeCommonsConfirmed: String,
-  dateModified: String,
 });
 
-const Cocktail = mongoose.model("Cocktails", cocktailSchema);
+// Create the Cocktail model
+const Cocktail = mongoose.model("Cocktail", cocktailSchema);
 
+// Export the model if you put this in a separate file
 module.exports = Cocktail;
 
-// API to get all cocktails
+// app.get("/api/cocktails", async (req, res) => {
+//   const { ingredients } = req.query;
+
+//   const ingredientsArray = ingredients
+//     .split(",")
+//     .map((ingredient) => ingredient.trim()); // Trim whitespaces
+
+//   console.log("Ingredients Array:", ingredientsArray); // Log the split array
+
+//   try {
+//     // Construct query using native JavaScript regex literals
+//     const query = {
+//       $and: ingredientsArray.map((ingredient) => ({
+//         $or: [
+//           { strIngredient1: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient2: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient3: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient4: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient5: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient6: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient7: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient8: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient9: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient10: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient11: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient12: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient13: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient14: { $regex: new RegExp(ingredient, "i") } },
+//           { strIngredient15: { $regex: new RegExp(ingredient, "i") } },
+//         ],
+//       })),
+//     };
+
+//     console.log("MongoDB Query:", JSON.stringify(query, null, 2)); // Log the query
+
+//     const cocktails = await Cocktail.find(query);
+//     console.log("Cocktails found:", cocktails);
+//     res.json(cocktails);
+//   } catch (error) {
+//     console.error("Error fetching cocktails:", error);
+//     res
+//       .status(500)
+//       .json({ message: "Error fetching cocktails", error: error.message });
+//   }
+// });
+
 app.get("/api/cocktails", async (req, res) => {
-  try {
-    const cocktails = await Cocktail.find();
-
-    const formattedCocktails = cocktails.map((cocktail) => {
-      const ingredients = [];
-      for (let i = 1; i <= 5; i++) {
-        // Adjust based on how many ingredients you expect
-        if (cocktail[`strIngredient${i}`]) {
-          ingredients.push(
-            `${cocktail[`strMeasure${i}`] || ""} ${
-              cocktail[`strIngredient${i}`]
-            }`.trim()
-          );
-        }
-      }
-
-      return {
-        idDrink: cocktail.idDrink,
-        name: cocktail.strDrink,
-        instructions: cocktail.strInstructions,
-        ingredients: ingredients,
-        image: cocktail.strDrinkThumb,
-      };
-    });
-
-    res.json(formattedCocktails);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// API to get cocktail by name
-app.get("/api/cocktails/:name", async (req, res) => {
-  try {
-    const cocktail = await Cocktail.findOne({ name: req.params.name });
-    if (cocktail) {
-      res.json(cocktail);
-    } else {
-      res.status(404).json({ error: "Cocktail not found" });
-    }
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// API to get unique ingredients
-app.get("/api/ingredients", async (req, res) => {
-  try {
-    const ingredients = await Cocktail.distinct("ingredients");
-    res.json(ingredients);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// API to search cocktails by ingredients
-app.get("/api/cocktails", async (req, res) => {
-  const ingredients = req.query.ingredients.split(",");
+  console.log("API route hit successfully");
+  res.json({ message: "Route is working" });
   try {
     const cocktails = await Cocktail.find({
-      ingredients: { $in: ingredients },
+      strIngredient1: { $regex: /Light rum/i },
     });
+    console.log("Cocktails found:", cocktails);
     res.json(cocktails);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error("Error fetching cocktails:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching cocktails", error: error.message });
   }
 });
 

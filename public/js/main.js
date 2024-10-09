@@ -1,95 +1,81 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const drinkSelect = document.getElementById("drink-select");
-  const ingredientSelect = document.getElementById("ingredient-select");
-  const drinkDetails = document.getElementById("drink-details");
-  const cocktailList = document.getElementById("cocktail-list");
+  const ingredientSelects = document.querySelectorAll(".ingredient-select");
 
-  // Function to load drinks from MongoDB
-  async function loadDrinks() {
-    const response = await fetch("/api/cocktails");
-    const drinks = await response.json();
+  // Function to populate ingredients dropdowns
+  function populateIngredients() {
+    const ingredients = [
+      "Light rum",
+      "Lime",
+      "Sugar",
+      "Mint",
+      "Soda water",
+      "Bourbon",
+      "Angostura bitters",
+      "Gin",
+      "Campari",
+      "Sweet Vermouth",
+      "Tequila",
+      "Triple sec",
+      "Lime juice",
+      "Salt",
+      "Vodka",
+      "Ginger ale",
+      "Apricot brandy",
+      "Pineapple juice",
+    ];
 
-    drinks.forEach((drink) => {
-      const option = document.createElement("option");
-      option.value = drink.name;
-      option.textContent = drink.name;
-      drinkSelect.appendChild(option);
+    ingredientSelects.forEach((select) => {
+      ingredients.forEach((ingredient) => {
+        const option = document.createElement("option");
+        option.value = ingredient;
+        option.textContent = ingredient;
+        select.appendChild(option);
+      });
     });
-
-    // Initialize Materialize Select Dropdown
-    M.FormSelect.init(drinkSelect);
+    M.FormSelect.init(ingredientSelects);
   }
 
-  // Load ingredients from the server
-  async function loadIngredients() {
-    const response = await fetch("/api/ingredients");
-    const ingredients = await response.json();
-    ingredients.forEach((ingredient) => {
-      const option = document.createElement("option");
-      option.value = ingredient;
-      option.text = ingredient;
-      ingredientSelect.appendChild(option);
-    });
-    M.FormSelect.init(ingredientSelect);
-  }
-
-  // Event listener for drink search
-  document
-    .getElementById("drink-submit")
-    .addEventListener("click", async () => {
-      const selectedDrink = drinkSelect.value;
-      const response = await fetch(`/api/cocktails/${selectedDrink}`);
-      const drink = await response.json();
-      displayDrinkInfo(drink);
-    });
-
-  // Event listener for ingredient search
-  document
-    .getElementById("ingredient-submit")
-    .addEventListener("click", async () => {
-      const selectedIngredients = Array.from(
-        ingredientSelect.selectedOptions
-      ).map((option) => option.value);
-      const response = await fetch(
-        `/api/cocktails?ingredients=${selectedIngredients.join(",")}`
-      );
-      const cocktails = await response.json();
-      displayCocktailList(cocktails);
-    });
-
-  // Event listener to display drink details
-  document
-    .getElementById("drink-submit")
-    .addEventListener("click", async () => {
-      const selectedDrink = drinkSelect.value;
-      const response = await fetch(`/api/cocktails`);
-      const drinks = await response.json();
-
-      const drink = drinks.find((d) => d.name === selectedDrink);
-
-      if (drink) {
-        drinkDetails.innerHTML = `
-        <h2>${drink.name}</h2>
-        <img src="${drink.image}" alt="${drink.name}" style="width:200px;">
-        <p>Ingredients: ${drink.ingredients.join(", ")}</p>
-        <p>Instructions: ${drink.instructions}</p>
-      `;
-      }
-    });
-
-  // Display cocktails list
-  function displayCocktailList(cocktails) {
-    cocktailList.innerHTML = cocktails
-      .map(
-        (cocktail) =>
-          `<li><h3>${cocktail.name}</h3><p>${cocktail.ingredients.join(
-            ", "
-          )}</p></li>`
-      )
-      .join("");
-  }
-
-  // Initialize dropdowns on page load
-  loadDrinks();
-  loadIngredients();
+  populateIngredients();
 });
+
+document
+  .getElementById("ingredient-submit")
+  .addEventListener("click", async () => {
+    const selectedIngredients = Array.from(
+      document.querySelectorAll(".ingredient-select")
+    )
+      .map((select) => select.value.trim())
+      .filter(Boolean);
+
+    console.log("Selected ingredients:", selectedIngredients);
+
+    const response = await fetch(
+      `/api/cocktails?ingredients=${selectedIngredients.join(",")}`
+    );
+    const cocktails = await response.json();
+    console.log("Cocktails returned:", cocktails);
+    displayCocktailList(cocktails);
+  });
+
+// Display the cocktails matching the ingredients
+function displayCocktailList(cocktails) {
+  const cocktailList = document.getElementById("cocktail-list");
+  cocktailList.innerHTML = cocktails
+    .map(
+      (cocktail) => `
+    <li>
+      <h3>${cocktail.strDrink}</h3>
+      <p>Ingredients: ${[
+        cocktail.strIngredient1,
+        cocktail.strIngredient2,
+        cocktail.strIngredient3,
+        cocktail.strIngredient4,
+        cocktail.strIngredient5,
+      ]
+        .filter(Boolean)
+        .join(", ")}</p>
+    </li>
+  `
+    )
+    .join("");
+}
