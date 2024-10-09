@@ -38,52 +38,55 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 // Define the Cocktail schema directly here
-const cocktailSchema = new mongoose.Schema({
-  idDrink: { type: Number, required: true },
-  strDrink: { type: String, required: true },
-  strDrinkAlternate: { type: String },
-  strTags: { type: String },
-  strVideo: { type: String },
-  strCategory: { type: String },
-  strIBA: { type: String },
-  strAlcoholic: { type: String },
-  strGlass: { type: String },
-  strInstructions: { type: String },
-  strIngredient1: { type: String },
-  strIngredient2: { type: String },
-  strIngredient3: { type: String },
-  strIngredient4: { type: String },
-  strIngredient5: { type: String },
-  strIngredient6: { type: String },
-  strIngredient7: { type: String },
-  strIngredient8: { type: String },
-  strIngredient9: { type: String },
-  strIngredient10: { type: String },
-  strIngredient11: { type: String },
-  strIngredient12: { type: String },
-  strIngredient13: { type: String },
-  strIngredient14: { type: String },
-  strIngredient15: { type: String },
-  strMeasure1: { type: String },
-  strMeasure2: { type: String },
-  strMeasure3: { type: String },
-  strMeasure4: { type: String },
-  strMeasure5: { type: String },
-  strMeasure6: { type: String },
-  strMeasure7: { type: String },
-  strMeasure8: { type: String },
-  strMeasure9: { type: String },
-  strMeasure10: { type: String },
-  strMeasure11: { type: String },
-  strMeasure12: { type: String },
-  strMeasure13: { type: String },
-  strMeasure14: { type: String },
-  strMeasure15: { type: String },
-  strImageSource: { type: String },
-  strImageAttribution: { type: String },
-  strCreativeCommonsConfirmed: { type: String },
-  dateModified: { type: String },
-});
+const cocktailSchema = new mongoose.Schema(
+  {
+    idDrink: { type: Number, required: true },
+    strDrink: { type: String, required: true },
+    strDrinkAlternate: { type: String },
+    strTags: { type: String },
+    strVideo: { type: String },
+    strCategory: { type: String },
+    strIBA: { type: String },
+    strAlcoholic: { type: String },
+    strGlass: { type: String },
+    strInstructions: { type: String },
+    strIngredient1: { type: String },
+    strIngredient2: { type: String },
+    strIngredient3: { type: String },
+    strIngredient4: { type: String },
+    strIngredient5: { type: String },
+    strIngredient6: { type: String },
+    strIngredient7: { type: String },
+    strIngredient8: { type: String },
+    strIngredient9: { type: String },
+    strIngredient10: { type: String },
+    strIngredient11: { type: String },
+    strIngredient12: { type: String },
+    strIngredient13: { type: String },
+    strIngredient14: { type: String },
+    strIngredient15: { type: String },
+    strMeasure1: { type: String },
+    strMeasure2: { type: String },
+    strMeasure3: { type: String },
+    strMeasure4: { type: String },
+    strMeasure5: { type: String },
+    strMeasure6: { type: String },
+    strMeasure7: { type: String },
+    strMeasure8: { type: String },
+    strMeasure9: { type: String },
+    strMeasure10: { type: String },
+    strMeasure11: { type: String },
+    strMeasure12: { type: String },
+    strMeasure13: { type: String },
+    strMeasure14: { type: String },
+    strMeasure15: { type: String },
+    strImageSource: { type: String },
+    strImageAttribution: { type: String },
+    strCreativeCommonsConfirmed: { type: String },
+    dateModified: { type: String },
+  },
+  { collection: "Cocktails" }
+);
 
 // Create the Cocktail model
 const Cocktail = mongoose.model("Cocktail", cocktailSchema);
@@ -238,37 +241,50 @@ app.get("/allCocktails", (req, res) => {
     });
 });
 
-app.post("/searchCocktails", (req, res) => {
-  const { ingredients } = req.body;
+app.post("/searchCocktails", async (req, res) => {
+  const { ingredient1, ingredient2, ingredient3 } = req.body;
 
-  // Log the ingredients to verify what is being received
-  console.log("Received ingredients:", ingredients);
+  console.log("Received ingredients:", ingredient1, ingredient2, ingredient3);
 
-  Cocktail.find({
-    $or: [
-      { strIngredient1: { $in: ingredients } },
-      { strIngredient2: { $in: ingredients } },
-      { strIngredient3: { $in: ingredients } },
-      { strIngredient4: { $in: ingredients } },
-      { strIngredient5: { $in: ingredients } },
-      { strIngredient6: { $in: ingredients } },
-      { strIngredient7: { $in: ingredients } },
-      { strIngredient8: { $in: ingredients } },
-      { strIngredient9: { $in: ingredients } },
-      { strIngredient10: { $in: ingredients } },
-      { strIngredient11: { $in: ingredients } },
-      { strIngredient12: { $in: ingredients } },
-      { strIngredient13: { $in: ingredients } },
-      { strIngredient14: { $in: ingredients } },
-      { strIngredient15: { $in: ingredients } },
-    ],
-  })
-    .then((cocktails) => {
-      res.json(cocktails); // Send cocktails to frontend
-    })
-    .catch((err) => {
-      res.status(500).json({ error: "Error fetching cocktails" });
+  // Create an array of ingredients (filter out any empty ones)
+  const ingredients = [ingredient1, ingredient2, ingredient3].filter(Boolean);
+
+  // Build the query for each ingredient
+  const ingredientQuery = ingredients.map((ingredient) => {
+    return {
+      $or: [
+        { strIngredient1: { $regex: ingredient, $options: "i" } },
+        { strIngredient2: { $regex: ingredient, $options: "i" } },
+        { strIngredient3: { $regex: ingredient, $options: "i" } },
+        { strIngredient4: { $regex: ingredient, $options: "i" } },
+        { strIngredient5: { $regex: ingredient, $options: "i" } },
+        { strIngredient6: { $regex: ingredient, $options: "i" } },
+        { strIngredient7: { $regex: ingredient, $options: "i" } },
+        { strIngredient8: { $regex: ingredient, $options: "i" } },
+        { strIngredient9: { $regex: ingredient, $options: "i" } },
+        { strIngredient10: { $regex: ingredient, $options: "i" } },
+        { strIngredient11: { $regex: ingredient, $options: "i" } },
+        { strIngredient12: { $regex: ingredient, $options: "i" } },
+        { strIngredient13: { $regex: ingredient, $options: "i" } },
+        { strIngredient14: { $regex: ingredient, $options: "i" } },
+        { strIngredient15: { $regex: ingredient, $options: "i" } },
+      ],
+    };
+  });
+
+  try {
+    // Find cocktails that match all the provided ingredients
+    const cocktails = await Cocktail.find({
+      $and: ingredientQuery,
     });
+    console.log(`Found ${cocktails.length} cocktails`);
+
+    res.json(cocktails); // Send matching cocktails back to the frontend
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching cocktails", error: err });
+  }
+
+  console.log("Ingredient Query:", JSON.stringify(ingredientQuery, null, 2));
 });
 
 app.get("/logout", (req, res, next) => {
