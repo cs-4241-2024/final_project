@@ -87,7 +87,7 @@ export default function CreateEvent() {
                             <Label>Location</Label>
                             <Input className="pl-2" />
                         </TextField>
-                        <DatePicker name="date">
+                        <DatePicker name="date" isRequired>
                             <Label>Event Date</Label>
                             <Group className="flex flex-row input justify-between">
                                 <DateInput className="pl-2 flex flex-row">
