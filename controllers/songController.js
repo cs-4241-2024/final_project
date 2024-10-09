@@ -12,6 +12,7 @@ export const addSong = async (req, res) => {
         await client.connect();
         const db = client.db('SongWebsite');
 
+
         const newSong = {
             name: req.body.name,
             artist: req.body.artist,
@@ -19,7 +20,7 @@ export const addSong = async (req, res) => {
             duration: req.body.duration,
             genre: req.body.genre,
             releaseDate: req.body.releaseDate,
-            createdBy: req.body.createdBy,
+            createdBy: req.user._id,
             createdOn: new Date()
         };
 
