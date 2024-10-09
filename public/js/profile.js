@@ -1,4 +1,4 @@
-import { nav } from "./main.js";
+import { nav, createPostPageRedirect, createSongPageRedirect, createPlaylistPageRedirect } from "./main.js";
 import { makeURLWithParams, getParam } from "./urlHelpers.js";
 
 window.onload = function () {
@@ -7,9 +7,15 @@ window.onload = function () {
     retrieveUserFavoriteSongs();
     retrieveUserPosts();
     showUsername();
+    const createPostButton = document.getElementById("createPostButton");
+    createPostButton.onclick = createPostPageRedirect;
+
+    const createSongButton = document.getElementById("createSongButton");
+    createSongButton.onclick = createSongPageRedirect;
+
+    const createPlaylistButton = document.getElementById("createPlaylistButton");
+    createPlaylistButton.onclick = createPlaylistPageRedirect;
 }
-
-
 
 async function showUsername() {
     const userNamePlacement = document.getElementById("userNamePlacement");
@@ -21,8 +27,6 @@ async function showUsername() {
                 'Content-type': 'application/json'
             }
         });
-
-
         if (!response.ok) throw new Error("Could not retrieve username.");
         let userName = await response.text();
         userNamePlacement.textContent = `This is ${userName}'s profile page!`;
@@ -36,7 +40,6 @@ async function showUsername() {
     }
 }
 
-
 async function retrieveUserPlaylists() {
     const playlistHolder = document.getElementById("playlistHolder");
     let innerHTML = "";
@@ -47,9 +50,6 @@ async function retrieveUserPlaylists() {
                 'Content-type': 'application/json'
             }
         });
-
-
-
         if (!response.ok) throw new Error("Could not retrieve playlists.");
         let playlists = JSON.parse(await response.text());
 
@@ -65,21 +65,14 @@ async function retrieveUserPlaylists() {
 
             }
         }
-
-
-
-
-
         playlistHolder.innerHTML = innerHTML;
     }
     catch (error) {
         console.error("Error! Could not obtain playlists!", error);
         playlistHolder.innerHTML = `<p>Could not load playlists.</p>`;
     }
-
 }
 
-// NEW BELOW (FAV SONGS).............................................
 async function retrieveUserFavoriteSongs() {
     const favoriteSongHolder = document.getElementById("favoriteSongHolder");
     let innerHTML = "";
@@ -90,8 +83,6 @@ async function retrieveUserFavoriteSongs() {
                 'Content-type': 'application/json'
             }
         });
-
-
 
         if (!response.ok) throw new Error("Could not retrieve favorites.");
         let favorites = JSON.parse(await response.text());
@@ -108,11 +99,6 @@ async function retrieveUserFavoriteSongs() {
 
             }
         }
-
-
-
-
-
         favoriteSongHolder.innerHTML = innerHTML;
     }
     catch (error) {
@@ -121,7 +107,6 @@ async function retrieveUserFavoriteSongs() {
     }
 
 }
-
 
 async function retrieveUserPosts() {
     const postHolder = document.getElementById("postHolder");
@@ -133,9 +118,6 @@ async function retrieveUserPosts() {
                 'Content-type': 'application/json'
             }
         });
-
-
-
         if (!response.ok) throw new Error("Could not retrieve user's posts.");
         let posts = JSON.parse(await response.text());
 
@@ -151,17 +133,10 @@ async function retrieveUserPosts() {
 
             }
         }
-
-
-
-
-
         postHolder.innerHTML = innerHTML;
     }
     catch (error) {
         console.error("Error! Could not obtain user's posts!", error);
         postHolder.innerHTML = `<p>Could not load user's posts.</p>`;
     }
-
 }
-

@@ -37,19 +37,19 @@ const search = function () {
 }
 
 //Sends the user to the addPost.html page
-const createPostPageRedirect = function () {
+export const createPostPageRedirect = function () {
 	const redirectStirng = makeURL("addPost");
 	location.assign(redirectStirng);
 }
 
 //Sends the user to the addPost.html page
-const createSongPageRedirect = function () {
+export const createSongPageRedirect = function () {
 	const redirectStirng = makeURL("add-song");
 	location.assign(redirectStirng);
 }
 
 //Sends the user to the addPost.html page
-const createPlaylistPageRedirect = function () {
+export const createPlaylistPageRedirect = function () {
 	const redirectStirng = makeURL("addPlaylist");
 	location.assign(redirectStirng);
 }
