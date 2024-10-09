@@ -108,7 +108,7 @@ const Editor: React.FC = () => {
 
   useEffect(() => {
     if (uploadedData) {
-      // handleClearData();
+      handleClearData();
       console.log('Uploaded data changed:', uploadedData);
       uploadedData.forEach((section: any) => {
         const data: string[] = [];
@@ -183,7 +183,7 @@ const Editor: React.FC = () => {
       </div>
 
       <div className="AutoComplete">
-        <ClassComboBox humanities={setHumanityData} PE={setPhysicalEducationData} SS={setSocialScienceData} IQP={setIqpData} Math={setMathematicsData} FE={setFreeElectivesData} CS={setComputerScienceData} BS={setBasicScienceData} />
+        <ClassComboBox />
       </div>
 
       <div className="tracking-sheet-container">
