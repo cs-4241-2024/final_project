@@ -94,9 +94,7 @@ const Editor: React.FC = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log('File uploaded successfully:', data);
-        setUploadedData(data);
+        console.log('File uploaded successfully:', JSON.stringify(allData));
       } else {
         console.error('File upload failed:', response.statusText);
       }
