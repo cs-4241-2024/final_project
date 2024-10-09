@@ -1,17 +1,52 @@
-.main {
-    position: relative;
+.main-home {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
     width: 905px;
-    height: 680px;
-    margin: 0 auto;  /* Center the main container horizontally */
+    height: 75vh;
+    transform: translate(-50%, -50%); 
+    margin: 0 auto;
     background: white;
     border: 8px solid #1e1e1e;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 18px;
     color: black;
     display: flex;
-    flex-direction: column;  /* Stack the contents vertically */
-    justify-content: flex-start;  /* Ensure content starts at the top */
-    align-items: center;  /* Center content horizontally */
+    flex-direction: column;
+    justify-items: center;
+    justify-content: flex-start;
+    align-items: center;
+    
+}
+
+.main{
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    width: 905px;
+    height: auto;
+    transform: translate(-50%, -50%); 
+    margin: 0 auto;
+    background: white;
+    border: 8px solid #1e1e1e;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 18px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.instructions{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    padding: 20px;
+    text-align: left;
+    margin-top: 20px; 
 }
 
 .about-container {
@@ -59,4 +94,10 @@
     margin-top: 20px;
     gap: 20px;
     flex-direction: column;
+}
+
+.tracking-img{
+    height: auto;
+    width: auto;
+    margin-top: 20px;
 }
