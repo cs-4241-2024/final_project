@@ -60,48 +60,57 @@ const Editor: React.FC = () => {
 
   const handleClearData = () => {
     setClearData(true);
+    setHumanityData([]);
+    setPhysicalEducationData([]);
+    setSocialScienceData([]);
+    setIqpData([]);
+    setMathematicsData([]);
+    setFreeElectivesData([]);
+    setComputerScienceData([]);
+    setBasicScienceData([]);
     setTimeout(() => { setClearData(false); }, 0);
     console.log("All components have been reset");
   };
 
   const handleSaveData = async () => {
     const allData = {
-        humanityData,
-        physicalEducationData,
-        socialScienceData,
-        iqpData,
-        mathematicsData,
-        freeElectivesData,
-        computerScienceData,
-        basicScienceData
+      humanityData,
+      physicalEducationData,
+      socialScienceData,
+      iqpData,
+      mathematicsData,
+      freeElectivesData,
+      computerScienceData,
+      basicScienceData
     };
 
     try {
-        const response = await fetch('/saveData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(allData),
-        });
+      const response = await fetch('/saveData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(allData),
+      });
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log('File uploaded successfully:', data);
-            setUploadedData(data);
-        } else {
-            console.error('File upload failed:', response.statusText);
-        }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('File uploaded successfully:', data);
+        setUploadedData(data);
+      } else {
+        console.error('File upload failed:', response.statusText);
+      }
     } catch (error) {
-        console.error('Error during file upload:', error);
+      console.error('Error during file upload:', error);
     }
 
     console.log("Data saved");
-};
+  };
 
 
   useEffect(() => {
     if (uploadedData) {
+      handleClearData();
       console.log('Uploaded data changed:', uploadedData);
       uploadedData.forEach((section: any) => {
         const data: string[] = [];
@@ -109,44 +118,41 @@ const Editor: React.FC = () => {
         section.rows.forEach((row: any) => {
           const registrationsUsed = row["Registrations Used"];
           data.push(registrationsUsed);
-          console.log('Registrations used:', registrationsUsed);
-        })
-        if (requirement.includes("Major Qualifying Project")) {
-          setComputerScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Interactive Qualifying Project")) {
-          setIqpData(data);
-        } else if (requirement.includes("Humanities and Arts Requirement")) {
-          setHumanityData(data);
-        } else if (requirement.includes("Social Science Requirement")) {
-          setSocialScienceData(data);
-        } else if (requirement.includes("Physical Education Requirement")) {
-          setPhysicalEducationData(data);
-        } else if (requirement.includes("Probability and Statistics Requirement")) {
-          setMathematicsData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Mathematics Requirement")) {
-          setMathematicsData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Basic Science Discipline")) {
-          setBasicScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Basic and/or Engineering Science")) {
-          setBasicScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Core Requirement")) {
-          setComputerScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Systems Requirement")) {
-          setComputerScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Theory and Languages Requirement")) {
-          setComputerScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Design Requirement")) {
-          setComputerScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Social Implications")) {
-          setComputerScienceData(prevData => [...prevData, ...data]);
-        } else if (requirement.includes("Free Elective")) {
-          setFreeElectivesData(data);
-        } else {
-        }
+        });
+        // console.log("Data for", requirement);
+        // console.log(data);
 
-      }, [uploadedData]);
+        if (requirement.includes("wpimajorqualifyingproject(")) {
+          setComputerScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
+          // console.log("data", data);
+          // console.log(computerScienceData);
+        } else if (requirement.includes("interactivequalifyingproject")) {
+          setIqpData([...data, ...data, ...data]); // Direct replacement seems fine here
+        } else if (requirement.includes("humanitiesandartsrequirement")) {
+          setHumanityData(data);
+        } else if (requirement.includes("socialsciencerequirement")) {
+          setSocialScienceData(data);
+        } else if (requirement.includes("physicaleducationrequirement")) {
+          setPhysicalEducationData(data);
+        } 
+        else if (requirement.includes("probabilityandstatisticsrequirement") || requirement.includes("mathematicsrequirement")) {
+         setMathematicsData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
+        //   console.log("Mathematics data", mathematicsData);
+         } else if (requirement.includes("basicsciencediscipline") || requirement.includes("basicand/orengineeringscience")) {
+           setBasicScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
+        //   console.log("Basic Science data", basicScienceData);
+         } else if (requirement.includes("corerequirement") || requirement.includes("systemsrequirement") || requirement.includes("theoryandlanguagesrequirement") || requirement.includes("designrequirement") || requirement.includes("socialimplications")) {
+           setComputerScienceData(prevData => [...prevData, ...(Array.isArray(data) ? data : [data])]);
+        //   console.log("Computer Science data", computerScienceData);
+         } 
+        else if (requirement.includes("freeelective")) {
+          setFreeElectivesData(data);
+        }
+        else {}
+
+      });
     }
-  });
+  }, [uploadedData]);
 
 
 
@@ -174,7 +180,7 @@ const Editor: React.FC = () => {
           >
             Clear current data
           </Button>
-          <FileUploadButton setUploadedData={setUploadedData}/>
+          <FileUploadButton setUploadedData={setUploadedData} />
         </div>
       </div>
 
@@ -184,29 +190,29 @@ const Editor: React.FC = () => {
 
       <div className="tracking-sheet-container">
         <div className="column-1">
-          <SimpleTable title="Humanities (6)" numInputs={6} clear={clearData} data={humanityData}/>
-          <SimpleTable title="Physical Education (4)" numInputs={4} clear={clearData} data={physicalEducationData}/>
-          <SimpleTable title="Social Science (2)" numInputs={2} clear={clearData} data={socialScienceData}/>
-          <SimpleTable title="IQP (3)" numInputs={3} clear={clearData} data={iqpData}/>
-          <SimpleTable title="Mathematics (7)" numInputs={7} clear={clearData} data={mathematicsData}/>
+          <SimpleTable title="Humanities (6)" numInputs={6} clear={clearData} data={humanityData} />
+          <SimpleTable title="Physical Education (4)" numInputs={4} clear={clearData} data={physicalEducationData} />
+          <SimpleTable title="Social Science (2)" numInputs={2} clear={clearData} data={socialScienceData} />
+          <SimpleTable title="IQP (3)" numInputs={3} clear={clearData} data={iqpData} />
+          <SimpleTable title="Mathematics (7)" numInputs={7} clear={clearData} data={mathematicsData} />
         </div>
         <div className="column-2">
-          <SimpleTable title="Free Electives (3)" numInputs={3} clear={clearData} data={freeElectivesData}/>
-          <SimpleTable title="Computer Science (18)" numInputs={18} clear={clearData} data={computerScienceData}/>
+          <SimpleTable title="Free Electives (3)" numInputs={3} clear={clearData} data={freeElectivesData} />
+          <SimpleTable title="Computer Science (18)" numInputs={18} clear={clearData} data={computerScienceData} />
 
-          <SimpleTable title="Basic Science (5)" numInputs={5} clear={clearData} data={basicScienceData}/>
+          <SimpleTable title="Basic Science (5)" numInputs={5} clear={clearData} data={basicScienceData} />
         </div>
       </div>
-      
+
       <Button
-            variant="contained"
-            type="submit"
-            className="submit-button"
-            sx={{ backgroundColor: 'purple', color: 'white' }}
-            onClick={handleSaveData}
-          >
-            Save
-          </Button>
+        variant="contained"
+        type="submit"
+        className="submit-button"
+        sx={{ backgroundColor: 'purple', color: 'white' }}
+        onClick={handleSaveData}
+      >
+        Save
+      </Button>
 
     </div >
 
