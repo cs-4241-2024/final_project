@@ -97,11 +97,13 @@ async function run() {
             throw Error("Files not found!");
         }
         const file = req.files.file as UploadedFile;
-        console.log(file.tempFilePath);
-        const newPath = `${file.tempFilePath}.xlsx`
-        await file.mv(newPath);
+        // console.log(file.tempFilePath);
+        // const newPath = `${file.tempFilePath}.xlsx`
+        // await file.mv(newPath);
 
-        const workbook = XLSX.readFile(newPath);
+        // const workbook = XLSX.readFile(newPath);
+
+        const workbook = XLSX.read(file.data, { type: 'buffer' });
 
         const parsed = parseXLSX(workbook);
         if (parsed === null) {
