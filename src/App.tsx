@@ -1,8 +1,8 @@
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import Header from "./components/Header";
 import WeeklyCalendar from "./components/WeeklyCalendar";
-import CreateEvent from "./createEvent";
-import CreateTask from "./createTask";
+import CreateEvent from "./components/CreateEvent";
+import CreateTask from "./components/CreateTask";
 
 function App() {
     return (
