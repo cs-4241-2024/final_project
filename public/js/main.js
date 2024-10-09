@@ -87,6 +87,7 @@ const checkAuth = async function () {
 
 async function fetchSessionUser(){
   try {
+
     const response = await fetch('/get-session', {
       method: 'GET',
         credentials: 'include'  // Include cookies in the request
@@ -99,13 +100,14 @@ async function fetchSessionUser(){
       document.getElementById('currentUser').innerText = `Hi ${user.username}, change your password here`;
       document.getElementById('currentUser').style.color = 'black';
 
-      window.currentSessionUser = await response.json();
-      
+      window.currentSessionUser = user;
       document.getElementById('currentUser').innerText = `Logged in as: ${window.currentSessionUser.username}`;
+
     } else {
       
     }
   } catch (error) {
+
     console.error('Error fetching session user:', error);
   }
 }
