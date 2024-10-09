@@ -5,8 +5,6 @@ import CreateEvent from "./components/CreateEvent";
 import CreateTask from "./components/CreateTask";
 
 function App() {
-    const { isSignedIn } = useSession();
-
     return (
         <>
             <Header />
