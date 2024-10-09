@@ -404,6 +404,8 @@ async function addNewTask(groupIndex) {
 
     if (response.ok) {
       alert('Task added successfully');
+      await newFetchGroups(); // Re-fetch groups to get the updated task list
+      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
       
     } else {
       alert('Failed to add task');
@@ -439,7 +441,6 @@ async function fetchGroups() {
   * Function to fetch the groups a user is in
 */
 async function newFetchGroups() {
-  console.log("New Fetch groups");
   try {
     const response = await fetch('/get-session', {
       method: 'GET',
@@ -492,8 +493,8 @@ async function deleteTask(group, assIndex){
 
     if (response.ok) {
       console.log("task deleted")
-      newFetchGroups(); //If authenticated, fetch groups
-      showContent(groupId)
+      await newFetchGroups(); // Re-fetch groups to get the updated task list
+      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
     }
   } catch (error) {
     console.error('Error deleting task:', error);
@@ -515,8 +516,8 @@ async function completeTask(group, assIndex){
 
     if (response.ok) {
       console.log("task completed")
-      //location.reload();
-      showContent(groupId)
+      await newFetchGroups(); // Re-fetch groups to get the updated task list
+      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
     }
   } catch (error) {
     
@@ -629,6 +630,20 @@ function generateGroupHTML(data) {
 */
 function createGroupButtons(data) {
   const groupButtonsDiv = document.getElementById("groupButtons");
+      
+  // Clear current buttons before adding new ones
+  while (groupButtonsDiv.firstChild) {
+    groupButtonsDiv.removeChild(groupButtonsDiv.firstChild);
+  }
+  const btnAddGroup = document.createElement('button');
+
+  btnAddGroup.id = 'btnAddGroup';
+  btnAddGroup.textContent = '+';
+  btnAddGroup.onclick = function() {
+      showGroup();
+  };
+  groupButtonsDiv.appendChild(btnAddGroup)
+
   data.forEach((group, index) => {
     const button = document.createElement("button");
     button.id = `btnGroup${index + 1}`;
