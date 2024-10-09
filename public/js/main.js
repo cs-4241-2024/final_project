@@ -1,6 +1,8 @@
 let currentGroup = null; // To store the active group
+let currentGroupID = null;
 
 function showContent(groupId) {
+  console.log("Now showing content for " + groupId + " LOOK HERE")
   const contents = document.querySelectorAll('.content');
   contents.forEach(content => content.style.display = 'none');
   
@@ -10,6 +12,7 @@ function showContent(groupId) {
   if (groupId.replace(/\d+$/, '') === 'group') {
     let groupIndex = parseInt(groupId.match(/\d+/)[0], 10) - 1;
     currentGroup = window.allGroups[groupIndex].groupName;
+    currentGroupID = groupId
      
     let usersInGroup = [];
     for (let i = 0; i < window.allGroups[groupIndex].users.length; i++) {
@@ -90,19 +93,16 @@ async function fetchSessionUser(){
 
     const response = await fetch('/get-session', {
       method: 'GET',
-        credentials: 'include'  // Include cookies in the request
+      credentials: 'include'  // Include cookies in the request
     });
 
     if (response.ok) {
 
       const user = await response.json();
       console.log('Session user:', user);
-      document.getElementById('currentUser').innerText = `Hi ${user.username}, change your password here`;
-      document.getElementById('currentUser').style.color = 'black';
-
-      window.currentSessionUser = await response.json();
-      
-      document.getElementById('currentUser').innerText = `Logged in as: ${window.currentSessionUser.username}`;
+      document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
+      document.getElementById('currentUsername').value = user.username; // Pre-fill username
+      document.getElementById('currentUsername').disabled = true; // Disable editing
     } else {
       
     }
@@ -292,6 +292,33 @@ async function addGroup(event) {
   }
 }
 
+async function deleteGroup(groupName) {
+  if(!confirm(`Are you sure you want to delete the group: ${groupName}? This action cannot be undone.`)) {
+    return;
+  }
+
+  try{
+    const response = await fetch('/delete-group', {
+      method: 'POST',
+      body: JSON.stringify({ groupName }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      alert('Group deleted successfully');
+      location.reload();  // Reload the page to reflect the changes
+    } else {
+      const data = await response.json();
+      alert(`Error deleting group: ${data.message}`);
+    }
+  }catch (error){
+    console.error('Error deleting group:', error);
+    alert('There was an error deleting the group. Please try again.');
+  }
+}
+
 window.onload = async function () {
   checkAuth();
   fetchSessionUser();
@@ -299,8 +326,8 @@ window.onload = async function () {
   fetchUsers(); //If authenticated, fetch users
   newFetchGroups(); //If authenticated, fetch groups
 
-  
-  showContent("profile");
+  showContent("profile"); // Default to the profile page
+
 
   // Add logout functionality
   document.getElementById('logoutBtn').addEventListener('click', async function() {
@@ -323,61 +350,59 @@ window.onload = async function () {
   });
 }
 
+
 /*
   * Function to change the password
   */
 const changePassword = async function(event) {
-  // Get password input value
-  const password = document.getElementById("currentPassword").value;
+  const currentPassword = document.getElementById("currentPassword").value;
   const newPassword = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
-  // Check if currentPassword is correct
+  if (newPassword !== confirmPassword) {
+    alert('New password and confirm password do not match.');
+    return;
+  }
+
   try {
+    // Check if the current password is correct
     const response = await fetch('/check-password', {
       method: 'POST',
-      body: JSON.stringify({ password: password }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      body: JSON.stringify({ currentPassword }),
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     });
 
-    // Check if the user is authenticated
     if (response.ok) {
-      // Check if newPassword and confirmPassword match
-      if (newPassword === confirmPassword) {
-        // Update the password
-        try{
-          const updateResponse = await fetch('/update-password', {
-          method: 'POST',
-          body: JSON.stringify({ password: newPassword }),
-          headers: {
-            'Content-Type': 'application/json'
-          }});
-          
-          if (updateResponse.ok) {
-            alert('Password updated successfully');
-            // Clear the input fields
-            document.getElementById("currentPassword").value = '';
-            document.getElementById("newPassword").value = '';
-            document.getElementById("confirmPassword").value = '';
-          } else {
-            alert('Error updating password. Please try again.');
-          }
-        } catch (error) {
-          console.error('Error updating password:', error);
-          alert('There was an error updating the password. Please try again.');
-        };
-      // If the user entered the wrong username or password
-    }else{
-      alert('Wrong password');
-  
-      }  
+
+      console.log('Sending new password:', newPassword);
+      // Update the password
+      const updateResponse = await fetch('/update-password', {
+        method: 'POST',
+        body: JSON.stringify({ newPassword }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+      // Clear out the input fields
+      document.getElementById("currentPassword").value = '';
+      document.getElementById("newPassword").value = '';
+      document.getElementById("confirmPassword").value = '';
+
+      if (updateResponse.ok) {
+        alert('Password updated successfully');
+
+      } else {
+        const updateData = await updateResponse.json();
+        alert('Error updating password: ' + (updateData.message || 'Please try again.'));
+      }
+    } else {
+      const data = await response.json();
+      alert(data.message || 'Error checking current password.');
     }
   } catch (error) {
-    console.error('Error checking password:', error);
-    alert('There was an error checking the password. Please try again.');
-  } 
+    console.error('Error updating password:', error);
+    alert('An error occurred. Please try again.');
+  }
 }
 
 async function addNewTask(groupIndex) {
@@ -403,7 +428,7 @@ async function addNewTask(groupIndex) {
     });
 
     if (response.ok) {
-      alert('Task added successfully');
+      alert(`Task added successfully to group${groupIndex}`);
       await newFetchGroups(); // Re-fetch groups to get the updated task list
       showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
       
@@ -413,27 +438,6 @@ async function addNewTask(groupIndex) {
   } catch (error) {
     console.error('Error adding task:', error);
     alert('An error occurred. Please try again.');
-  }
-}
-
-/*
-  * Function to fetch the groups a user is in
-*/
-async function fetchGroups() {
-
-  try {
-    const response = await fetch('/get-group-info');
-    if (response.ok) {
-      
-    } else {
-      
-    }
-    const groups = await response.json();
-    window.allGroups = groups;
-    generateGroupHTML(window.allGroups);
-    createGroupButtons(window.allGroups);
-  } catch (error) {
-    console.error('Error fetching users:', error);
   }
 }
 
@@ -494,11 +498,11 @@ async function deleteTask(groupId, assIndex){
     if (response.ok) {
       console.log("task deleted")
       await newFetchGroups(); // Re-fetch groups to get the updated task list
-      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
+      showContent(currentGroupID)
     }
   } catch (error) {
     console.error('Error deleting task:', error);
-    alert('There was an error deleting the task. Please try again.');
+    alert('There was an error deleting the task. Please try again. fuuuuuck' );
   }
 }
 
@@ -515,7 +519,7 @@ async function completeTask(groupId, assIndex){
     if (response.ok) {
       console.log("task completed")
       await newFetchGroups(); // Re-fetch groups to get the updated task list
-      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
+      showContent(currentGroupID); // Re-render the group content to reflect new tasks
     }
   } catch (error) {
     
@@ -529,6 +533,11 @@ async function completeTask(groupId, assIndex){
 function generateGroupHTML(data) {
   data.forEach((group, index) => {
     
+    // Clear the existing content first (if any)
+    const groupEl = document.getElementById(`group${index + 1}`);
+    if (groupEl) {
+      groupEl.remove(); // Remove the existing group HTML
+    }
 
     // Group Members Names
     const userNames = group.users.map(user => user.username).join(", ");
@@ -569,6 +578,8 @@ function generateGroupHTML(data) {
         <div class="group-header">
             <h1>Welcome to ${group.groupName}</h1>
             <p>Member Names: ${userNames}</p>
+            <button class="leave-group-btn" onclick="leaveGroup('${group.groupName}')">Leave Group</button>
+            <button class="delete-group-btn" onclick="deleteGroup('${group.groupName}')">Delete Group</button>
         </div>
         <div class="calendar-tasks-container">
           <div id="calendar${index + 1}" class="calendar-section"></div>
@@ -650,3 +661,46 @@ function createGroupButtons(data) {
     groupButtonsDiv.appendChild(button); // Add button to the sidebar
   });
 }
+
+
+// Function to handle leaving the group
+async function leaveGroup(groupName) {
+  console.log(groupName)
+  const confirmation = confirm("Are you sure you want to leave this group?");
+  if (confirmation) {
+    // Remove the user from the group (logic for leaving group goes here)
+    // window.allGroups[groupIndex].users = window.allGroups[groupIndex].users.filter(user => user.username !== currentUser); // Assuming you have a currentUser variable
+    try{
+      const response = await fetch('/leave-group', {
+        method: 'POST',
+        body: JSON.stringify({groupName: groupName}),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        await newFetchGroups(); // Re-fetch groups to get the updated task list
+        showContent("profile"); // Re-render the group content to reflect new tasks
+      }
+
+    }catch{
+      console.error('Error leaving group:', error);
+      alert('There was an error leaving the group. Please try again.');
+    }
+    // Re-render the groups (or update the UI as needed)
+    generateGroupHTML(window.allGroups);
+    alert("You have left the group.");
+  }
+}
+
+// Function to handle deleting the group
+/*function deleteGroup(groupName) {
+  console.log(groupName)
+  const confirmation = confirm("Are you sure you want to delete this group?");
+  if (confirmation) {
+    // Remove the group from the list of groups
+    window.allGroups.splice(groupIndex, 1);
+
+    // Re-render the groups (or update the UI as needed)
+    generateGroupHTML(window.allGroups);
+    alert("The group has been deleted.");
+  }
+}*/

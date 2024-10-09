@@ -80,6 +80,22 @@ app.post('/add-group', async (req, res) => {
     }
 });
 
+app.post('/delete-group', async (req, res) => {
+    const { groupName } = req.body;
+
+    try{
+        const result = await groupCollection.deleteOne({groupName});
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+        res.json({ message: 'Group deleted' });
+    }catch(error){
+        console.error('Error deleting group', error);
+        res.status(500).json({ message: 'Error deleting group', error });
+    }
+});
+
 app.post('/addTask', async (req, res) => {
     const { newTask } = req.body;
     const { title, user, date, groupName } = newTask;
@@ -357,57 +373,70 @@ app.post('/login', async (req, res) => {
 
 //Check if the user logged in submitted the correct current password to change their password
 app.post('/check-password', async (req, res) => {
-    const sessionCookie = req.cookies[sessionCookieName];
-    const { password } = req.body;
+    const { currentPassword } = req.body;
 
     try {
-        // Find the user by username
-        const user = await usersCollection.findOne({ username: sessionCookie.username });
+        const sessionCookie = req.cookies[sessionCookieName];
+        if (!sessionCookie) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Find the user by userId in the session cookie
+        const user = await usersCollection.findOne({ _id: new ObjectId(sessionCookie.userId) });
 
         if (!user) {
-            // If no user found, return an error
-            return res.status(400).json({ message: 'Invalid username or password' });
+            return res.status(400).json({ message: 'Invalid session. Please log in again.' });
         }
 
         // Compare the provided password with the hashed password in the database
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
 
         if (!isMatch) {
-            // If password doesn't match, return an error
-            return res.status(400).json({ message: 'Invalid username or password' });
+            return res.status(400).json({ message: 'Incorrect current password' });
         }
 
-        console.log('Login successful:', user.username);
-        
-        // If login is successful, return a success message
-        return res.status(200).json({ message: 'Login successful' });
+        return res.status(200).json({ message: 'Password is correct' });
+
+
 
     } catch (error) {
         // Handle any errors
-        console.error('Error logging in:', error);
-        res.status(500).json({ message: 'Error logging in', error });
+        console.error('Error Checking Password:', error);
+        res.status(500).json({ message: 'Error Checking Password', error });
     }
 });
 
 //Change password
 app.post('/update-password', async (req, res) => {
-    const { password } = req.body;
+    const { newPassword } = req.body;
 
     console.log('Request Body:', req.body); // Debug log
+    console.log('Received new password for update:', req.body);
+
+    if (!newPassword) {
+        return res.status(400).json({ message: 'New password is required' });
+    }
 
     try {
-        // Hash the new password
-        const hashedPassword = await bcrypt.hash(password, 10);
         const sessionCookie = req.cookies[sessionCookieName];
+        if (!sessionCookie) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         // Update the user's password in the database
         await usersCollection.updateOne(
-            { username: sessionCookie.username },
+            { _id: new ObjectId(sessionCookie.userId) },
             { $set: { password: hashedPassword } }
         );
 
         // Return a success message
-        return res.status(200).json({ message: 'Success' });
+        console.log('Password updated successfully');
+
+        return res.status(200).json({ message: 'Password updated successfully' });
+
 
     } catch (error) {
         // Handle any errors
@@ -416,10 +445,55 @@ app.post('/update-password', async (req, res) => {
     }
 });
 
+//
+
 //Logout
 app.post('/logout', (req, res) =>{
     res.clearCookie(sessionCookieName);
     res.json({ message: 'Logged out successfully' });
+});
+
+// Leave a group
+app.post('/leave-group', async (req, res) => {
+    const { groupName } = req.body;
+    const sessionCookie = req.cookies[sessionCookieName];
+
+    try {
+        if (!sessionCookie) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Find the group
+        const group = await groupCollection.findOne({ groupName });
+        console.log('Group:', group);
+
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        // Find the user in the group
+        const userIndex = group.users.findIndex(user => user.username === sessionCookie.username);
+        console.log('User index:', userIndex);
+
+        if (userIndex === -1) {
+            return res.status(400).json({ message: 'User not found in group' });
+        }
+
+        // Remove the user from the group
+        group.users.splice(userIndex, 1);
+
+        // Update the group in the database
+        await groupCollection.updateOne(
+            { groupName },
+            { $set: { users: group.users } }
+        );
+
+        return res.status(200).json({ message: 'Left group successfully' });
+
+    } catch (error) {
+        console.error('Error leaving group:', error);
+        res.status(500).json({ message: 'Error leaving group', error });
+    }
 });
 
 function authentication(req,res,next){
