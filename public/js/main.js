@@ -237,6 +237,21 @@ const ingredients = [
   "Zima",
 ];
 
+let currentUser = null;
+
+// Fetch the logged-in user's information
+fetch("/getCurrentUser")
+  .then((response) => response.json())
+  .then((data) => {
+    currentUser = data.username;
+    console.log("Logged-in user:", currentUser);
+  })
+  .catch((error) => console.error("Error fetching current user:", error));
+
+document.getElementById("myDrinksButton").addEventListener("click", () => {
+  window.location.href = "myPage.html";
+});
+
 $(document).ready(function () {
   $(".ingredient-select").each(function () {
     $(this).empty();
@@ -280,7 +295,7 @@ function triggerSearch() {
       .then((response) => response.json())
       .then((data) => {
         const resultsDiv = document.getElementById("results");
-        resultsDiv.innerHTML = ""; // Clear previous results
+        resultsDiv.innerHTML = "";
 
         data.forEach((cocktail) => {
           let ingredientsHtml = "";
@@ -295,8 +310,9 @@ function triggerSearch() {
             }
           }
 
+          // Collapsible trigger and content for reviews
           resultsDiv.innerHTML += `
-            <div>
+            <div id="drink-${cocktail.idDrink}" class="cocktail-item">
               <h3>${cocktail.strDrink}</h3>
               <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
               <p><strong>Category:</strong> ${cocktail.strCategory}</p>
@@ -305,9 +321,41 @@ function triggerSearch() {
               <p><strong>Ingredients:</strong></p>
               ${ingredientsHtml}
               <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
+
+              <!-- Add/Remove Drink Buttons -->
+              <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')">Add to My List</button>
+              <button onclick="removeFromMyList(${cocktail.idDrink})">Remove from My List</button>
+
+              <!-- Review Form -->
+              <form class="review-form" onsubmit="submitReview(event, ${cocktail.idDrink}, '${cocktail.strDrink}')">
+                <label for="rating-${cocktail.idDrink}">Rating (1-5):</label>
+                <input type="number" min="1" max="5" id="rating-${cocktail.idDrink}" required />
+
+                <textarea id="reviewText-${cocktail.idDrink}" placeholder="Write your review..." required></textarea>
+                
+                <button type="submit" class="btn">Submit Review</button>
+              </form>
+
+              <!-- Collapsible Trigger for Reviews -->
+              <ul class="collapsible">
+                <li>
+                  <div class="collapsible-header">
+                    <!-- Replaced <a> with <button> to prevent scrolling -->
+                    <button class="btn blue" onclick="fetchReviews(${cocktail.idDrink})">View Reviews</button>
+                  </div>
+                  <div class="collapsible-body">
+                    <div id="reviews-${cocktail.idDrink}">
+                      <p>Click "View Reviews" to see the reviews.</p>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
           `;
         });
+
+        const collapsibleElems = document.querySelectorAll(".collapsible");
+        M.Collapsible.init(collapsibleElems);
       })
       .catch((error) => console.error("Error fetching cocktails:", error));
   } else {
@@ -315,59 +363,172 @@ function triggerSearch() {
   }
 }
 
-// Manual Search
-// Populate dropdowns with ingredients and include a default empty option
-// ingredients.forEach((ingredient) => {
-//   $(".ingredient-select").append(
-//     `<option value="">Select an ingredient</option>`
-//   );
-//   $(".ingredient-select").append(
-//     `<option value="${ingredient}">${ingredient}</option>`
-//   );
-// });
+// Function to fetch reviews for a drink
+function fetchReviews(idDrink) {
+  fetch(`/getReviews/${idDrink}`)
+    .then((response) => response.json())
+    .then((reviews) => {
+      const reviewsDiv = document.getElementById(`reviews-${idDrink}`);
+      if (reviews.length > 0) {
+        reviewsDiv.innerHTML = reviews
+          .map(
+            (review) => `
+              <div>
+                <strong>${review.username}</strong> rated ${review.rating}/5
+                <p>${review.reviewText}</p>
+              </div>
+            `
+          )
+          .join("");
+      } else {
+        reviewsDiv.innerHTML =
+          "<p>No reviews yet. Be the first to add one!</p>";
+      }
+    })
+    .catch((error) => console.error("Error fetching reviews:", error));
+}
 
-// document.getElementById("ingredientForm").addEventListener("submit", (e) => {
-//   e.preventDefault();
-//   const ingredients = {
-//     ingredient1: document.getElementById("ingredient1").value,
-//     ingredient2: document.getElementById("ingredient2").value,
-//     ingredient3: document.getElementById("ingredient3").value,
-//   };
+// Helper function to render the ingredients list
+function renderIngredients(cocktail) {
+  let ingredientsHtml = "";
+  for (let i = 1; i <= 15; i++) {
+    const ingredient = cocktail[`strIngredient${i}`];
+    const measure = cocktail[`strMeasure${i}`];
+    if (ingredient) {
+      ingredientsHtml += `<p>${measure ? measure : ""} ${ingredient}</p>`;
+    }
+  }
+  return ingredientsHtml;
+}
 
-//   fetch("/searchCocktails", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(ingredients),
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       const resultsDiv = document.getElementById("results");
-//       resultsDiv.innerHTML = ""; // Clear previous results
+// Submit a review for a drink
+function submitReview(event, idDrink, strDrink) {
+  event.preventDefault();
 
-//       data.forEach((cocktail) => {
-//         let ingredientsHtml = "";
+  // Check if the user has already written a review for this drink
+  fetch(`/getReviews/${idDrink}`)
+    .then((response) => response.json())
+    .then((reviews) => {
+      const userHasReviewed = reviews.some(
+        (review) => review.username === currentUser
+      );
 
-//         for (let i = 1; i <= 15; i++) {
-//           const ingredient = cocktail[`strIngredient${i}`];
-//           const measure = cocktail[`strMeasure${i}`];
-//           if (ingredient) {
-//             ingredientsHtml += `<p>${measure ? measure : ""} ${ingredient}</p>`;
-//           }
-//         }
+      if (userHasReviewed) {
+        alert("You have already written a review for this drink.");
+        return;
+      } else {
+        const rating = document.getElementById(`rating-${idDrink}`).value;
+        const reviewText = document.getElementById(
+          `reviewText-${idDrink}`
+        ).value;
 
-//         resultsDiv.innerHTML += `
-//             <div>
-//               <h3>${cocktail.strDrink}</h3>
-//               <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
-//               <p><strong>Category:</strong> ${cocktail.strCategory}</p>
-//               <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
-//               <p><strong>Alcoholic:</strong> ${cocktail.strAlcoholic}</p>
-//               <p><strong>Ingredients:</strong></p>
-//               ${ingredientsHtml}
-//               <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
-//             </div>
-//           `;
-//       });
-//     })
-//     .catch((error) => console.error("Error fetching cocktails:", error));
-// });
+        // Validate rating input
+        if (rating < 1 || rating > 5) {
+          alert("Please enter a rating between 1 and 5.");
+          return;
+        }
+
+        // Post the review to the backend
+        fetch("/addReview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idDrink, strDrink, rating, reviewText }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data.message);
+            fetchReviews(idDrink);
+          })
+          .catch((error) => console.error("Error submitting review:", error));
+      }
+    })
+    .catch((error) => console.error("Error fetching reviews:", error));
+}
+
+// Edit a review
+function editReview(reviewId) {
+  const newRating = prompt("Enter new rating (1-5):");
+  const newReviewText = prompt("Enter new review:");
+
+  fetch("/editReview", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      reviewId,
+      rating: newRating,
+      reviewText: newReviewText,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      alert(data.message);
+      // Refresh reviews after editing
+      fetchReviews(idDrink);
+    })
+    .catch((error) => console.error("Error editing review:", error));
+}
+
+// Delete a review
+function deleteReview(reviewId) {
+  if (confirm("Are you sure you want to delete this review?")) {
+    fetch("/deleteReview", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reviewId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.message);
+        // Refresh reviews after deleting
+        fetchReviews(idDrink);
+      })
+      .catch((error) => console.error("Error deleting review:", error));
+  }
+}
+
+// Add drink to user's list
+function addToMyList(idDrink, strDrink) {
+  // Fetch the user's drinks to check if the drink already exists in their list
+  fetch("/getMyDrinks")
+    .then((response) => response.json())
+    .then((drinks) => {
+      const isAlreadyAdded = drinks.some((drink) => drink.idDrink === idDrink);
+
+      if (isAlreadyAdded) {
+        alert("This drink is already in your list.");
+      } else {
+        // If not already added, proceed to add the drink
+        fetch("/addDrink", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idDrink, strDrink }),
+        })
+          .then((response) => response.json())
+          .then((data) => alert(data.message))
+          .catch((error) => console.error("Error adding drink:", error));
+      }
+    })
+    .catch((error) => console.error("Error fetching user's drinks:", error));
+}
+
+// Remove drink from user's list
+function removeFromMyList(idDrink) {
+  fetch("/removeDrink", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ idDrink }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      alert(data.message);
+      // Optionally remove the drink element from the page
+      const drinkElement = document.getElementById(`drink-${idDrink}`);
+      if (drinkElement) drinkElement.remove();
+    })
+    .catch((error) => console.error("Error removing drink:", error));
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const elems = document.querySelectorAll(".dropdown-trigger");
+  M.Dropdown.init(elems, { hover: true });
+});
