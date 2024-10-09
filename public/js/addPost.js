@@ -105,8 +105,12 @@ export async function submitNewPost(ev){
         headers:{'Content-Type': 'application/json'},
         body: JSON.stringify(newPost)
     })
+    let idOfNewPost = await response.text()
+    console.log(idOfNewPost)
+    let redirectURL = document.location.origin+"/forum.html?id="+idOfNewPost
+    console.log(redirectURL)
+    window.location.href = redirectURL
 
-    console.log(await response.text())
 }
 
 window.onload = function () {
