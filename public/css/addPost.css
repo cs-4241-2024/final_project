@@ -46,7 +46,7 @@
 .postTopicDropDown-vis {
     position: absolute;
     background-color: #ffffff;
-    overflow: visible;
+    overflow: auto;
     border: 1px solid #dddddd;
     display: block;
     max-height: 500px;
