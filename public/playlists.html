@@ -4,12 +4,10 @@
 	<head>
 		<title>CS4241 Assignment 2</title>
 		<meta charset="utf-8">
-		<script src="js/main.js" type="module"></script>
+		<script src="js/playlistPage.js" type="module"></script>
 		<link rel="stylesheet" href="css/main.css">
 		<link rel="stylesheet" href="css/playlist.css">
 
-		<!-- get rid of favicon error -->
-		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	</head>
 
 	<body>
@@ -17,25 +15,22 @@
 		<nav class="navbar"></nav>
 
 		<!-- Title of the playlist -->
-		<h1 id="playlistTitle">Playlist: (Playlist name)</h1>
+		<div id="titleContainer">
+			<h1 id="playlistTitle">Playlist: (Playlist name)</h1>
+		</div>
 
 		<!-- Has a new section for each song in the playlist. This will be dynamically inserted using innerHTML-->
 		<div id="playlistSongsArea">
-			<section class="songSection">
-				<h2 class="songInfo">SongName by ArtistName</h2>
-
-				<!-- Deletes the specific song from the playlist -->
-				<button class="button">Delete Song</button>
-			</section>
-
-			<section class="songSection">
-				<h2 class="songInfo">SongName by ArtistName</h2>
-
-				<!-- Deletes the specific song from the playlist -->
-				<button class="button">Delete Song</button>
-			</section>
 		</div>
-		<button class="button" id="addSongButton">Add Song</button>
+
+		<div id="divForAdd" class="songDropDownContainer">
+			<button id="toggleButton" class="addSongButton">Add Song</button>
+			<button id="editTitleButton" class="addSongButton">Edit Title</button>
+			<div id="songDropDown" class="addSongDropDown-hidden" >
+				<input type="text" placeholder="Search.." id="songSearch" class="songSearch" value="">
+
+			</div>
+		</div>
 	</body>
 
 </html>

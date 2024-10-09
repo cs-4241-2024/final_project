@@ -1,5 +1,6 @@
 // FRONT-END (CLIENT) JAVASCRIPT HERE
-import { makeURLWithParams, getParam } from "./urlHelpers.js";
+import { makeURLWithParams, getParam, makeURL } from "./urlHelpers.js";
+
 
 
 function iloveClicking() {
@@ -34,13 +35,63 @@ const search = function () {
 	}
 }
 
+//Sends the user to the addPost.html page
+const createPostPageRedirect = function () {
+	const redirectStirng = makeURL("addPost");
+	location.assign(redirectStirng);
+}
+
 window.onload = function () {
 	nav()
 	const searchButton = document.getElementById("searchButton");
 	searchButton.onclick = search;
-}
+	const createPostButton = document.getElementById("createPostButton");
+	createPostButton.onclick = createPostPageRedirect;
 
-// redirect to add song page
-document.getElementById("addSongButton").addEventListener("click", function() {
-	window.location.href = "add-song.html";
-});
+
+	const postContainer = document.getElementById("postContainer");
+
+	async function recoverRecentPosts() {
+		try {
+			const response = await fetch('/api/posts/recent');
+			if (!response.ok) throw new Error("Failure.")
+			const posts = await response.json();
+			showPosts(posts);
+		}
+		catch (error) {
+			console.error("Couldn't recover recent posts ", error);
+
+		}
+	}
+	function showPosts(posts) {
+		postContainer.innerHTML = '';
+		posts.forEach(post => {
+			const postSection = document.createElement("section");
+			postSection.className = "postSection";
+
+			const postTitle = document.createElement("h2");
+			postTitle.className = "postTitle";
+
+			const postLink = document.createElement("a");
+			postLink.className = "postLink";
+
+			postLink.textContent = post.title;
+			//console.log(post._id);
+			postLink.href = makeURLWithParams("forum", "id", post._id);
+			//console.log(makeURLWithParams("forum", "id", post._id));
+
+			const postContent = document.createElement("p");
+			postContent.className = "postContent";
+			postContent.textContent = post.content;
+
+			postTitle.appendChild(postLink);
+			postSection.appendChild(postTitle);
+			postSection.appendChild(postContent);
+			postContainer.appendChild(postSection);
+
+
+		});
+	}
+
+	recoverRecentPosts();
+}

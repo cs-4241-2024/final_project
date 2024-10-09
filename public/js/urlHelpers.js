@@ -13,3 +13,11 @@ export function getParam(urlWithParams, paramName) {
 	let params = new URLSearchParams(url.search);
 	return params.get(paramName);
 }
+
+//Makes a url without parameters. Only works on pages where the URL doesn't have any parameters.
+export function makeURL(htmlFileName) {
+	let urlString = window.location.href
+	urlString = urlString.slice(0, -(window.location.pathname.length));
+	urlString += "/" + htmlFileName + ".html";
+	return urlString;
+}

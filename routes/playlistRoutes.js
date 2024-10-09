@@ -4,7 +4,7 @@ import {
     createPlaylist,
     deletePlaylist,
     addSongToPlaylist,
-    getSongsInPlaylist, searchPlaylists, updatePlaylistName
+    getSongsInPlaylist, searchPlaylists, updatePlaylistName, deleteSongFromPlaylist, moveSong
 } from "../controllers/playlistControllers.js"
 import {isAuthed} from "../server.js";
 
@@ -21,9 +21,13 @@ router.delete('/:id',isAuthed, deletePlaylist);
 // add song to playlist
 router.post('/:id/add-song',isAuthed, addSongToPlaylist);
 
+router.post('/:id/delete-song',isAuthed, deleteSongFromPlaylist);
+
 // get all songs in a playlist by id
 router.get('/:id/songs', getSongsInPlaylist);
 
 router.post('/search', searchPlaylists);
+
+router.post('/moveSong',isAuthed, moveSong);
 
 export default router;

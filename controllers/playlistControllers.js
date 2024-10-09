@@ -116,6 +116,48 @@ export async function addSongToPlaylist(req,res) {
         res.send('error connecting to db')
     }
 }
+
+export async function deleteSongFromPlaylist(req,res) {
+    let userID = req.user._id.toString()
+    let playlistID = req.params.id
+    let songToDelete = req.body.songID
+    console.log("songToDelete")
+    console.log(userID)
+    console.log(playlistID)
+    console.log(songToDelete)
+    try {
+
+        let playlistTable = await client.db(Dbname).collection("Playlists")
+        let playlist = await playlistTable.findOne({_id: new ObjectId(playlistID),createdBy: userID})
+        let playlistSongs = playlist.songs
+        let indexToRemove = playlistSongs.indexOf(songToDelete)
+        if(indexToRemove !== -1) {
+            playlistSongs.splice(indexToRemove, 1)
+        }
+        else{
+            res.status(400)
+            res.send('song not found in db')
+            return
+        }
+
+        let updateStrat = {
+            $set: {
+                songs: playlistSongs
+            }
+        }
+
+        let playListUpdate = await playlistTable.findOneAndUpdate({_id: new ObjectId(playlistID),createdBy: userID}, updateStrat)
+
+
+        res.status(200)
+        res.send("song deleted")
+    } catch (e) {
+        console.log(e)
+        res.status(404)
+        res.send('error connecting to db')
+    }
+}
+
 export async function getSongsInPlaylist(req,res) {
     let playlistID = req.params.id
     console.log(playlistID)
@@ -184,6 +226,52 @@ export async function searchPlaylists(req,res) {
         console.log(e)
         res.status(400)
         res.send('bad search parameters')
+    }
+}
+
+export async function moveSong(req,res){
+    let parms = req.body
+    console.log("parms stryder")
+    console.log(parms)
+    try {
+        let playlistTable = await client.db(Dbname).collection("Playlists")
+        let playlist = await playlistTable.findOne({_id: new ObjectId(parms.playlist)})
+
+        let songs_IDs = playlist.songs
+        let indexToMove = songs_IDs.indexOf(parms.song)
+        let indexToMoveTo=parms.movement+indexToMove
+
+        if(indexToMoveTo<0 || indexToMoveTo>= songs_IDs.length){
+            res.status(400)
+            res.send('movement out of range')
+            return
+        }
+
+        let temp = songs_IDs[indexToMove]
+        songs_IDs[indexToMove] = songs_IDs[indexToMoveTo]
+        songs_IDs[indexToMoveTo] = temp
+
+        let updateScheme = {
+            $set: {
+                songs: songs_IDs
+            },
+        }
+        let updateResult = await playlistTable.updateOne({
+            _id: new ObjectId(parms.playlist),
+            createdBy: req.user._id.toString()
+        }, updateScheme)
+
+        if (updateResult) {
+            res.status(200)
+            res.send("move complete")
+        } else {
+            res.status(400)
+            res.send('move failed not found in db??')
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(404)
+        res.send('error connecting to db')
     }
 }
 
