@@ -1,23 +1,26 @@
-import { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+import { useEffect, useState } from "react";
 
-const range = (keyCount: number) => [...Array(keyCount).keys()]
+const range = (keyCount: number) => [...Array(keyCount).keys()];
 
 const areDatesSame = (first: Date, second: Date) => {
-  return first.getFullYear() === second.getFullYear() &&
-  first.getMonth() === second.getMonth() &&
-  first.getDate() === second.getDate()
-}
+    return (
+        first.getFullYear() === second.getFullYear() &&
+        first.getMonth() === second.getMonth() &&
+        first.getDate() === second.getDate()
+    );
+};
 
 const addDateBy = (date: Date, count: number) => {
-  const d = new Date(date);
-  return new Date(d.setDate(d.getDate() + count))
-}
+    const d = new Date(date);
+    return new Date(d.setDate(d.getDate() + count));
+};
 
 const getSunday = () => {
-  const today = new Date();
-  const first = today.getDate() - today.getDay();
-  return new Date(today.setDate(first))
-}
+    const today = new Date();
+    const first = today.getDate() - today.getDay();
+    return new Date(today.setDate(first));
+};
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
 const HOUR_HEIGHT = 30;
@@ -25,11 +28,11 @@ const HOUR_MARGIN_TOP = 15;
 
 export default function WeeklyCalendar() {
     const [sundayDate, setSundayDate] = useState(getSunday());
-    const [events] = useState([
-        { date: new Date(2022, 11, 20, 10), text: "first hi", howLong: 3 },
-        { date: new Date(2022, 11, 22, 15), text: "second", howLong: 2 },
-        { date: new Date(2022, 11, 27, 11), text: "third", howLong: 2 },
-        { date: new Date(2023, 0, 2, 13), text: "forth", howLong: 2 },
+    const [events, setEvents] = useState([
+        { date: new Date(2024, 9, 11, 10), text: "first", howLong: 3 },
+    ]);
+    const [tasks, setTasks] = useState([
+        { date: new Date(2024, 9, 11, 10), text: "second" },
     ]);
 
     const hourNow = new Date().getHours();
@@ -46,6 +49,35 @@ export default function WeeklyCalendar() {
     //     date.setHours(from);
     //     setEvents((prev) => [...prev, { text, date, howLong: to - from }]);
     // };
+    const { isSignedIn, user } = useUser();
+
+    useEffect(() => {
+        if (!isSignedIn) {
+            return;
+        }
+
+        fetch("/event", {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.id}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setEvents(data);
+            });
+
+        fetch("/task", {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.id}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setTasks(data);
+            });
+    }, [isSignedIn, user]);
 
     return (
         <>
@@ -78,51 +110,79 @@ export default function WeeklyCalendar() {
 
                     {/* Days grid */}
                     <div className="grid grid-cols-7">
-                        {DAYS.map((day, index) => (
-                            <div
-                                key={day}
-                                // onDoubleClick={() =>
-                                //     onAddEvent(addDateBy(mondayDate, index))
-                                // }
-                                className={`border border-red-500 relative ${
-                                    areDatesSame(
-                                        new Date(),
-                                        addDateBy(sundayDate, index)
-                                    )
-                                        ? "bg-pink-100"
-                                        : ""
-                                }`}
-                            >
-                                <p>{day}</p>
-                                {events.map(
-                                    (event, eventIndex) =>
+                        {DAYS.map((day, index) => {
+                            return (
+                                <div
+                                    key={day}
+                                    // onDoubleClick={() =>
+                                    //     onAddEvent(addDateBy(mondayDate, index))
+                                    // }
+                                    className={`border border-red-500 relative ${
                                         areDatesSame(
-                                            addDateBy(sundayDate, index),
-                                            event.date
-                                        ) && (
-                                            <div
-                                                key={eventIndex}
-                                                className="absolute bg-green-500 text-white mx-1 p-1 rounded-md -mt-2"
-                                                style={{
-                                                    top: `${
-                                                        event.date.getHours() *
-                                                            HOUR_HEIGHT +
-                                                        HOUR_HEIGHT / 2 +
-                                                        event.date.getMinutes() /
-                                                            2
-                                                    }px`,
-                                                    height: `${
-                                                        event.howLong *
-                                                        HOUR_HEIGHT
-                                                    }px`,
-                                                }}
-                                            >
-                                                Hi
-                                            </div>
+                                            new Date(),
+                                            addDateBy(sundayDate, index)
                                         )
-                                )}
-                            </div>
-                        ))}
+                                            ? "bg-pink-100"
+                                            : ""
+                                    }`}
+                                >
+                                    <p>{day}</p>
+                                    {events.map((event, eventIndex) => {
+                                        return (
+                                            areDatesSame(
+                                                addDateBy(sundayDate, index),
+                                                event.date
+                                            ) && (
+                                                <div
+                                                    key={eventIndex}
+                                                    className="absolute bg-green-500 text-white mx-1 p-1 rounded-md -mt-2 w-full"
+                                                    style={{
+                                                        top: `${
+                                                            event.date.getHours() *
+                                                                HOUR_HEIGHT +
+                                                            HOUR_HEIGHT / 2 +
+                                                            event.date.getMinutes() /
+                                                                2
+                                                        }px`,
+                                                        height: `${
+                                                            event.howLong *
+                                                            HOUR_HEIGHT
+                                                        }px`,
+                                                    }}
+                                                >
+                                                    {event.text}
+                                                </div>
+                                            )
+                                        );
+                                    })}
+                                    {tasks.map((task, taskIndex) => {
+                                        return (
+                                            areDatesSame(
+                                                addDateBy(sundayDate, index),
+                                                task.date
+                                            ) && (
+                                                <div
+                                                    key={taskIndex}
+                                                    className="absolute bg-green-500 text-white mx-1 p-1 rounded-md -mt-2 w-full"
+                                                    style={{
+                                                        top: `${
+                                                            task.date.getHours() *
+                                                                HOUR_HEIGHT +
+                                                            HOUR_HEIGHT / 2 +
+                                                            task.date.getMinutes() /
+                                                                2
+                                                        }px`,
+                                                        height: `2px`,
+                                                    }}
+                                                >
+                                                    {task.text}
+                                                </div>
+                                            )
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
