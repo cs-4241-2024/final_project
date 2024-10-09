@@ -37,6 +37,57 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
+// Define the Cocktail schema directly here
+const cocktailSchema = new mongoose.Schema({
+  idDrink: { type: Number, required: true },
+  strDrink: { type: String, required: true },
+  strDrinkAlternate: { type: String },
+  strTags: { type: String },
+  strVideo: { type: String },
+  strCategory: { type: String },
+  strIBA: { type: String },
+  strAlcoholic: { type: String },
+  strGlass: { type: String },
+  strInstructions: { type: String },
+  strIngredient1: { type: String },
+  strIngredient2: { type: String },
+  strIngredient3: { type: String },
+  strIngredient4: { type: String },
+  strIngredient5: { type: String },
+  strIngredient6: { type: String },
+  strIngredient7: { type: String },
+  strIngredient8: { type: String },
+  strIngredient9: { type: String },
+  strIngredient10: { type: String },
+  strIngredient11: { type: String },
+  strIngredient12: { type: String },
+  strIngredient13: { type: String },
+  strIngredient14: { type: String },
+  strIngredient15: { type: String },
+  strMeasure1: { type: String },
+  strMeasure2: { type: String },
+  strMeasure3: { type: String },
+  strMeasure4: { type: String },
+  strMeasure5: { type: String },
+  strMeasure6: { type: String },
+  strMeasure7: { type: String },
+  strMeasure8: { type: String },
+  strMeasure9: { type: String },
+  strMeasure10: { type: String },
+  strMeasure11: { type: String },
+  strMeasure12: { type: String },
+  strMeasure13: { type: String },
+  strMeasure14: { type: String },
+  strMeasure15: { type: String },
+  strImageSource: { type: String },
+  strImageAttribution: { type: String },
+  strCreativeCommonsConfirmed: { type: String },
+  dateModified: { type: String },
+});
+
+// Create the Cocktail model
+const Cocktail = mongoose.model("Cocktail", cocktailSchema);
+
 // Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -173,6 +224,51 @@ app.post("/login", async (req, res, next) => {
   } catch (error) {
     res.status(500).json({ message: "An error occurred", error });
   }
+});
+
+app.get("/allCocktails", (req, res) => {
+  Cocktail.find({})
+    .then((cocktails) => {
+      console.log("Cocktails retrieved:", cocktails); // Log all retrieved cocktails
+      res.json(cocktails); // Send cocktails data to frontend
+    })
+    .catch((err) => {
+      console.error("Error retrieving cocktails:", err); // Log errors if any
+      res.status(500).json({ error: "Error retrieving cocktails" });
+    });
+});
+
+app.post("/searchCocktails", (req, res) => {
+  const { ingredients } = req.body;
+
+  // Log the ingredients to verify what is being received
+  console.log("Received ingredients:", ingredients);
+
+  Cocktail.find({
+    $or: [
+      { strIngredient1: { $in: ingredients } },
+      { strIngredient2: { $in: ingredients } },
+      { strIngredient3: { $in: ingredients } },
+      { strIngredient4: { $in: ingredients } },
+      { strIngredient5: { $in: ingredients } },
+      { strIngredient6: { $in: ingredients } },
+      { strIngredient7: { $in: ingredients } },
+      { strIngredient8: { $in: ingredients } },
+      { strIngredient9: { $in: ingredients } },
+      { strIngredient10: { $in: ingredients } },
+      { strIngredient11: { $in: ingredients } },
+      { strIngredient12: { $in: ingredients } },
+      { strIngredient13: { $in: ingredients } },
+      { strIngredient14: { $in: ingredients } },
+      { strIngredient15: { $in: ingredients } },
+    ],
+  })
+    .then((cocktails) => {
+      res.json(cocktails); // Send cocktails to frontend
+    })
+    .catch((err) => {
+      res.status(500).json({ error: "Error fetching cocktails" });
+    });
 });
 
 app.get("/logout", (req, res, next) => {

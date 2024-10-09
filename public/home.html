@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Import Materialize CSS -->
-    <link
+    <!-- <link
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
       rel="stylesheet"
     />
-    <!-- Import Materialize JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    \
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
     <link rel="stylesheet" href="css/styles.css" />
 
     <title>Document</title>
@@ -33,6 +32,32 @@
         <div class="barstools"></div>
       </div>
     </div> -->
+
+    <h1>Available Cocktails</h1>
+    <div id="results"></div>
+
+    <script>
+      // Fetch the data from the backend
+      fetch("http://localhost:3000/allCocktails") // Make sure the path is correct
+        .then((response) => response.json()) // Convert to JSON
+        .then((data) => {
+          console.log("Cocktails:", data); // Log the data to ensure it's received
+
+          // Display data
+          const resultsDiv = document.getElementById("results");
+          data.forEach((cocktail) => {
+            resultsDiv.innerHTML += `<div>
+                        <h3>${cocktail.strDrink}</h3>
+                        <p>Category: ${cocktail.strCategory}</p>
+                        <p>Instructions: ${cocktail.strInstructions}</p>
+                        <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
+                    </div>`;
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching cocktails:", error); // Log any errors
+        });
+    </script>
 
     <script src="js/main.js"></script>
   </body>
