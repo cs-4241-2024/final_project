@@ -76,12 +76,22 @@ async function searchPosts(query) {
 		//Make href link using makeURLWithParams
 		const linkString = makeURLWithParams("forum", "id", resultPost[i]["_id"]);
 
-		innerHTML += `
+		if (resultPost[i]["isPlaylist"]) {
+			innerHTML += `
+			<section class="postSection">
+				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + resultPost[i]["title"] + ` - ` + songPlaylist[0]["name"] + `</a></h2>
+				<p class="postContent">`+ username + ` - ` + resultPost[i]["content"] + `</p >
+			</section >
+			`;
+		}
+		else {
+			innerHTML += `
 			<section class="postSection">
 				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + resultPost[i]["title"] + ` - ` + songPlaylist["name"] + `</a></h2>
 				<p class="postContent">`+ username + ` - ` + resultPost[i]["content"] + `</p >
 			</section >
 			`;
+		}
 	}
 	searchResultsArea.innerHTML = searchResultsArea.innerHTML + innerHTML;
 }
