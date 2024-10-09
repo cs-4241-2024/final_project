@@ -42,6 +42,18 @@ const createPostPageRedirect = function () {
 	location.assign(redirectStirng);
 }
 
+//Sends the user to the addPost.html page
+const createSongPageRedirect = function () {
+	const redirectStirng = makeURL("add-song");
+	location.assign(redirectStirng);
+}
+
+//Sends the user to the addPost.html page
+const createPlaylistPageRedirect = function () {
+	const redirectStirng = makeURL("addPlaylist");
+	location.assign(redirectStirng);
+}
+
 async function recoverRecentPosts() {
 	try {
 		const response = await fetch('/api/posts/recent');
@@ -85,8 +97,15 @@ window.onload = function () {
 	nav()
 	const searchButton = document.getElementById("searchButton");
 	searchButton.onclick = search;
+
 	const createPostButton = document.getElementById("createPostButton");
 	createPostButton.onclick = createPostPageRedirect;
+
+	const createSongButton = document.getElementById("createSongButton");
+	createSongButton.onclick = createSongPageRedirect;
+
+	const createPlaylistButton = document.getElementById("createPlaylistButton");
+	createPlaylistButton.onclick = createPlaylistPageRedirect;
 
 	recoverRecentPosts();
 }
