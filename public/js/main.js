@@ -320,6 +320,33 @@ async function addGroup(event) {
   }
 }
 
+async function deleteGroup(groupName) {
+  if(!confirm(`Are you sure you want to delete the group: ${groupName}? This action cannot be undone.`)) {
+    return;
+  }
+
+  try{
+    const response = await fetch('/delete-group', {
+      method: 'POST',
+      body: JSON.stringify({ groupName }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      alert('Group deleted successfully');
+      location.reload();  // Reload the page to reflect the changes
+    } else {
+      const data = await response.json();
+      alert(`Error deleting group: ${data.message}`);
+    }
+  }catch (error){
+    console.error('Error deleting group:', error);
+    alert('There was an error deleting the group. Please try again.');
+  }
+}
+
 window.onload = async function () {
   checkAuth();
   fetchSessionUser();
@@ -351,36 +378,6 @@ window.onload = async function () {
   });
 }
 
-window.onload2 = async function (groupIdSomething) {
-  checkAuth();
-  fetchSessionUser();
-
-  fetchUsers(); //If authenticated, fetch users
-  newFetchGroups(); //If authenticated, fetch groups
-
-  showContent(groupIdSomething); // Default to the profile page
-
-
-  // Add logout functionality
-  document.getElementById('logoutBtn').addEventListener('click', async function() {
-    try {
-        const response = await fetch('/logout', {
-            method: 'POST'
-        });
-        const data = await response.json();
-        
-        if (response.ok) {
-            
-            window.location.href = '/login.html';
-        } else {
-            alert('Error during logout: ' + data.message);
-        }
-    } catch (error) {
-        console.error('Error logging out:', error);
-        alert('An error occurred during logout. Please try again.');
-    }
-  });
-}
 
 /*
   * Function to change the password
@@ -518,27 +515,6 @@ async function addNewUsers(groupIndex) {
 /*
   * Function to fetch the groups a user is in
 */
-async function fetchGroups() {
-
-  try {
-    const response = await fetch('/get-group-info');
-    if (response.ok) {
-      
-    } else {
-      console.log('unable to fetch groups');
-    }
-    const groups = await response.json();
-    window.allGroups = groups;
-    generateGroupHTML(window.allGroups);
-    createGroupButtons(window.allGroups);
-  } catch (error) {
-    console.error('Error fetching users:', error);
-  }
-}
-
-/*
-  * Function to fetch the groups a user is in
-*/
 async function newFetchGroups() {
   try {
     const response = await fetch('/get-session', {
@@ -578,11 +554,11 @@ async function newFetchGroups() {
   }
 }
 
-/*
-  * Function to delete a task from a group
-*/
-async function deleteTask(group, assIndex){
-  console.log("deleting task with group  " +group +" index " + assIndex)
+
+async function deleteTask(groupId, assIndex){
+
+  console.log("The group we are trying to delete a tasj frrom is "+ currentGroup)
+  
   try {
     const response = await fetch('/deleteTask', {
       method: 'POST',
@@ -601,11 +577,9 @@ async function deleteTask(group, assIndex){
   }
 }
 
-/*
-  * Function to mark a task complete
-*/
-async function completeTask(group, assIndex){
-  console.log("completing task with group  " +group +" index " + assIndex)
+
+async function completeTask(groupId, assIndex){
+  
   try {
     const response = await fetch('/completeTask', {
       method: 'POST',
@@ -774,13 +748,27 @@ function createGroupButtons(data) {
 
 
 // Function to handle leaving the group
-function leaveGroup(groupName) {
+async function leaveGroup(groupName) {
   console.log(groupName)
   const confirmation = confirm("Are you sure you want to leave this group?");
   if (confirmation) {
     // Remove the user from the group (logic for leaving group goes here)
-    window.allGroups[groupIndex].users = window.allGroups[groupIndex].users.filter(user => user.username !== currentUser); // Assuming you have a currentUser variable
+    // window.allGroups[groupIndex].users = window.allGroups[groupIndex].users.filter(user => user.username !== currentUser); // Assuming you have a currentUser variable
+    try{
+      const response = await fetch('/leave-group', {
+        method: 'POST',
+        body: JSON.stringify({groupName: groupName}),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        await newFetchGroups(); // Re-fetch groups to get the updated task list
+        showContent("profile"); // Re-render the group content to reflect new tasks
+      }
 
+    }catch{
+      console.error('Error leaving group:', error);
+      alert('There was an error leaving the group. Please try again.');
+    }
     // Re-render the groups (or update the UI as needed)
     generateGroupHTML(window.allGroups);
     alert("You have left the group.");
@@ -788,7 +776,7 @@ function leaveGroup(groupName) {
 }
 
 // Function to handle deleting the group
-function deleteGroup(groupName) {
+/*function deleteGroup(groupName) {
   console.log(groupName)
   const confirmation = confirm("Are you sure you want to delete this group?");
   if (confirmation) {
@@ -799,4 +787,4 @@ function deleteGroup(groupName) {
     generateGroupHTML(window.allGroups);
     alert("The group has been deleted.");
   }
-}
+}*/

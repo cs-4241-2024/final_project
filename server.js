@@ -80,6 +80,22 @@ app.post('/add-group', async (req, res) => {
     }
 });
 
+app.post('/delete-group', async (req, res) => {
+    const { groupName } = req.body;
+
+    try{
+        const result = await groupCollection.deleteOne({groupName});
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+        res.json({ message: 'Group deleted' });
+    }catch(error){
+        console.error('Error deleting group', error);
+        res.status(500).json({ message: 'Error deleting group', error });
+    }
+});
+
 app.post('/addTask', async (req, res) => {
     const { newTask } = req.body;
     const { title, user, date, groupName } = newTask;
@@ -451,10 +467,55 @@ app.post('/update-password', async (req, res) => {
     }
 });
 
+//
+
 //Logout
 app.post('/logout', (req, res) =>{
     res.clearCookie(sessionCookieName);
     res.json({ message: 'Logged out successfully' });
+});
+
+// Leave a group
+app.post('/leave-group', async (req, res) => {
+    const { groupName } = req.body;
+    const sessionCookie = req.cookies[sessionCookieName];
+
+    try {
+        if (!sessionCookie) {
+            return res.status(401).json({ message: 'Access denied. Please login.' });
+        }
+
+        // Find the group
+        const group = await groupCollection.findOne({ groupName });
+        console.log('Group:', group);
+
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        // Find the user in the group
+        const userIndex = group.users.findIndex(user => user.username === sessionCookie.username);
+        console.log('User index:', userIndex);
+
+        if (userIndex === -1) {
+            return res.status(400).json({ message: 'User not found in group' });
+        }
+
+        // Remove the user from the group
+        group.users.splice(userIndex, 1);
+
+        // Update the group in the database
+        await groupCollection.updateOne(
+            { groupName },
+            { $set: { users: group.users } }
+        );
+
+        return res.status(200).json({ message: 'Left group successfully' });
+
+    } catch (error) {
+        console.error('Error leaving group:', error);
+        res.status(500).json({ message: 'Error leaving group', error });
+    }
 });
 
 function authentication(req,res,next){
