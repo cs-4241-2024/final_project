@@ -122,7 +122,7 @@ run();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('dist'));
 
 // Log all requests
 app.use((req: Request, res: Response, next: NextFunction) => {
