@@ -18,7 +18,6 @@ async function setup() {
 
 	let post = JSON.parse(await responsePost.text())
 
-	console.log(post[0]["title"])
 	postTitle.textContent = post[0]["title"];
 
 	let songPlaylist;
@@ -40,7 +39,6 @@ async function setup() {
 	else {
 		//It's a song
 		let songID = post[0]["idOfTopic"];
-		console.log(songID)
 
 		// Request to get a song by ID
 		const responseSong = await fetch(`/api/songs/${songID}`, {
@@ -83,7 +81,7 @@ async function setup() {
 	let replies = await response.json();
 
 	for (let i = 0; i < replies.length; i++) {
-		let userID = post[0]["createdBy"];
+		let userID = replies[i]["createdBy"];
 		const responseReplyUsername = await fetch(`/api/users/userName/${userID}`, {
 			method: 'GET'
 		})
@@ -92,7 +90,49 @@ async function setup() {
 		<p class="reply">` + replyUsername + ` - ` + replies[i]["content"] + `</p>
 		<hr class="solidDivider">`
 	}
+	const submitCommentButton = document.getElementById("submitCommentButton");
+	submitCommentButton.onclick = addComment;
+}
 
+async function addComment() {
+	const postId = getParam(window.location.href, "id");
+	const postAndRepliesArea = document.getElementById("postAndRepliesArea");
+	// postAndRepliesArea.innerHTML += `
+	// 	<p class="reply">` + replyUsername + ` - ` + replies[i]["content"] + `</p>
+	// 	<hr class="solidDivider">`
+	const commentBox = document.getElementById("commentBox");
+
+	//request the username from the database
+	const responseCurrentUSer = await fetch('/api/users/git/dbID', {
+		method: 'GET'
+	})
+	//contains the current logged in user’s userName
+	let userId = await responseCurrentUSer.text();
+	let newContent = document.getElementById("commentBox").value;
+
+	// create reply object
+	let newReply = {};
+	newReply['content'] = commentBox.value;
+	newReply['createdBy'] = userId; // user id
+	commentBox.value = "";
+
+	// send object to sever
+	const response = await fetch(`/api/replies/${postId}`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(newReply)
+	});
+
+	// Confirmation of reply creation
+	const result = await response.json();
+
+	const responseReplyUsername = await fetch(`/api/users/userName/${userId}`, {
+		method: 'GET'
+	})
+	let replyUsername = await responseReplyUsername.text();
+	postAndRepliesArea.innerHTML += `
+		<p class="reply">` + replyUsername + ` - ` + newContent + `</p>
+		<hr class="solidDivider">`
 }
 
 window.onload = function () {
