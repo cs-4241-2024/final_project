@@ -350,19 +350,17 @@ app.post('/login', async (req, res) => {
 
 //Check if the user logged in submitted the correct current password to change their password
 app.post('/check-password', async (req, res) => {
-    const { username, password } = req.body;
+    const sessionCookie = req.cookies[sessionCookieName];
+    const { password } = req.body;
 
     try {
         // Find the user by username
-        const user = await usersCollection.findOne({ username });
+        const user = await usersCollection.findOne({ username: sessionCookie.username });
 
         if (!user) {
             // If no user found, return an error
             return res.status(400).json({ message: 'Invalid username or password' });
         }
-
-        // Hash the provided password
-        // const hashedPassword = await bcrypt.hash(password, 10);
 
         // Compare the provided password with the hashed password in the database
         const isMatch = await bcrypt.compare(password, user.password);
@@ -386,7 +384,7 @@ app.post('/check-password', async (req, res) => {
 
 //Change password
 app.post('/update-password', async (req, res) => {
-    const { username, password } = req.body;
+    const { password } = req.body;
 
     console.log('Request Body:', req.body); // Debug log
 
@@ -395,14 +393,9 @@ app.post('/update-password', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const sessionCookie = req.cookies[sessionCookieName];
 
-        // Checks if the current user is the same as the user trying to change their password
-        if(username !== sessionCookie.username){
-            return res.status(401).json({ message: 'Access denied. You can only change your password' });
-        }
-
         // Update the user's password in the database
         await usersCollection.updateOne(
-            { username: username },
+            { username: sessionCookie.username },
             { $set: { password: hashedPassword } }
         );
 

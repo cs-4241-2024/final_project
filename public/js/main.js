@@ -74,7 +74,7 @@ async function fetchSessionUser(){
     if (response.ok) {
       const user = await response.json();
       console.log('Session user:', user);
-      document.getElementById('currentUser').innerText = `Welcome to your settings ${user.username}!`;
+      document.getElementById('currentUser').innerText = `Hi ${user.username}, change your password here`;
       document.getElementById('currentUser').style.color = 'black';
     } else {
       console.error('Failed to retrieve user');
@@ -319,7 +319,6 @@ window.onload = async function () {
   */
 const changePassword = async function(event) {
   // Get password input value
-  const username = document.getElementById("currentUsername").value;
   const password = document.getElementById("currentPassword").value;
   const newPassword = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
@@ -330,7 +329,7 @@ const changePassword = async function(event) {
   try {
     const response = await fetch('/check-password', {
       method: 'POST',
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify({ password: password }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -344,7 +343,7 @@ const changePassword = async function(event) {
         try{
           const updateResponse = await fetch('/update-password', {
           method: 'POST',
-          body: JSON.stringify({ username: username, password: newPassword }),
+          body: JSON.stringify({ password: newPassword }),
           headers: {
             'Content-Type': 'application/json'
           }});
@@ -352,7 +351,6 @@ const changePassword = async function(event) {
           if (updateResponse.ok) {
             alert('Password updated successfully');
             // Clear the input fields
-            document.getElementById("currentUsername").value = '';
             document.getElementById("currentPassword").value = '';
             document.getElementById("newPassword").value = '';
             document.getElementById("confirmPassword").value = '';
