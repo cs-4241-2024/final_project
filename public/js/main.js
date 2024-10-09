@@ -641,13 +641,27 @@ function createGroupButtons(data) {
 
 
 // Function to handle leaving the group
-function leaveGroup(groupName) {
+async function leaveGroup(groupName) {
   console.log(groupName)
   const confirmation = confirm("Are you sure you want to leave this group?");
   if (confirmation) {
     // Remove the user from the group (logic for leaving group goes here)
-    window.allGroups[groupIndex].users = window.allGroups[groupIndex].users.filter(user => user.username !== currentUser); // Assuming you have a currentUser variable
+    // window.allGroups[groupIndex].users = window.allGroups[groupIndex].users.filter(user => user.username !== currentUser); // Assuming you have a currentUser variable
+    try{
+      const response = await fetch('/leave-group', {
+        method: 'POST',
+        body: JSON.stringify({groupName: groupName}),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        await newFetchGroups(); // Re-fetch groups to get the updated task list
+        showContent("profile"); // Re-render the group content to reflect new tasks
+      }
 
+    }catch{
+      console.error('Error leaving group:', error);
+      alert('There was an error leaving the group. Please try again.');
+    }
     // Re-render the groups (or update the UI as needed)
     generateGroupHTML(window.allGroups);
     alert("You have left the group.");
