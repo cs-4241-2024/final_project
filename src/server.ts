@@ -32,6 +32,8 @@ declare module "express-session" {
   }
 }
 
+
+//Setting up server session
 app.use(
   session({
     secret: "FIXMEFIXMEFIXMEFIXME", //FIXME
@@ -49,6 +51,7 @@ function pageHandleAuth(req, res) {
   }
   return userID;
 }
+
 app.get("/", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
@@ -58,6 +61,7 @@ app.get("/", async (req, res, next) => {
 
   res.render("home", { username, locations });
 });
+
 app.get("/toorder", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
@@ -85,9 +89,11 @@ async function renderLocation(
     template: useTemplate ? template : false,
   });
 }
+
 function validateParam(param: string): boolean {
   return !param || param.length < 1 || isNaN(Number(param));
 }
+
 app.get("/location/:id", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
@@ -100,6 +106,7 @@ app.get("/location/:id", async (req, res, next) => {
 
   await renderLocation(res, userID, locationID, true);
 });
+
 app.get(
   "/location/:locationID/edit-food-dialog/:foodID",
   async (req, res, next) => {
@@ -143,6 +150,7 @@ app.post("/api/location/make", async (req, res) => {
     res.status(500).json({ error: `Make location failed` });
   }
 });
+
 app.post("/api/location/edit", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
@@ -154,6 +162,7 @@ app.post("/api/location/edit", async (req, res) => {
     res.status(500).send("Edit location failed");
   }
 });
+
 app.post("/api/location/delete", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
@@ -166,6 +175,8 @@ app.post("/api/location/delete", async (req, res) => {
   }
 });
 
+
+//handle creating a new food
 app.post("/api/food/make", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
@@ -177,6 +188,9 @@ app.post("/api/food/make", async (req, res) => {
     res.status(500).send("Make food failed");
   }
 });
+
+
+//Handle Food item Editing
 app.post("/api/food/edit", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
@@ -222,6 +236,8 @@ app.post("/login", async (req, res) => {
   }
 });
 
+
+//Handle ne wUsers through sign in feature
 app.post("/signup", async (req, res) => {
   const { username, password } = req.body;
   const userID = await db.makeUser(username, password);
@@ -234,6 +250,8 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+
+//Handle Logouts
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
