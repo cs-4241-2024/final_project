@@ -117,6 +117,15 @@ async function run() {
         }
     });
 
+    app.post("/logout", async (req: express.Request, res: express.Response) => {
+        if (!req.session) {
+            res.status(500).send("Session not found!");
+            throw Error("Session not found!");
+        }
+        req.session = null;
+        res.sendStatus(204);
+    });
+
     app.post("/parseXlsx", fileUpload({
         useTempFiles : true,
         tempFileDir : '/tmp/'
@@ -154,8 +163,14 @@ async function run() {
 
         let sheet: ISheet = req.body;
         sheet.user = req.session.user;
-        await new Sheet(sheet).save();
-        res.sendStatus(201);
+        const exists = await Sheet.exists({user: req.session.user});
+        if (exists != null) {
+            await Sheet.replaceOne({user: req.session.user}, sheet);
+            res.sendStatus(200);
+        } else {
+            await new Sheet(sheet).save();
+            res.sendStatus(201);
+        }
     });
 
     app.get("/loadData", async (req: express.Request, res: express.Response) => {
