@@ -26,7 +26,9 @@ window.onload = async function () {
             if (response.ok) {
                 // If login is successful, redirect to the main page
                 window.location.href = "index.html";
-            } else {
+            }else{
+
+
                 alert(data.message);
                 if (data.message === 'Invalid username or password') {
                     const register = confirm('User does not exist. Would you like to create an account?');
@@ -41,9 +43,9 @@ window.onload = async function () {
             console.error('Error during login:', error);
             alert('An error occurred during login. Please try again.');
         }
-    });
-
-    document.getElementById('register').addEventListener('click', async function (event) {
+    })
+    document.getElementById('register').addEventListener('click', async function(event){
+        // Get username & password
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         if (username && password) {
