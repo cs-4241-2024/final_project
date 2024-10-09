@@ -393,6 +393,12 @@ app.post('/update-password', async (req, res) => {
     try {
         // Hash the new password
         const hashedPassword = await bcrypt.hash(password, 10);
+        const sessionCookie = req.cookies[sessionCookieName];
+
+        // Checks if the current user is the same as the user trying to change their password
+        if(username !== sessionCookie.username){
+            return res.status(401).json({ message: 'Access denied. You can only change your password' });
+        }
 
         // Update the user's password in the database
         await usersCollection.updateOne(

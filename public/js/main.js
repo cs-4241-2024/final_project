@@ -217,7 +217,9 @@ function removeSelectedOption(value, selectedOptionsId) {
   }
 }
 
-
+/*
+  * Function to show the profile page
+*/
 const showGroup = async function (event) {
   await fetchUsers();
   
@@ -246,6 +248,9 @@ const showGroup = async function (event) {
   });
 };
 
+/*
+  * Function to add a new group
+*/
 async function addGroup(event) {
   const groupName = document.getElementById("groupNameInput").value;
   const selectedUsersDiv = document.getElementById("group-selected-list");
@@ -275,7 +280,6 @@ async function addGroup(event) {
     alert('There was an error adding the group. Please try again.');
   }
 }
-
 
 window.onload = async function () {
   checkAuth();
@@ -310,7 +314,9 @@ window.onload = async function () {
   });
 }
 
-
+/*
+  * Function to change the password
+  */
 const changePassword = async function(event) {
   // Get password input value
   const username = document.getElementById("currentUsername").value;
@@ -332,8 +338,6 @@ const changePassword = async function(event) {
 
     // Check if the user is authenticated
     if (response.ok) {
-      console.log('Password is correct');
-
       // Check if newPassword and confirmPassword match
       if (newPassword === confirmPassword) {
         // Update the password
@@ -347,6 +351,11 @@ const changePassword = async function(event) {
           
           if (updateResponse.ok) {
             alert('Password updated successfully');
+            // Clear the input fields
+            document.getElementById("currentUsername").value = '';
+            document.getElementById("currentPassword").value = '';
+            document.getElementById("newPassword").value = '';
+            document.getElementById("confirmPassword").value = '';
           } else {
             alert('Error updating password. Please try again.');
           }
@@ -354,14 +363,10 @@ const changePassword = async function(event) {
           console.error('Error updating password:', error);
           alert('There was an error updating the password. Please try again.');
         };
-        
-
-      
       // If the user entered the wrong username or password
     }else{
-      alert('bruh you entered the wrong password');
-  
-      }  
+      alert('New password and Confirm password do not match');
+    }  
     }
   } catch (error) {
     console.error('Error checking password:', error);
@@ -369,6 +374,9 @@ const changePassword = async function(event) {
   } 
 }
 
+/*
+  * Function to add a new task
+*/
 async function addNewTask() {
   const task = document.getElementById('addTaskInput').value;
   const assignedUser = document.querySelector('input[name="task-assignee"]:checked').value;
@@ -405,7 +413,9 @@ async function addNewTask() {
   }
 }
 
-
+/*
+  * Function to fetch the groups a user is in
+*/
 async function fetchGroups() {
   console.log("Fetch groups")
   try {
@@ -413,7 +423,7 @@ async function fetchGroups() {
     if (response.ok) {
       console.log('groups fethced successfully');
     } else {
-      console.log('FUCKKKKKKKKK');
+      console.log('unable to fetch groups');
     }
     const groups = await response.json();
     window.allGroups = groups;
@@ -426,6 +436,9 @@ async function fetchGroups() {
   }
 }
 
+/*
+  * Function to fetch the groups a user is in
+*/
 async function newFetchGroups() {
   console.log("New Fetch groups");
   try {
@@ -466,7 +479,9 @@ async function newFetchGroups() {
   }
 }
 
-
+/*
+  * Function to delete a task from a group
+*/
 async function deleteTask(group, assIndex){
   console.log("deleting task with group  " +group +" index " + assIndex)
   try {
@@ -488,7 +503,9 @@ async function deleteTask(group, assIndex){
   }
 }
 
-
+/*
+  * Function to mark a task complete
+*/
 async function completeTask(group, assIndex){
   console.log("completing task with group  " +group +" index " + assIndex)
   try {
@@ -510,7 +527,9 @@ async function completeTask(group, assIndex){
   }
 }
 
-// Function to generate and inject HTML into the DOM
+/*
+  * Function to generate and inject HTML into the DOM
+*/
 function generateGroupHTML(data) {
   console.log('This is the data' + data);
   data.forEach((group, index) => {
@@ -606,7 +625,9 @@ function generateGroupHTML(data) {
 }
 
 
-// Function to create buttons for each group in the sidebar
+/*
+  * Function to create buttons for groups
+*/
 function createGroupButtons(data) {
   const groupButtonsDiv = document.getElementById("groupButtons");
   data.forEach((group, index) => {
