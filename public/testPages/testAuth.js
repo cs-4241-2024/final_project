@@ -57,6 +57,15 @@ export async function loadUsersPosts(){
         createCell(newTableRow,posts[i]["replies"])
         tableBody.append(newTableRow)
     }
+
+    let userID="66ff5f2f71bff28b6c95717f"
+    const responseUSERNAME = await fetch(`/api/users/userName/${userID}`, {
+        method: 'GET'
+    })
+
+    let userName = await responseUSERNAME.text()
+    console.log("stryder usernmae")
+    console.log(userName)
 }
 
 

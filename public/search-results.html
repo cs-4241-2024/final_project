@@ -4,7 +4,9 @@
 	<head>
 		<title>CS4241 Assignment 2</title>
 		<meta charset="utf-8">
-		<script src="js/main.js"></script>
+		<script src="js/main.js" type="module"></script>
+		<script src="js/urlHelpers.js" type="module"></script>
+		<script src="js/searchResults.js" type="module"></script>
 		<link rel="stylesheet" href="css/main.css">
 		<link rel="stylesheet" href="css/searchResults.css">
 
@@ -17,40 +19,40 @@
 		<nav class="navbar"></nav>
 
 		<!-- The search results title would also be changed using innerHTML -->
-		<h1 class="searchPageTitle">Search Results for query</h1>
+		<h1 id="searchPageTitle">Search Results for query</h1>
 
 		<!-- This is where all of the different search results would appear. Each section (example below) would be inserted using innerHTML. This way it can be dynamically updated as query would be whatever was searched for-->
-		<div id="search-results-area">
+		<div id="searchResultsArea">
 
 			<!-- Example post about song -->
-			<section class="postSection">
+			<!-- <section class="postSection">
 				<h2 class="postTitle"><a class="postLink">Post Title - Song Name</a></h2>
 				<p class="postContent">User - Post Content</p>
-			</section>
+			</section> -->
 
 			<!-- Example post about playlist -->
-			<section class="postSection">
+			<!-- <section class="postSection">
 				<h2 class="postTitle"><a class="postLink">Post Title - Playlist Name</a></h2>
 				<p class="postContent">User - Post Content</p>
-			</section>
+			</section> -->
 
 			<!-- Example song -->
-			<section class="postSection">
+			<!-- <section class="postSection">
 				<h2 class="postTitle"><a class="postLink">Song Title by Artist Name</a></h2>
 				<p class="postContent">Type: Song</p>
-			</section>
+			</section> -->
 
 			<!-- Example playlist -->
-			<section class="postSection">
+			<!-- <section class="postSection">
 				<h2 class="postTitle"><a class="postLink">Playlist Title by User</a></h2>
 				<p class="postContent">Type: Playlist</p>
-			</section>
+			</section> -->
 
 			<!-- Example User -->
-			<section class="postSection">
+			<!-- <section class="postSection">
 				<h2 class="postTitle"><a class="postLink">Username</a></h2>
 				<p class="postContent">Type: User</p>
-			</section>
+			</section> -->
 
 		</div>
 	</body>

@@ -1,43 +1,43 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <title>CS4241 Assignment 2</title>
-    <meta charset="utf-8">
-    <script src="js/main.js"></script>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/songs.css">
-    <style>
-    </style>
-    <!-- get rid of favicon error -->
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-</head>
+    <head>
+        <title>CS4241 Assignment 2</title>
+        <meta charset="utf-8">
+        <script src="js/main.js" type="module"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/songs.css">
+        <style>
+        </style>
+        <!-- get rid of favicon error -->
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    </head>
 
-<body>
-    <!-- Inserts the navbar into the page -->
-    <nav class="navbar"></nav>
+    <body>
+        <!-- Inserts the navbar into the page -->
+        <nav class="navbar"></nav>
 
-    <!-- Has one playlists, each song in the playlist have hyperlinks to a song page-->
-    <div id="PlaylistsForUser">
+        <!-- Has one playlists, each song in the playlist have hyperlinks to a song page-->
+        <div id="PlaylistsForUser">
 
-        <!-- Title of the page-->
-        <h1 class="postTitle"> Welcome to our Song Database
-        </h1>
-        <p class="postContent2"> Please click below to sign in to your github account
-        </p>
+            <!-- Title of the page-->
+            <h1 class="postTitle"> Welcome to our Song Database
+            </h1>
+            <p class="postContent2"> Please click below to sign in to your github account
+            </p>
 
 
-        <!-- Example Playlists that would show all playlists a user has, most likely use the getAllPlaylists -->
-        <!--Created by seems redudnant-->
-        <a class="postTitle" href="/api/users/auth/github"><button>Login</button></a>
+            <!-- Example Playlists that would show all playlists a user has, most likely use the getAllPlaylists -->
+            <!--Created by seems redudnant-->
+            <a class="postTitle" href="/api/users/auth/github"><button>Login</button></a>
 
-        <!--button to allow a user to create a new playlist, which after clicked and 
+            <!--button to allow a user to create a new playlist, which after clicked and 
 			<section class="playlistSection">
 				<h2 class="playlistSmallAreaTitle">Would you like to create a new playlist? If so, type your playlist's name and click sumbit when ready!</h2>
 				<input class="nameBox" type="text" id="playlistNewName"><br><br>
 				<button id="submitButton">Create new Playlist</button>
 			</section>-->
-    </div>
-</body>
+        </div>
+    </body>
 
 </html>

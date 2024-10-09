@@ -144,6 +144,21 @@ export function getUserName(req,res){
     res.send(req.user.userName)
 }
 
+export async function getUserNameByID(req, res) {
+    let userID = req.params.id
+    console.log(userID)
+    try {
+        let usersTable = await client.db(Dbname).collection("Users")
+        let user = await usersTable.findOne({_id: new ObjectId( userID)})
+        res.status(200)
+        res.send(user.userName)
+    } catch (e) {
+        console.log(e)
+        res.status(404)
+        res.send('error connecting to db')
+    }
+}
+
 export function getDBid(req,res){
     console.log("sent id+")
     res.status(200)
