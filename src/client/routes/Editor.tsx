@@ -183,7 +183,7 @@ const Editor: React.FC = () => {
       </div>
 
       <div className="AutoComplete">
-        <ClassComboBox />
+        <ClassComboBox humanities={setHumanityData} PE={setPhysicalEducationData} SS={setSocialScienceData} IQP={setIqpData} Math={setMathematicsData} FE={setFreeElectivesData} CS={setComputerScienceData} BS={setBasicScienceData} />
       </div>
 
       <div className="tracking-sheet-container">
