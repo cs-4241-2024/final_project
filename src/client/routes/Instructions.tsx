@@ -2,6 +2,7 @@ import "../css/Instructions.css";
 import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import exportImage from '../assets/Academic_Progress.png';
 
 function Instructions() {
     const navigate = useNavigate();
@@ -32,7 +33,10 @@ function Instructions() {
                             <strong>Step 3:</strong> Go to <em>View My Academic Progress</em>.
                         </li>
                         <li>
-                            <strong>Step 4:</strong> On the desired major, click on <em>Export to Excel</em> (located at the top right and looks like a building with an "X").
+                            <strong>Step 4:</strong> On the desired major, click on <em>Export to Excel</em>
+                            (located at the top right and looks like a building with an "X").
+                            <br />
+                            <img src={exportImage} alt="Export to Excel Icon" style={{ marginTop: '10px', width: '80%', height: 'auto' }} />
                         </li>
                         <li>
                             <strong>Step 5:</strong> Open the Excel file and unmerge the first row (merging affects parsing).
