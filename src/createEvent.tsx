@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
 import {
     Button,
@@ -23,13 +24,21 @@ export default function CreateEvent() {
     const [visible, setVisible] = useState(false);
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const { user, isSignedIn } = useUser();
+
+        if (!isSignedIn) return;
+
         // Prevent default browser page refresh
         e.preventDefault();
 
         // Get form data as an object
         const data = Object.fromEntries(new FormData(e.currentTarget));
 
+        // Add user token to object
+        data["accessToken"] = user.id;
+
         // Send data to server
+        fetch("/task", { method: "PUT", body: JSON.stringify(data) });
 
         setVisible(false);
     };

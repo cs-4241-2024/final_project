@@ -10,8 +10,10 @@ function App() {
             <Header />
             <SignedIn>
                 <WeeklyCalendar />
-                <CreateEvent />
-                <CreateTask />
+                <div className="flex flex-row gap-2 p-2">
+                    <CreateEvent />
+                    <CreateTask />
+                </div>
             </SignedIn>
             <SignedOut>
                 <p className="text-center text-4xl pt-40">
