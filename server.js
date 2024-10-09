@@ -80,6 +80,22 @@ app.post('/add-group', async (req, res) => {
     }
 });
 
+app.post('/delete-group', async (req, res) => {
+    const { groupName } = req.body;
+
+    try{
+        const result = await groupCollection.deleteOne({groupName});
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+        res.json({ message: 'Group deleted' });
+    }catch(error){
+        console.error('Error deleting group', error);
+        res.status(500).json({ message: 'Error deleting group', error });
+    }
+});
+
 app.post('/addTask', async (req, res) => {
     const { newTask } = req.body;
     const { title, user, date, groupName } = newTask;

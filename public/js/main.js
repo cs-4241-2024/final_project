@@ -292,6 +292,33 @@ async function addGroup(event) {
   }
 }
 
+async function deleteGroup(groupName) {
+  if(!confirm(`Are you sure you want to delete the group: ${groupName}? This action cannot be undone.`)) {
+    return;
+  }
+
+  try{
+    const response = await fetch('/delete-group', {
+      method: 'POST',
+      body: JSON.stringify({ groupName }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      alert('Group deleted successfully');
+      location.reload();  // Reload the page to reflect the changes
+    } else {
+      const data = await response.json();
+      alert(`Error deleting group: ${data.message}`);
+    }
+  }catch (error){
+    console.error('Error deleting group:', error);
+    alert('There was an error deleting the group. Please try again.');
+  }
+}
+
 window.onload = async function () {
   checkAuth();
   fetchSessionUser();
@@ -669,7 +696,7 @@ async function leaveGroup(groupName) {
 }
 
 // Function to handle deleting the group
-function deleteGroup(groupName) {
+/*function deleteGroup(groupName) {
   console.log(groupName)
   const confirmation = confirm("Are you sure you want to delete this group?");
   if (confirmation) {
@@ -680,4 +707,4 @@ function deleteGroup(groupName) {
     generateGroupHTML(window.allGroups);
     alert("The group has been deleted.");
   }
-}
+}*/
