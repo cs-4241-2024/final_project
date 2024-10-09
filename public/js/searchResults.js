@@ -78,7 +78,7 @@ async function searchPosts(query) {
 
 		innerHTML += `
 			<section class="postSection">
-				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + resultPost[i]["title"] + ` - ` + songPlaylist[0]["name"] + `</a></h2>
+				<h2 class="postTitle"><a href="`+ linkString + `" class="postLink">` + resultPost[i]["title"] + ` - ` + songPlaylist["name"] + `</a></h2>
 				<p class="postContent">`+ username + ` - ` + resultPost[i]["content"] + `</p >
 			</section >
 			`;
