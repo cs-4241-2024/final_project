@@ -21,6 +21,11 @@ async function onTopicChange(event){
     console.log(checkedRadioValue)
     let searchButton = document.getElementById("searchButton")
     searchButton.className="searchButton-vis"
+    //clear any options remaining
+    let postTopicDropDown = document.getElementById("postTopicDropDown")
+    while (postTopicDropDown.children.length >0){
+        postTopicDropDown.removeChild(postTopicDropDown.lastChild)
+    }
     if(checkedRadioValue === "playlist"){
         searchButton.textContent="Search For Playlist"
         loadPlayLists().then()
