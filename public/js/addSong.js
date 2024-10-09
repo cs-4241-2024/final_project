@@ -1,4 +1,5 @@
-import {makeURLWithParams} from "./urlHelpers.js";
+import { makeURLWithParams } from "./urlHelpers.js";
+import { nav } from "./main.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("addSongForm").addEventListener("submit", async function (event) {
@@ -6,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let userID = null;
         try {
-            const userResponse = await fetch('/api/users/git/dbID', {method: 'GET'});
+            const userResponse = await fetch('/api/users/git/dbID', { method: 'GET' });
             if (userResponse.ok) {
                 userID = await userResponse.text();
             } else {
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const response = await fetch('/api/songs', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newSong),
             })
 
@@ -55,3 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+window.onload = function () {
+    nav()
+}
