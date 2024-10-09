@@ -9,8 +9,8 @@ async function getSong() {
     //let songID = "66fad67d7c666b549aef4189";http://localhost:3000/songs.html/?id=66fad67d7c666b549aef4189
     let songID = urlParams.get('id');
     songId = songID;
-    console.log(queryString);
-    console.log(urlParams["song"]);
+    // console.log(queryString);
+    // console.log(urlParams["song"]);
 
     // Request to get a song by ID
     const response = await fetch(`/api/songs/${songID}`, {
@@ -20,7 +20,7 @@ async function getSong() {
 
     // Contains song object if found
     let song = await response.json();
-    console.log(song);
+    // console.log(song);
 
     let title = document.getElementById("songTitle");
     title.textContent = song.name;
@@ -44,20 +44,26 @@ async function getSong() {
     addToFavoritesButton.onclick = addSongToFavorites;
 }
 
-const addSongToFavorites = async function (songId) {
+const addSongToFavorites = async function () {
+    //Retrive the user id
     const responseUserId = await fetch('/api/users/git/dbID', {
         method: 'get'
     })
-    //contains the current logged in user’s database ID
-    let userID = await responseUserId.text()
-
+    let userID = await responseUserId.text();
     console.log(userID);
 
-    //Add the song to the usser's favorite songs
-    const response = await fetch(`/api/users/favorites/${songId}`, {
-        method: 'POST'
+    const responseFavoriteSongs = await fetch('/api/users/favorites', {
+        method: 'GET'
     })
-    let result = await response.text();
+    //Contains all the favorited songs for the logged in user’s
+    let favorites = JSON.parse(await responseFavoriteSongs.text())
+    console.log(favorites)
+
+    //Add the song to the usser's favorite songs
+    // const response = await fetch(`/api/users/favorites/${songId}`, {
+    //     method: 'POST'
+    // })
+    // let result = await response.text();
 
     alert("Song successfully added to your favorites!");
 }
