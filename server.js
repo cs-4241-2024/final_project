@@ -65,11 +65,11 @@ export function isAuthed(req, res, next) {
     //console.log(req)
     if (req.isAuthenticated()) { return next(); }
     else{
-        res.sendStatus(400)
+        res.redirect("/login.html")
     }
 }
 
-app.get('/', (req, res) => {
+app.get('/', isAuthed, (req, res) => {
     res.sendFile('/public/index.html', {root: __dirname})
 })
 
@@ -81,7 +81,8 @@ app.use('/api/replies', replyRoutes);
 app.use('/api/playlists', playlistRoutes);
 
 // allow all files in public to be served
-app.use(express.static('public'))
+app.use(express.static('truePublic'))
+app.use([isAuthed, express.static('public')])
 
 
 //start server on port
