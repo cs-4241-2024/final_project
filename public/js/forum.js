@@ -50,13 +50,15 @@ async function setup() {
 
 	//Sets the text to the name of the song/playlist
 	const songPlaylistName = document.getElementById("songPlaylistName");
-	songPlaylistName.textContent = songPlaylist["name"];
+
 	if (post[0]["isPlaylist"]) {
 		//It's a playlist
+		songPlaylistName.textContent = songPlaylist[0]["name"];
 		songPlaylistName.href = makeURLWithParams("playlists", "id", post[0]["idOfTopic"]);
 	}
 	else {
 		//It's a song
+		songPlaylistName.textContent = songPlaylist["name"];
 		songPlaylistName.href = makeURLWithParams("songs", "id", post[0]["idOfTopic"]);
 	}
 
