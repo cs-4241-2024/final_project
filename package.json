@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon -w src/server -x tsx src/server/main.ts",
     "server": "cross-env NODE_ENV=production tsx src/server/main.ts",
-    "start": "serve -s dist",
+    "start": "cross-env NODE_ENV=production tsx src/server/main.ts",
     "build": "vite build"
   },
   "dependencies": {
