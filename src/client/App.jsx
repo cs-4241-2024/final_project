@@ -5,6 +5,7 @@ import Table from "./components/Table";
 import Form from "./components/Form";
 import { FiPlus } from "react-icons/fi";
 import JobApplicationForm from "./components/Form";
+import Dashboard from "./components/graphs/Dashboard";
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
   return (
     <div className="App">
       <div>
-        <Table></Table>
+        <Dashboard />
 
         <a href="https://vitejs.dev" target="_blank">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
