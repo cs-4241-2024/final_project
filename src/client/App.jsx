@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import Login from './components/Login';
 import JobApplicationForm from './components/Form';
 import JobApplicationTable from './components/Table';
+import Modal from './components/Modal'; 
+import Tabs from './components/tabs'; 
+import Community from './components/Community'; 
 import './index.css';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [applications, setApplications] = useState([]);
+  const [showModal, setShowModal] = useState(false); 
+  const [activeTab, setActiveTab] = useState('myApplications'); 
 
   useEffect(() => {
     checkSession();
@@ -59,6 +64,7 @@ function App() {
 
     if (response.ok) {
       loadApplications();
+      setShowModal(false); 
     } else {
       alert('Error adding application.');
     }
@@ -88,19 +94,57 @@ function App() {
     }
   };
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'myApplications':
+        return (
+          <div>
+            <JobApplicationTable 
+              applications={applications} 
+              handleDeleteApplication={handleDeleteApplication} 
+              handleUpdateApplication={handleUpdateApplication} 
+            />
+            <button 
+              onClick={() => setShowModal(true)} 
+              className="pure-button pure-button-primary"
+            >
+              Add New Application
+            </button>
+          </div>
+        );
+      case 'communityApplications':
+        return <Community />; 
+      case 'stats':
+        return <div>Statistics will be displayed here.</div>;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="App">
       {!loggedIn ? (
         <Login handleLogin={handleLogin} />
       ) : (
         <div id="applicationSection">
-          <JobApplicationForm handleAddApplication={handleAddApplication} />
-          <JobApplicationTable 
-            applications={applications} 
-            handleDeleteApplication={handleDeleteApplication} 
-            handleUpdateApplication={handleUpdateApplication} 
-          />
-          <button onClick={handleLogout} className="pure-button pure-button-primary">Logout</button>
+          {/* tabs */}
+          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          
+          <div id="tabContent">
+            {renderTabContent()}
+          </div>
+
+          {/* pop up to add application */}
+          {showModal && (
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+              <JobApplicationForm handleAddApplication={handleAddApplication} />
+            </Modal>
+          )}
+
+          {/* Logout button */}
+          <button onClick={handleLogout} className="pure-button pure-button-primary">
+            Logout
+          </button>
         </div>
       )}
     </div>
