@@ -5,6 +5,7 @@ import JobApplicationTable from './components/Table';
 import Modal from './components/Modal'; 
 import Tabs from './components/tabs'; 
 import Community from './components/Community'; 
+import Stats from './components/Stats';
 import './index.css';
 
 function App() {
@@ -115,7 +116,7 @@ function App() {
       case 'communityApplications':
         return <Community />; 
       case 'stats':
-        return <div>Statistics will be displayed here.</div>;
+        return <Stats applications={applications} />; 
       default:
         return null;
     }
@@ -141,7 +142,7 @@ function App() {
             </Modal>
           )}
 
-          {/* Logout button */}
+          {/* logout */}
           <button onClick={handleLogout} className="pure-button pure-button-primary">
             Logout
           </button>
