@@ -1,6 +1,8 @@
 let currentGroup = null; // To store the active group
+let currentGroupID = null;
 
 function showContent(groupId) {
+  console.log("Now showing content for " + groupId + " LOOK HERE")
   const contents = document.querySelectorAll('.content');
   contents.forEach(content => content.style.display = 'none');
   
@@ -10,6 +12,7 @@ function showContent(groupId) {
   if (groupId.replace(/\d+$/, '') === 'group') {
     let groupIndex = parseInt(groupId.match(/\d+/)[0], 10) - 1;
     currentGroup = window.allGroups[groupIndex].groupName;
+    currentGroupID = groupId
      
     let usersInGroup = [];
     for (let i = 0; i < window.allGroups[groupIndex].users.length; i++) {
@@ -299,8 +302,39 @@ window.onload = async function () {
   fetchUsers(); //If authenticated, fetch users
   newFetchGroups(); //If authenticated, fetch groups
 
-  
-  showContent("profile");
+  showContent("profile"); // Default to the profile page
+
+
+  // Add logout functionality
+  document.getElementById('logoutBtn').addEventListener('click', async function() {
+    try {
+        const response = await fetch('/logout', {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+            
+            window.location.href = '/login.html';
+        } else {
+            alert('Error during logout: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error logging out:', error);
+        alert('An error occurred during logout. Please try again.');
+    }
+  });
+}
+
+window.onload2 = async function (groupIdSomething) {
+  checkAuth();
+  fetchSessionUser();
+
+  fetchUsers(); //If authenticated, fetch users
+  newFetchGroups(); //If authenticated, fetch groups
+
+  showContent(groupIdSomething); // Default to the profile page
+
 
   // Add logout functionality
   document.getElementById('logoutBtn').addEventListener('click', async function() {
@@ -403,7 +437,7 @@ async function addNewTask(groupIndex) {
     });
 
     if (response.ok) {
-      alert('Task added successfully');
+      alert(`Task added successfully to group${groupIndex}`);
       await newFetchGroups(); // Re-fetch groups to get the updated task list
       showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
       
@@ -494,11 +528,11 @@ async function deleteTask(group, assIndex){
     if (response.ok) {
       console.log("task deleted")
       await newFetchGroups(); // Re-fetch groups to get the updated task list
-      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
+      showContent(currentGroupID)
     }
   } catch (error) {
     console.error('Error deleting task:', error);
-    alert('There was an error deleting the task. Please try again.');
+    alert('There was an error deleting the task. Please try again. fuuuuuck' );
   }
 }
 
@@ -517,7 +551,7 @@ async function completeTask(group, assIndex){
     if (response.ok) {
       console.log("task completed")
       await newFetchGroups(); // Re-fetch groups to get the updated task list
-      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
+      showContent(currentGroupID); // Re-render the group content to reflect new tasks
     }
   } catch (error) {
     
@@ -531,6 +565,11 @@ async function completeTask(group, assIndex){
 function generateGroupHTML(data) {
   data.forEach((group, index) => {
     
+    // Clear the existing content first (if any)
+    const groupEl = document.getElementById(`group${index + 1}`);
+    if (groupEl) {
+      groupEl.remove(); // Remove the existing group HTML
+    }
 
     // Group Members Names
     const userNames = group.users.map(user => user.username).join(", ");
