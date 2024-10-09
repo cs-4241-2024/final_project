@@ -1,4 +1,10 @@
 # Webware Group 8: Songtopia
+**Project Members:**
+Winston Lewis
+Stryder Crouse
+Kenyon Coleman
+Brittany Ficarra
+Elijah Rothschild
 1. &nbsp;&nbsp;&nbsp;&nbsp;We created an application that allows users to keep track of their favorite playlists and songs in an online database as well as allow them to interact and discuss their songs and playlists together through forum posts. In order to use our website the user is required to sign in through a GitHub account, after which they are able to access all of the site’s features.
 t <br />&nbsp;&nbsp;&nbsp;&nbsp;Users are able to add songs to the database by providing information such as the song name, artist, album, length, and genre. Each song can then be inserted into playlists, which can be created by any user. Each playlist can be updated by the owner, allowing them to be able to add new songs to a playlist or deleting old songs. Users are also able to create forum posts about either a song or a playlist which then can have replies left on it by themselves or other users allowing for community discussion. User’s are also able to favorite songs so that they can easily get back to them later. Forum posts, playlists, and favorite songs can all be found on a user’s profile page which can each be clicked on to navigate to. The homepage of our website has a search bar for searching through all songs, playlists, and forum posts, as well as buttons for creating new songs, playlists, and forum posts. The homepage also displays the most recent forum posts for the user so that they can easily navigate to them to join the discussion.
 <br />Link to project: https://webware-group-8.glitch.me
