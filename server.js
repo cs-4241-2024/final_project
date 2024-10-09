@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema({
   },
   email: { type: String },
   profilePhoto: { type: String },
-  drinksList: [{ idDrink: Number, strDrink: String }],
 });
 
 const User = mongoose.model("User", userSchema);
@@ -90,18 +89,6 @@ const cocktailSchema = new mongoose.Schema(
 
 // Create the Cocktail model
 const Cocktail = mongoose.model("Cocktail", cocktailSchema);
-
-// Define Review schema
-const reviewSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  idDrink: { type: Number, required: true },
-  strDrink: { type: String, required: true },
-  rating: { type: Number, required: true, min: 1, max: 5 },
-  reviewText: { type: String, required: true },
-  date: { type: Date, default: Date.now },
-});
-
-const Review = mongoose.model("Review", reviewSchema);
 
 // Middleware
 app.use(express.json());
@@ -241,19 +228,14 @@ app.post("/login", async (req, res, next) => {
   }
 });
 
-// Send the logged-in user's info
-app.get("/getCurrentUser", isLoggedIn, (req, res) => {
-  res.json({ username: req.user.username });
-});
-
 app.get("/allCocktails", (req, res) => {
   Cocktail.find({})
     .then((cocktails) => {
-      console.log("Cocktails retrieved:", cocktails);
-      res.json(cocktails);
+      console.log("Cocktails retrieved:", cocktails); // Log all retrieved cocktails
+      res.json(cocktails); // Send cocktails data to frontend
     })
     .catch((err) => {
-      console.error("Error retrieving cocktails:", err);
+      console.error("Error retrieving cocktails:", err); // Log errors if any
       res.status(500).json({ error: "Error retrieving cocktails" });
     });
 });
@@ -296,175 +278,12 @@ app.post("/searchCocktails", async (req, res) => {
     });
     console.log(`Found ${cocktails.length} cocktails`);
 
-    res.json(cocktails);
+    res.json(cocktails); // Send matching cocktails back to the frontend
   } catch (err) {
     res.status(500).json({ message: "Error fetching cocktails", error: err });
   }
 
   console.log("Ingredient Query:", JSON.stringify(ingredientQuery, null, 2));
-});
-
-// Add a drink to the user's list
-app.post("/addDrink", isLoggedIn, async (req, res) => {
-  const { idDrink, strDrink } = req.body;
-  try {
-    const user = await User.findById(req.user._id);
-    user.drinksList.push({ idDrink, strDrink });
-    await user.save();
-    res.json({ message: "Drink added to your list!" });
-  } catch (error) {
-    res.status(500).json({ message: "Error adding drink", error });
-  }
-});
-
-// Remove a drink from the user's list
-app.post("/removeDrink", isLoggedIn, async (req, res) => {
-  const { idDrink } = req.body;
-  try {
-    const user = await User.findById(req.user._id);
-    user.drinksList = user.drinksList.filter(
-      (drink) => drink.idDrink !== idDrink
-    );
-    await user.save();
-    res.json({ message: "Drink removed from your list!" });
-  } catch (error) {
-    res.status(500).json({ message: "Error removing drink", error });
-  }
-});
-
-// Get all drinks in the user's list
-app.get("/getMyDrinks", isLoggedIn, async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-    res.json(user.drinksList);
-  } catch (error) {
-    res.status(500).json({ message: "Error retrieving drinks list", error });
-  }
-});
-
-// Add a review for a drink
-app.post("/addReview", isLoggedIn, async (req, res) => {
-  const { idDrink, strDrink, rating, reviewText } = req.body;
-  try {
-    const newReview = new Review({
-      username: req.user.username,
-      idDrink,
-      strDrink,
-      rating,
-      reviewText,
-    });
-    await newReview.save();
-    res.json({ message: "Review added!" });
-  } catch (error) {
-    res.status(500).json({ message: "Error adding review", error });
-  }
-});
-
-// Edit a review
-app.put("/editReview", isLoggedIn, async (req, res) => {
-  const { reviewId, rating, reviewText } = req.body;
-
-  if (rating < 1 || rating > 5 || isNaN(rating)) {
-    return res.status(400).json({ message: "Rating must be between 1 and 5" });
-  }
-
-  try {
-    const review = await Review.findById(reviewId);
-    if (!review) {
-      return res.status(404).json({ message: "Review not found" });
-    }
-
-    // Ensure the user editing the review is the one who wrote it
-    if (review.username !== req.user.username) {
-      return res
-        .status(403)
-        .json({ message: "You can only edit your own reviews" });
-    }
-
-    review.rating = rating;
-    review.reviewText = reviewText;
-    await review.save();
-
-    res.json({ message: "Review updated successfully" });
-  } catch (error) {
-    console.error("Error editing review:", error);
-    res.status(500).json({ message: "Error editing review", error });
-  }
-});
-
-// Delete a review
-app.delete("/deleteReview", isLoggedIn, async (req, res) => {
-  const { reviewId } = req.body;
-
-  try {
-    // Log the entire request body and the reviewId to check if it's being passed correctly
-    console.log("Received request to delete review:", req.body);
-
-    if (!reviewId) {
-      console.error("Review ID is missing in the request");
-      return res.status(400).json({ message: "Review ID is required" });
-    }
-
-    // Log before attempting to find the review
-    console.log("Finding review with ID:", reviewId);
-    const review = await Review.findById(reviewId);
-
-    if (!review) {
-      console.error("Review not found with ID:", reviewId);
-      return res.status(404).json({ message: "Review not found" });
-    }
-
-    // Log the user and the review author to ensure we're comparing correctly
-    console.log(
-      "Review found. Review author:",
-      review.username,
-      "Current user:",
-      req.user.username
-    );
-
-    // Ensure the user deleting the review is the one who wrote it
-    if (review.username !== req.user.username) {
-      console.error(
-        "Unauthorized attempt to delete review by:",
-        req.user.username
-      );
-      return res
-        .status(403)
-        .json({ message: "You can only delete your own reviews" });
-    }
-
-    // Log before deletion
-    console.log("Deleting review with ID:", reviewId);
-    await Review.findByIdAndDelete(reviewId);
-
-    // Log success
-    console.log("Review deleted successfully with ID:", reviewId);
-    res.json({ message: "Review deleted successfully" });
-  } catch (error) {
-    // Log the specific error and return it in the response for debugging
-    console.error("Error deleting review:", error);
-    res.status(500).json({ message: "Error deleting review", error });
-  }
-});
-
-// Get all reviews for a drink
-app.get("/getReviews/:idDrink", async (req, res) => {
-  try {
-    const reviews = await Review.find({ idDrink: req.params.idDrink });
-    res.json(reviews);
-  } catch (error) {
-    res.status(500).json({ message: "Error retrieving reviews", error });
-  }
-});
-
-// Get all reviews by the logged-in user
-app.get("/getMyReviews", isLoggedIn, async (req, res) => {
-  try {
-    const reviews = await Review.find({ username: req.user.username });
-    res.json(reviews);
-  } catch (error) {
-    res.status(500).json({ message: "Error retrieving reviews", error });
-  }
 });
 
 app.get("/logout", (req, res, next) => {
