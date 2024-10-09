@@ -50,7 +50,7 @@ export const createSongPageRedirect = function () {
 
 //Sends the user to the addPost.html page
 export const createPlaylistPageRedirect = function () {
-	const redirectStirng = makeURL("addPlaylist");
+	const redirectStirng = makeURL("addPlayList");
 	location.assign(redirectStirng);
 }
 
