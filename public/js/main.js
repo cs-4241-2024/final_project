@@ -1,6 +1,7 @@
 // FRONT-END (CLIENT) JAVASCRIPT HERE
 import { makeURLWithParams, getParam, makeURL } from "./urlHelpers.js";
 
+const postContainer = document.getElementById("postContainer");
 
 
 function iloveClicking() {
@@ -41,57 +42,51 @@ const createPostPageRedirect = function () {
 	location.assign(redirectStirng);
 }
 
+async function recoverRecentPosts() {
+	try {
+		const response = await fetch('/api/posts/recent');
+		if (!response.ok) throw new Error("Failure.")
+		const posts = await response.json();
+		showPosts(posts);
+	}
+	catch (error) {
+		console.error("Couldn't recover recent posts ", error);
+
+	}
+}
+
+function showPosts(posts) {
+	postContainer.innerHTML = '';
+	posts.forEach(post => {
+		const postSection = document.createElement("section");
+		postSection.className = "postSection";
+
+		const postTitle = document.createElement("h2");
+		postTitle.className = "postTitle";
+
+		const postLink = document.createElement("a");
+		postLink.className = "postLink";
+
+		postLink.textContent = post.title;
+		postLink.href = makeURLWithParams("forum", "id", post._id);
+
+		const postContent = document.createElement("p");
+		postContent.className = "postContent";
+		postContent.textContent = post.content;
+
+		postTitle.appendChild(postLink);
+		postSection.appendChild(postTitle);
+		postSection.appendChild(postContent);
+		postContainer.appendChild(postSection);
+	});
+}
+
 window.onload = function () {
 	nav()
 	const searchButton = document.getElementById("searchButton");
 	searchButton.onclick = search;
 	const createPostButton = document.getElementById("createPostButton");
 	createPostButton.onclick = createPostPageRedirect;
-
-
-	const postContainer = document.getElementById("postContainer");
-
-	async function recoverRecentPosts() {
-		try {
-			const response = await fetch('/api/posts/recent');
-			if (!response.ok) throw new Error("Failure.")
-			const posts = await response.json();
-			showPosts(posts);
-		}
-		catch (error) {
-			console.error("Couldn't recover recent posts ", error);
-
-		}
-	}
-	function showPosts(posts) {
-		postContainer.innerHTML = '';
-		posts.forEach(post => {
-			const postSection = document.createElement("section");
-			postSection.className = "postSection";
-
-			const postTitle = document.createElement("h2");
-			postTitle.className = "postTitle";
-
-			const postLink = document.createElement("a");
-			postLink.className = "postLink";
-
-			postLink.textContent = post.title;
-			//console.log(post._id);
-			postLink.href = makeURLWithParams("forum", "id", post._id);
-			//console.log(makeURLWithParams("forum", "id", post._id));
-
-			const postContent = document.createElement("p");
-			postContent.className = "postContent";
-			postContent.textContent = post.content;
-
-			postTitle.appendChild(postLink);
-			postSection.appendChild(postTitle);
-			postSection.appendChild(postContent);
-			postContainer.appendChild(postSection);
-
-
-		});
-	}
 
 	recoverRecentPosts();
 }
