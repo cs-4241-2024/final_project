@@ -53,7 +53,7 @@ export async function loadPlaylist(){
         newSection.className = "songSection"
         let songNameAndArtists = document.createElement("section")
         songNameAndArtists.className = "songInfo"
-        songNameAndArtists.style.fontWeight = "bold"
+        songNameAndArtists.style.textDecoration = "underline"
         songNameAndArtists.textContent = playListSongs[i].name + "\n by "+ playListSongs[i].artist
         let songAlbum = document.createElement("section")
         songAlbum.className = "songInfo"
