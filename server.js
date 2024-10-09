@@ -59,6 +59,8 @@ app.post("/event", async (req, res) => {
     const data = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];
 
+    console.log(data)
+
     const response = await client
         .db(DB_NAME)
         .collection(COLLECTION_NAME)
@@ -140,7 +142,7 @@ app.post("/task", async (req, res) => {
         .collection(COLLECTION_NAME)
         .insertOne({
             accessToken: accessToken,
-            type: "event",
+            type: "task",
             ...data,
         });
 

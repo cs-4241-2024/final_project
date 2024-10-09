@@ -22,18 +22,38 @@ const getSunday = () => {
     return new Date(today.setDate(first));
 };
 
+interface EventData {
+    date: string;
+    startTime: string;
+    title: string;
+    howLong: number;
+}
+
+interface Event {
+    date: Date;
+    title: string;
+    howLong: number;
+}
+
+interface TaskData {
+    dueDate: string;
+    dueTime: string;
+    title: string;
+}
+
+interface Task {
+    dueDate: Date;
+    title: string;
+}
+
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
 const HOUR_HEIGHT = 30;
 const HOUR_MARGIN_TOP = 15;
 
 export default function WeeklyCalendar() {
     const [sundayDate, setSundayDate] = useState(getSunday());
-    const [events, setEvents] = useState([
-        { date: new Date(2024, 9, 11, 10), text: "first", howLong: 3 },
-    ]);
-    const [tasks, setTasks] = useState([
-        { date: new Date(2024, 9, 11, 10), text: "second" },
-    ]);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [tasks, setTasks] = useState<Task[]>([]);
 
     const hourNow = new Date().getHours();
     const minutesNow = new Date().getMinutes();
@@ -64,7 +84,16 @@ export default function WeeklyCalendar() {
         })
             .then((response) => response.json())
             .then((data) => {
-                setEvents(data);
+                console.log(data);
+
+                setEvents(
+                    data.map((event: EventData) => ({
+                        ...event,
+                        date: new Date(
+                            Date.parse(event.date + " " + event.startTime)
+                        ),
+                    }))
+                );
             });
 
         fetch("/task", {
@@ -75,7 +104,14 @@ export default function WeeklyCalendar() {
         })
             .then((response) => response.json())
             .then((data) => {
-                setTasks(data);
+                setTasks(
+                    data.map((event: TaskData) => ({
+                        ...event,
+                        dueDate: new Date(
+                            Date.parse(event.dueDate + " " + event.dueTime)
+                        ),
+                    }))
+                );
             });
     }, [isSignedIn, user]);
 
@@ -150,7 +186,7 @@ export default function WeeklyCalendar() {
                                                         }px`,
                                                     }}
                                                 >
-                                                    {event.text}
+                                                    {event.title}
                                                 </div>
                                             )
                                         );
@@ -159,23 +195,23 @@ export default function WeeklyCalendar() {
                                         return (
                                             areDatesSame(
                                                 addDateBy(sundayDate, index),
-                                                task.date
+                                                task.dueDate
                                             ) && (
                                                 <div
                                                     key={taskIndex}
                                                     className="absolute bg-green-500 text-white mx-1 p-1 rounded-md -mt-2 w-full"
                                                     style={{
                                                         top: `${
-                                                            task.date.getHours() *
+                                                            task.dueDate.getHours() *
                                                                 HOUR_HEIGHT +
                                                             HOUR_HEIGHT / 2 +
-                                                            task.date.getMinutes() /
+                                                            task.dueDate.getMinutes() /
                                                                 2
                                                         }px`,
                                                         height: `2px`,
                                                     }}
                                                 >
-                                                    {task.text}
+                                                    {task.title}
                                                 </div>
                                             )
                                         );

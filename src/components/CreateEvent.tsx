@@ -14,6 +14,7 @@ import {
     Heading,
     Input,
     Label,
+    NumberField,
     Popover,
     TextArea,
     TextField,
@@ -22,10 +23,9 @@ import {
 
 export default function CreateEvent() {
     const [visible, setVisible] = useState(false);
+    const { user, isSignedIn } = useUser();
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        const { user, isSignedIn } = useUser();
-
         if (!isSignedIn) return;
 
         // Prevent default browser page refresh
@@ -38,7 +38,14 @@ export default function CreateEvent() {
         data["accessToken"] = user.id;
 
         // Send data to server
-        fetch("/task", { method: "PUT", body: JSON.stringify(data) });
+        fetch("/event", {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.id}`,
+            },
+            method: "POST",
+            body: JSON.stringify(data),
+        });
 
         setVisible(false);
     };
@@ -58,6 +65,7 @@ export default function CreateEvent() {
                         onSubmit={onSubmit}
                         className="flex flex-col gap-5 bg-white mx-auto w-min p-4 border-black border-2 rounded-md"
                     >
+                        <p className="text-xl">Create Event</p>
                         <TextField
                             name="title"
                             type="text"
@@ -132,12 +140,15 @@ export default function CreateEvent() {
                                 {(segment) => <DateSegment segment={segment} />}
                             </DateInput>
                         </TimeField>
-                        <TimeField name="howLong" isRequired>
-                            <Label>Event Duration</Label>
-                            <DateInput className="flex flex-row input pl-2">
-                                {(segment) => <DateSegment segment={segment} />}
-                            </DateInput>
-                        </TimeField>
+                        <NumberField
+                            minValue={0}
+                            maxValue={24}
+                            isRequired
+                            name="howLong"
+                        >
+                            <Label>Event Duration (Hours)</Label>
+                            <Input className="input pl-2" />
+                        </NumberField>
                         <Button className="button" type="submit">
                             Create Event
                         </Button>

@@ -22,23 +22,29 @@ import {
 
 export default function CreateTask() {
     const [visible, setVisible] = useState(false);
+    const { user, isSignedIn } = useUser();
 
-    let onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        const { user, isSignedIn } = useUser();
-
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         if (!isSignedIn) return;
 
         // Prevent default browser page refresh.
         e.preventDefault();
 
         // Get form data as an object.
-        let data = Object.fromEntries(new FormData(e.currentTarget));
+        const data = Object.fromEntries(new FormData(e.currentTarget));
 
         // Add user token to object
         data["accessToken"] = user.id;
 
         // Send data to server
-        fetch("/task", { method: "PUT", body: JSON.stringify(data) });
+        fetch("/task", {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.id}`,
+            },
+            method: "POST",
+            body: JSON.stringify(data),
+        });
 
         setVisible(false);
     };
@@ -50,7 +56,7 @@ export default function CreateTask() {
                 type="button"
                 onPress={() => setVisible(true)}
             >
-                Create Event
+                Create Task
             </Button>
             {visible && (
                 <div className="fixed top-0 left-0 w-full h-full content-center">
@@ -58,6 +64,7 @@ export default function CreateTask() {
                         onSubmit={onSubmit}
                         className="flex flex-col gap-5 bg-white mx-auto w-min p-4 border-black border-2 rounded-md"
                     >
+                        <p className="text-xl">Create Task</p>
                         <TextField
                             name="title"
                             type="text"

@@ -33,7 +33,8 @@ We used MongoDB to store data. The simplicity of storing a collection of JSON ob
 
 ### NodeJS + Express Server
 
-We used Express and NodeJS as our server of choice. TODO: Harshith explain more pls
+We used Express and NodeJS as our server of choice. 
+TODO: Harshith explain more pls
 
 ### Clerk authentication
 
