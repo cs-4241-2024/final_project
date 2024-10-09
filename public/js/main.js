@@ -323,36 +323,6 @@ window.onload = async function () {
   });
 }
 
-window.onload2 = async function (groupIdSomething) {
-  checkAuth();
-  fetchSessionUser();
-
-  fetchUsers(); //If authenticated, fetch users
-  newFetchGroups(); //If authenticated, fetch groups
-
-  showContent(groupIdSomething); // Default to the profile page
-
-
-  // Add logout functionality
-  document.getElementById('logoutBtn').addEventListener('click', async function() {
-    try {
-        const response = await fetch('/logout', {
-            method: 'POST'
-        });
-        const data = await response.json();
-        
-        if (response.ok) {
-            
-            window.location.href = '/login.html';
-        } else {
-            alert('Error during logout: ' + data.message);
-        }
-    } catch (error) {
-        console.error('Error logging out:', error);
-        alert('An error occurred during logout. Please try again.');
-    }
-  });
-}
 
 /*
   * Function to change the password
@@ -444,26 +414,7 @@ async function addNewTask(groupIndex) {
   }
 }
 
-/*
-  * Function to fetch the groups a user is in
-*/
-async function fetchGroups() {
 
-  try {
-    const response = await fetch('/get-group-info');
-    if (response.ok) {
-      
-    } else {
-      console.log('unable to fetch groups');
-    }
-    const groups = await response.json();
-    window.allGroups = groups;
-    generateGroupHTML(window.allGroups);
-    createGroupButtons(window.allGroups);
-  } catch (error) {
-    console.error('Error fetching users:', error);
-  }
-}
 
 /*
   * Function to fetch the groups a user is in
