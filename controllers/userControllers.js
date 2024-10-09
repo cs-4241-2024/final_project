@@ -128,7 +128,7 @@ export async function addFavoriteSong(req,res){
 }
 
 export function gitHubCallBack(req,res){
-        res.redirect("/testPages/testMain.html");
+        res.redirect("/");
 }
 
 export function gitHubLogOut(req,res){
