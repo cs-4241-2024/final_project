@@ -10,6 +10,26 @@ function showContent(groupId) {
   if (groupId.replace(/\d+$/, '') === 'group') {
     let groupIndex = parseInt(groupId.match(/\d+/)[0], 10) - 1;
     currentGroup = window.allGroups[groupIndex].groupName;
+     
+    let usersInGroup = [];
+    for (let i = 0; i < window.allGroups[groupIndex].users.length; i++) {
+      usersInGroup.push(window.allGroups[groupIndex].users[i].username);
+    }
+
+    const taskSearchBar = document.getElementById(`task-search-bar${groupIndex + 1}`);
+    const taskOptionsList = document.getElementById(`task-options-list${groupIndex + 1}`);
+
+    taskSearchBar.addEventListener('focus', () => {
+      taskOptionsList.style.display = 'block';
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown')) {
+        taskOptionsList.style.display = 'none';
+      }
+    });
+
+    populateUserDropdownTask(usersInGroup, `task-options-list${groupIndex + 1}`, `task-search-bar${groupIndex + 1}`, `task-selected-list${groupIndex + 1}`);
     
     const calendarEl = document.getElementById('calendar' + (groupIndex + 1));
     if (calendarEl) {
@@ -19,14 +39,15 @@ function showContent(groupId) {
     const groupAssignments = window.allGroups[groupIndex].assignments && window.allGroups[groupIndex].assignments.length > 0
     ? window.allGroups[groupIndex].assignments.map(assignment => ({
         title: `${assignment.title} (Assigned to: ${assignment.assignedTo})`,
-        start: assignment.dueDate
+        start: assignment.dueDate,
+        color: assignment.status === 'complete' ? 'green' : 'blue'
       }))
     : [];
     
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       events: groupAssignments,
-      dateClick: (info) => showTasksForDate(info.dateStr, window.allGroups[groupIndex].assignments)
+      dateClick: (info) => showTasksForDate(info.dateStr, window.allGroups[groupIndex].assignments, groupIndex)
     });
     
     calendar.render();
@@ -34,16 +55,16 @@ function showContent(groupId) {
 }
 
 
-function showTasksForDate(selectedDate, assignments) {
+function showTasksForDate(selectedDate, assignments, groupIndex) {
   const tasksForDate = assignments.filter(assignment => assignment.dueDate === selectedDate);
-  
-  const tasksListEl = document.querySelector('.tasks-list');
+  const tasksListEl = document.getElementById(`tasks-list${groupIndex+1}`);
   tasksListEl.innerHTML = tasksForDate.length > 0
     ? tasksForDate.map(assignment => `
           <li>${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})</li>
         `).join("")
     : '<li>No tasks due on this date</li>';
 }
+
 
 const checkAuth = async function () {
     try {
@@ -72,12 +93,17 @@ async function fetchSessionUser(){
     });
 
     if (response.ok) {
+
       const user = await response.json();
       console.log('Session user:', user);
       document.getElementById('currentUser').innerText = `Hi ${user.username}, change your password here`;
       document.getElementById('currentUser').style.color = 'black';
+
+      window.currentSessionUser = await response.json();
+      
+      document.getElementById('currentUser').innerText = `Logged in as: ${window.currentSessionUser.username}`;
     } else {
-      console.error('Failed to retrieve user');
+      
     }
   } catch (error) {
     console.error('Error fetching session user:', error);
@@ -85,14 +111,11 @@ async function fetchSessionUser(){
 }
 
 async function fetchUsers() {
-  console.log("Fetch Users")
   try {
     const response = await fetch('/get-users');
     const users = await response.json();
-    console.log(`users are ${JSON.stringify(users)}`);
     window.allUsers = users;
 
-    populateUserDropdownTask(window.allUsers, 'task-options-list', 'task-search-bar', 'task-selected-list');
     populateUserDropdownGroup(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
 
   } catch (error) {
@@ -111,9 +134,9 @@ function populateUserDropdownTask(users, dropdownId, searchBarId, selectedOption
     const radioButton = document.createElement('input');
     radioButton.type = 'radio';
     radioButton.name = 'task-assignee';
-    radioButton.value = user.username;
+    radioButton.value = user;
     label.appendChild(radioButton);
-    label.appendChild(document.createTextNode(user.username));
+    label.appendChild(document.createTextNode(user));
     optionsList.appendChild(label);
   });
   
@@ -130,7 +153,6 @@ function updateRadioListeners(dropdownId, selectedOptionsId) {
     radio.addEventListener('change', () => {
       if (radio.checked) {
         const selectedValue = radio.value;
-        console.log('Selected user:', selectedValue); // Log selection
         updateSelectedOption(selectedValue, selectedOptionsId);
       }
     });
@@ -146,8 +168,6 @@ function updateSelectedOption(value, selectedOptionsId) {
   selectedOption.textContent = value;
   selectedOption.dataset.value = value;
   selectedOptionsContainer.appendChild(selectedOption);
-
-  console.log('Updated user to:', value); // Log updated selection
 }
 
 function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptionsId) {
@@ -190,10 +210,8 @@ function updateCheckboxListeners(dropdownId, selectedOptionsId) {
   checkboxes.forEach(checkbox => {
     checkbox.addEventListener('change', () => {
       if (checkbox.checked) {
-        console.log('Checkbox selected:', checkbox.value); // Log checkbox selection
         addSelectedOption(checkbox.value, selectedOptionsId);
       } else {
-        console.log('Checkbox deselected:', checkbox.value); // Log deselection
         removeSelectedOption(checkbox.value, selectedOptionsId);
       }
     });
@@ -206,8 +224,6 @@ function addSelectedOption(value, selectedOptionsId) {
   selectedOption.textContent = value;
   selectedOption.dataset.value = value;
   document.getElementById(selectedOptionsId).appendChild(selectedOption);
-
-  console.log('Added user:', value); // Log selected users
 }
 
 function removeSelectedOption(value, selectedOptionsId) {
@@ -227,22 +243,15 @@ const showGroup = async function (event) {
 
   // Show/Hide the options list when clicking on the search bar
   const groupSearchBar = document.getElementById('group-search-bar');
-  const taskSearchBar = document.getElementById('task-search-bar');
   const groupOptionsList = document.getElementById('group-options-list');
-  const taskOptionsList = document.getElementById('task-options-list');
   
   groupSearchBar.addEventListener('focus', () => {
     groupOptionsList.style.display = 'block';
   });
-  taskSearchBar.addEventListener('focus', () => {
-    taskOptionsList.style.display = 'block';
-  });
-
 
   // Hide the options list when clicking outside of it
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.dropdown')) {
-      taskOptionsList.style.display = 'none';
       groupOptionsList.style.display = 'none';
     }
   });
@@ -285,12 +294,10 @@ window.onload = async function () {
   checkAuth();
   fetchSessionUser();
 
-
-  console.log("Main.js Onload");
-
   fetchUsers(); //If authenticated, fetch users
   newFetchGroups(); //If authenticated, fetch groups
 
+  
   showContent("profile");
 
   // Add logout functionality
@@ -300,9 +307,9 @@ window.onload = async function () {
             method: 'POST'
         });
         const data = await response.json();
-        console.log('Logout response:', data);
+        
         if (response.ok) {
-            console.log("Successfully logged out user!");
+            
             window.location.href = '/login.html';
         } else {
             alert('Error during logout: ' + data.message);
@@ -322,8 +329,6 @@ const changePassword = async function(event) {
   const password = document.getElementById("currentPassword").value;
   const newPassword = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
-
-  console.log(fetchSessionUser());
 
   // Check if currentPassword is correct
   try {
@@ -363,8 +368,9 @@ const changePassword = async function(event) {
         };
       // If the user entered the wrong username or password
     }else{
-      alert('New password and Confirm password do not match');
-    }  
+      alert('Wrong password');
+  
+      }  
     }
   } catch (error) {
     console.error('Error checking password:', error);
@@ -372,27 +378,21 @@ const changePassword = async function(event) {
   } 
 }
 
-/*
-  * Function to add a new task
-*/
-async function addNewTask() {
-  const task = document.getElementById('addTaskInput').value;
+async function addNewTask(groupIndex) {
+  const task = document.getElementById(`addTaskInput${groupIndex}`).value;
   const assignedUser = document.querySelector('input[name="task-assignee"]:checked').value;
-  const dueDate = document.getElementById('dateInput').value;
-
-  console.log(`${task} ${assignedUser} ${dueDate} ${currentGroup}`);
+  const dueDate = document.getElementById(`dateInput${groupIndex}`).value;
 
   if (!currentGroup) {
     alert("No group selected. Please select a group before adding a task.");
     return;
   }
+  console.log(assignedUser, task, dueDate)
   if (!task || !assignedUser || !dueDate) {
     alert("Please fill in all the fields.");
     return;
   }
-
   const newTask = { title: task, user: assignedUser, date: dueDate, groupName: currentGroup };
-
   try {
     const response = await fetch('/addTask', {
       method: 'POST',
@@ -402,6 +402,7 @@ async function addNewTask() {
 
     if (response.ok) {
       alert('Task added successfully');
+      
     } else {
       alert('Failed to add task');
     }
@@ -415,20 +416,18 @@ async function addNewTask() {
   * Function to fetch the groups a user is in
 */
 async function fetchGroups() {
-  console.log("Fetch groups")
+
   try {
     const response = await fetch('/get-group-info');
     if (response.ok) {
-      console.log('groups fethced successfully');
+      
     } else {
       console.log('unable to fetch groups');
     }
     const groups = await response.json();
     window.allGroups = groups;
-    generateGroupHTML(groups);
-    createGroupButtons(groups);
-
-    console.log(`groups are ${JSON.stringify(groups)}`);
+    generateGroupHTML(window.allGroups);
+    createGroupButtons(window.allGroups);
   } catch (error) {
     console.error('Error fetching users:', error);
   }
@@ -485,15 +484,14 @@ async function deleteTask(group, assIndex){
   try {
     const response = await fetch('/deleteTask', {
       method: 'POST',
-      body: JSON.stringify({groupName: group, assignmentIndex: assIndex}),
+      body: JSON.stringify({groupName: currentGroup, assignmentIndex: assIndex}),
       headers: { 'Content-Type': 'application/json' }
     });
 
     if (response.ok) {
-      //TODO make it regenerate the page probably
-      location.reload();
-      showContent(group)
-      
+      console.log("task deleted")
+      newFetchGroups(); //If authenticated, fetch groups
+      showContent(groupId)
     }
   } catch (error) {
     console.error('Error deleting task:', error);
@@ -509,18 +507,17 @@ async function completeTask(group, assIndex){
   try {
     const response = await fetch('/completeTask', {
       method: 'POST',
-      body: JSON.stringify({groupName: group, assignmentIndex: assIndex}),
+      body: JSON.stringify({groupName: currentGroup, assignmentIndex: assIndex}),
       headers: { 'Content-Type': 'application/json' }
     });
 
     if (response.ok) {
-      //TODO change the generate html so that we see completed and incomplete tasks
-      console.log("response is ok")
-      // location.reload();
-      // showContent(group)
+      console.log("task completed")
+      //location.reload();
+      showContent(groupId)
     }
   } catch (error) {
-    console.error('Error completing task:', error);
+    
     alert('There was an error completing the task. Please try again.');
   }
 }
@@ -529,9 +526,8 @@ async function completeTask(group, assIndex){
   * Function to generate and inject HTML into the DOM
 */
 function generateGroupHTML(data) {
-  console.log('This is the data' + data);
   data.forEach((group, index) => {
-    console.log(`Generating HTML for group: ${group.groupName}`);
+    
 
     // Group Members Names
     const userNames = group.users.map(user => user.username).join(", ");
@@ -547,19 +543,22 @@ function generateGroupHTML(data) {
         return `
         <li>
           ${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})
-          <button class="complete-task-btn" onclick="completeTask('${group.groupName}', ${originalIndex})">Complete</button>
-          <button class="delete-task-btn" onclick="deleteTask('${group.groupName}', ${originalIndex})">Delete</button>
+          <button class="complete-task-btn" onclick="completeTask('group${index + 1}', ${originalIndex})">Complete</button>
+          <button class="delete-task-btn" onclick="deleteTask('group${index + 1}', ${originalIndex})">Delete</button>
         </li>
       `}).join("")
       : "<li>No incomplete assignments available</li>";
 
     // Generate HTML for completed assignments
     const completedAssignmentsHTML = completedAssignments.length > 0
-      ? completedAssignments.map(assignment => `
+      ? completedAssignments.map(assignment => { 
+        const originalIndex = group.assignments.findIndex(a => a.title === assignment.title && a.assignedTo === assignment.assignedTo);
+        return `
         <li>
           ${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})
+          <button class="delete-task-btn" onclick="deleteTask('group${index + 1}', ${originalIndex})">Delete</button>
         </li>
-      `).join("")
+      `}).join("")
       : "<li>No completed assignments available</li>";
 
 
@@ -575,7 +574,7 @@ function generateGroupHTML(data) {
           <div class="tasks-container">
             <div class="tasks-section">
               <h3>Tasks for the day</h3>
-              <ul class="tasks-list">
+              <ul id="tasks-list${index+1}" class="all-tasks-list">
                 <li>Select a day to see tasks</li>
               </ul>
             </div>
@@ -596,21 +595,21 @@ function generateGroupHTML(data) {
 
             <div class="all-tasks-section">
               <form id="addTask">
-                  <h3>Add New Task</h3>
-                  <input type="text" id="addTaskInput" placeholder="New Task" required>
+                  <label>Add new task</label>
+                  <input type="text" id="addTaskInput${index + 1}" placeholder="New Task" required>
                   <div class="dropdown-container">
-                      <div class="selected-options" id="task-selected-list">
+                      <div class="selected-options" id="task-selected-list${index + 1}">
                           <!-- Selected options will appear here -->
                       </div>
                       <div class="dropdown">
-                          <input class="search-bar" type="text" placeholder="Assign User" id="task-search-bar">
-                          <div class="options-list" id="task-options-list">
+                          <input class="search-bar" type="text" placeholder="Assign User" id="task-search-bar${index + 1}">
+                          <div class="options-list" id="task-options-list${index + 1}">
                               <!-- has all users -->
                           </div>
                       </div>
                   </div>
-                  <input type="date" id="dateInput" placeholder="Date" required>
-                  <button type="button" onclick="addNewTask()">Add Task</button>
+                  <input type="date" id="dateInput${index + 1}" placeholder="Date" required>
+                  <button type="button" onclick="addNewTask(${index + 1})">Add new task</button>
               </form>
             </div>
           </div>
@@ -629,7 +628,6 @@ function generateGroupHTML(data) {
 function createGroupButtons(data) {
   const groupButtonsDiv = document.getElementById("groupButtons");
   data.forEach((group, index) => {
-    console.log("Making a button for " + group.groupName)
     const button = document.createElement("button");
     button.id = `btnGroup${index + 1}`;
     button.innerText = group.groupName.split(' ').map(word => word[0]).join('');

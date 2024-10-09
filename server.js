@@ -93,12 +93,20 @@ app.post('/addTask', async (req, res) => {
             dueDate: date,
             status: 'incomplete' 
         };
-       
+
+        console.log(newAssignment)
+
+
         await groupCollection.updateOne(
-            { groupName },
-            { $push: { assignments: newAssignment } } 
+            { groupName, assignments: null },  // Check if 'assignments' is null
+            { $set: { assignments: [] } }      // Initialize it as an empty array
         );
 
+        await groupCollection.updateOne(
+            { groupName },
+            { $push: { assignments: newAssignment } }  // Now safely push the new assignment
+        );
+        
         res.status(201).json({
             success: true,
             message: 'Task added successfully',
@@ -309,7 +317,6 @@ app.post('/register', async (req, res) => {
         const newUser = { 
             username, 
             password: hashedPassword, 
-            groupIDs: [] 
         };
         await usersCollection.insertOne(newUser);
 
