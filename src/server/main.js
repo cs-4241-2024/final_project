@@ -23,10 +23,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your secret option here',
+  secret: process.env.SESSION_SECRET || 'your-secret',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, sameSite: 'lax' }
+  cookie: { secure: false, sameSite: 'lax' }  
 }));
 
 app.use(passport.initialize());
@@ -45,7 +45,7 @@ const jobApplicationSchema = new mongoose.Schema({
   dueDate: { type: Date, required: true },
   submitted: { type: Boolean, default: false },
   status: { type: String, enum: ['Denied', 'Accepted', 'Under Review', 'Interview Stage'], required: true },
-  githubId: { type: String, required: true }  
+  githubId: { type: String, required: true }
 });
 
 const JobApplication = mongoose.model('JobApplication', jobApplicationSchema);
@@ -53,9 +53,8 @@ const JobApplication = mongoose.model('JobApplication', jobApplicationSchema);
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/github/callback", //CHANGE THIS TO GLITCH URL AFTER!!!
-},
-async function(accessToken, refreshToken, profile, done) {
+  callbackURL: "http://localhost:3000/auth/github/callback", //CHANGE TO GLITCHHH!!!!
+}, async function (accessToken, refreshToken, profile, done) {
   try {
     let user = await User.findOne({ githubId: profile.id });
     if (!user) {
@@ -69,11 +68,12 @@ async function(accessToken, refreshToken, profile, done) {
   } catch (err) {
     return done(err, null);
   }
-}
-));
+}));
 
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
 
-passport.serializeUser((user, done) => done(null, user._id));
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
@@ -104,6 +104,7 @@ app.get('/check-session', (req, res) => {
   res.status(401).json({ loggedIn: false });
 });
 
+
 app.get('/logout', (req, res) => {
   req.logout((err) => {
     if (err) return res.status(500).json({ message: 'Error during logout.' });
@@ -114,10 +115,9 @@ app.get('/logout', (req, res) => {
   });
 });
 
-
-app.get('/applications', checkLogin, async (req, res) => { //gets users id and match them w the ids in the server to find user applications
+app.get('/applications', checkLogin, async (req, res) => {
   try {
-    const githubId = req.user.githubId;  
+    const githubId = req.user.githubId;
     const applications = await JobApplication.find({ githubId });
     res.status(200).json(applications);
   } catch (error) {
@@ -125,18 +125,17 @@ app.get('/applications', checkLogin, async (req, res) => { //gets users id and m
   }
 });
 
-
 app.post('/applications', checkLogin, async (req, res) => {
   try {
     const { companyName, jobTitle, dueDate, submitted, status } = req.body;
-    const githubId = req.user.githubId;  
+    const githubId = req.user.githubId;
     const newApplication = new JobApplication({
       companyName,
       jobTitle,
       dueDate,
       submitted,
       status,
-      githubId  
+      githubId
     });
     const savedApplication = await newApplication.save();
     res.status(201).json(savedApplication);
@@ -147,40 +146,62 @@ app.post('/applications', checkLogin, async (req, res) => {
 
 app.get('/applications/all', async (req, res) => {
   try {
-    const applications = await JobApplication.find({}); 
+    const applications = await JobApplication.find({});
     res.status(200).json(applications);
   } catch (error) {
     res.status(500).json({ message: 'Error loading applications' });
   }
 });
 
+// app.put('/applications/:id', async (req, res) => {
+//   const applicationId = req.params.id;
+//   const updatedApplication = req.body;
+//   try {
+//     const application = await Application.findByIdAndUpdate(applicationId, updatedApplication, { new: true });
+//     res.json(application);
+//   } catch (error) {
+//     console.error('Error updating application:', error);
+//     res.status(500).send('Error updating application');
+//   }
+// });
 
-
-app.put('/applications/:id', checkLogin, async (req, res) => {
+app.put('/applications/:id',checkLogin,  async (req, res) => {
   try {
-    const updatedApplication = await JobApplication.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+    const applicationId = req.params.id;
+    const updatedApplication = req.body;
+    const application = await JobApplication.findByIdAndUpdate(
+      applicationId,
+      {
+        companyName: updatedApplication.companyName,
+        jobTitle: updatedApplication.jobTitle,
+        dueDate: new Date(updatedApplication.dueDate),
+        submitted: updatedApplication.submitted,
+        status: updatedApplication.status,
+        githubId: updatedApplication.githubId
+      },
       { new: true }
     );
-    if (!updatedApplication) return res.status(404).json({ message: 'Application not found' });
-    res.status(200).json(updatedApplication);
+    if (!application) {
+      return res.status(404).json({ success: false, message: "applications not found" });
+    }
+    res.status(200).json(application);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating application' });
+    res.status(500).json({ success: false, message: "Error updating applications" });
   }
 });
 
-app.delete('/applications/:id', checkLogin, async (req, res) => {
+
+app.delete('/applications/:id', async (req, res) => {
   try {
-    const deletedApplication = await JobApplication.findByIdAndDelete(req.params.id);
-    if (!deletedApplication) return res.status(404).json({ message: 'Application not found' });
-    res.status(200).json({ message: 'Application deleted successfully' });
+    const { id } = req.params;
+    await JobApplication.findByIdAndDelete(id);
+    res.status(200).send({ message: 'Application deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting application' });
+    res.status(500).send({ message: 'Error deleting application', error });
   }
 });
 
-// Start ViteExpress Server
+
 ViteExpress.listen(app, port, () => {
   console.log(`Server is listening on port ${port}...`);
 });

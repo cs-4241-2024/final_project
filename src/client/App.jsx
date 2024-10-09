@@ -1,38 +1,108 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
-import Table from './components/Table';
-import Form from './components/Form';
-
+import React, { useState, useEffect } from 'react';
+import Login from './components/Login';
+import JobApplicationForm from './components/Form';
+import JobApplicationTable from './components/Table';
+import './index.css';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [applications, setApplications] = useState([]);
+
+  useEffect(() => {
+    checkSession();
+  }, []);
+
+  const checkSession = async () => {
+    try {
+      const response = await fetch('/check-session');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.loggedIn) {
+          setLoggedIn(true);
+          await loadApplications();
+        }
+      }
+    } catch (error) {
+      console.error('Error checking session:', error);
+    }
+  };
+
+  const loadApplications = async () => {
+    try {
+      const response = await fetch('/applications');
+      if (response.ok) {
+        const data = await response.json();
+        setApplications(data);
+      }
+    } catch (error) {
+      console.error('Error loading applications:', error);
+    }
+  };
+
+  const handleLogin = () => {
+    window.location.href = '/auth/github'; 
+  };
+
+  const handleLogout = async () => {
+    const response = await fetch('/logout');
+    if (response.ok) {
+      setLoggedIn(false);
+    }
+  };
+
+  const handleAddApplication = async (application) => {
+    const response = await fetch('/applications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(application),
+    });
+
+    if (response.ok) {
+      loadApplications();
+    } else {
+      alert('Error adding application.');
+    }
+  };
+
+  const handleDeleteApplication = async (id) => {
+    const response = await fetch(`/applications/${id}`, { method: 'DELETE' });
+
+    if (response.ok) {
+      loadApplications();
+    } else {
+      alert('Error deleting application.');
+    }
+  };
+
+  const handleUpdateApplication = async (updatedApplication) => {
+    const response = await fetch(`/applications/${updatedApplication.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedApplication),
+    });
+
+    if (response.ok) {
+      loadApplications();
+    } else {
+      alert('Error updating application.');
+    }
+  };
 
   return (
     <div className="App">
-      <div>
-
-        <Table></Table>
-
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR!
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {!loggedIn ? (
+        <Login handleLogin={handleLogin} />
+      ) : (
+        <div id="applicationSection">
+          <JobApplicationForm handleAddApplication={handleAddApplication} />
+          <JobApplicationTable 
+            applications={applications} 
+            handleDeleteApplication={handleDeleteApplication} 
+            handleUpdateApplication={handleUpdateApplication} 
+          />
+          <button onClick={handleLogout} className="pure-button pure-button-primary">Logout</button>
+        </div>
+      )}
     </div>
   );
 }
