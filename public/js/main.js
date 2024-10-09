@@ -1,5 +1,5 @@
 // FRONT-END (CLIENT) JAVASCRIPT HERE
-import { makeURLWithParams, getParam } from "./urlHelpers.js";
+import { makeURLWithParams, getParam, makeURL } from "./urlHelpers.js";
 
 
 
@@ -35,11 +35,20 @@ const search = function () {
 	}
 }
 
+//Sends the user to the addPost.html page
+const createPostPageRedirect = function () {
+	const redirectStirng = makeURL("addPost");
+	location.assign(redirectStirng);
+}
+
 window.onload = function () {
 	nav()
 	const searchButton = document.getElementById("searchButton");
 	searchButton.onclick = search;
-	//NEW BELOWWWWWWWWWWWWWWWWWWWWWWW...
+	const createPostButton = document.getElementById("createPostButton");
+	createPostButton.onclick = createPostPageRedirect;
+
+
 	const postContainer = document.getElementById("postContainer");
 
 	async function recoverRecentPosts() {
@@ -85,6 +94,4 @@ window.onload = function () {
 	}
 
 	recoverRecentPosts();
-
-	//NEW ABOVEEEEEEEEEEEEEEEEEEEEEEE...
 }
