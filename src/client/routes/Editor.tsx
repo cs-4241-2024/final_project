@@ -108,7 +108,7 @@ const Editor: React.FC = () => {
 
   useEffect(() => {
     if (uploadedData) {
-      handleClearData();
+      // handleClearData();
       console.log('Uploaded data changed:', uploadedData);
       uploadedData.forEach((section: any) => {
         const data: string[] = [];
