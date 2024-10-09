@@ -12,6 +12,19 @@ dotenv.config();
 import parseXLSX from "./parser/parseXLSX.js"
 import XLSX from "xlsx";
 import groupRow from "./parser/groupRow.js";
+import {Schema} from "node:inspector";
+
+interface ISheet {
+    user: mongoose.Types.ObjectId;
+    humanityData: string[];
+    physicalEducationData: string[];
+    socialScienceData: string[];
+    iqpData: string[];
+    mathematicsData: string[];
+    freeElectivesData: string[];
+    computerScienceData: string[];
+    basicScienceData: string[];
+}
 
 const app = express();
 
@@ -21,6 +34,19 @@ const clientOptions = { serverApi: { version: '1', strict: true, deprecationErro
 const userSchema = new mongoose.Schema({});
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("User", userSchema);
+
+const sheetSchema: mongoose.Schema<ISheet> = new mongoose.Schema({
+    user: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true, unique: true},
+    humanityData: [String],
+    physicalEducationData: [String],
+    socialScienceData: [String],
+    iqpData: [String],
+    mathematicsData: [String],
+    freeElectivesData: [String],
+    computerScienceData: [String],
+    basicScienceData: [String]
+});
+const Sheet = mongoose.model("Sheet", sheetSchema);
 
 // use static authenticate method of model in LocalStrategy
 passport.use(User.createStrategy());
@@ -46,6 +72,7 @@ async function run() {
 
     app.post("/addUser", express.json(), async (req: express.Request, res: express.Response) => {
         if (!req.session) {
+            res.status(500).send("Session not found!");
             throw Error("Session not found!");
         }
         const newUser: PassportLocalDocument = new User({ username: req.body.username }) as PassportLocalDocument;
@@ -54,16 +81,17 @@ async function run() {
         const user = await User.authenticate()(req.body.username, req.body.password);
         console.log(user);
         if (user.user === false) {
-            res.sendStatus(500);
+            res.status(500).send("User not found!");
         } else {
             req.session.user = user.user._id;
             // res.json(user.user._id);
-            res.sendStatus(200);
+            res.sendStatus(201);
         }
     });
 
     app.get("/checkLogin", async (req: express.Request, res: express.Response) => {
         if (!req.session) {
+            res.status(500).send("Session not found!");
             throw Error("Session not found!");
         }
         if (req.session.isPopulated) {
@@ -75,6 +103,7 @@ async function run() {
 
     app.post("/login", express.json(), async (req: express.Request, res: express.Response) => {
         if (!req.session) {
+            res.status(500).send("Session not found!");
             throw Error("Session not found!");
         }
         console.log(req.body);
@@ -86,6 +115,15 @@ async function run() {
             req.session.user = user.user;
             res.sendStatus(204);
         }
+    });
+
+    app.post("/logout", async (req: express.Request, res: express.Response) => {
+        if (!req.session) {
+            res.status(500).send("Session not found!");
+            throw Error("Session not found!");
+        }
+        req.session = null;
+        res.sendStatus(204);
     });
 
     app.post("/parseXlsx", fileUpload({
@@ -106,13 +144,53 @@ async function run() {
         // const workbook = XLSX.read(file.data, { type: 'buffer' });
 
         const parsed = parseXLSX(workbook);
-        if (parsed === null) {
+        if (parsed == null) {
             res.sendStatus(400);
         } else {
             const grouped = groupRow(JSON.parse(parsed));
             res.send(grouped);
         }
 
+    });
+
+    app.post("/saveData", express.json(), async (req: express.Request, res: express.Response) => {
+        if (req.session == null) {
+            res.status(500).send("Session not found!");
+            throw Error("Session not found!");
+        }
+        if (req.session.user == null) {
+            res.sendStatus(404);
+            return;
+        }
+
+        let sheet: ISheet = req.body;
+        sheet.user = req.session.user;
+        const exists = await Sheet.exists({user: req.session.user});
+        if (exists != null) {
+            await Sheet.replaceOne({user: req.session.user}, sheet);
+            res.sendStatus(200);
+        } else {
+            await new Sheet(sheet).save();
+            res.sendStatus(201);
+        }
+    });
+
+    app.get("/loadData", async (req: express.Request, res: express.Response) => {
+        if (req.session == null) {
+            res.status(500).send("Session not found!");
+            throw Error("Session not found!");
+        }
+        if (req.session.user == null) {
+            res.sendStatus(404);
+            return
+        }
+
+        let data = await Sheet.findOne({user: req.session.user}).exec();
+        if (data != null) {
+            res.json(data);
+        } else {
+            res.sendStatus(404);
+        }
     });
 
     app.get("/hello", (_, res) => {

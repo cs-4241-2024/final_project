@@ -31,10 +31,13 @@ function Home() {
   return (
     <div className="main-home">
       <IconButton
-        className="back-button"
-        aria-label="back to home"
-        onClick={() => {
-          console.log("back button clicked");
+        className="logout-button"
+        aria-label="logout"
+        onClick={async () => {
+          console.log("logout button clicked");
+                      await fetch("/logout", {
+                          method: "POST",
+                      });
           navigate('/login');
         }}
       >
@@ -59,7 +62,6 @@ function Home() {
         }}>
           Instructions
         </Button>
-
       </div>
       <div className="tracking-img">
         <iframe
