@@ -1,12 +1,16 @@
 const express = require( 'express' ),
+      mongoose = require( 'mongoose' ),
+      path = require( 'path' ),
+      session = require( 'express-session'),
+      passport = require( 'passport'),
+      GoogleStrategy = require( 'passport-google-oauth20' ).Strategy,
       port = 3000;
 
 const app = express();
 app.use(express.static('public'));
 
 // MongoDB connection
-mongoose
-  .connect(
+mongoose.connect(
     "mongodb+srv://azzhang3:eGPDbrMNzogUpygL@cluster0.iuxm8.mongodb.net/",
     {
       useNewUrlParser: true,
