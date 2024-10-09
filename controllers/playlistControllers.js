@@ -229,6 +229,52 @@ export async function searchPlaylists(req,res) {
     }
 }
 
+export async function moveSong(req,res){
+    let parms = req.body
+    console.log("parms stryder")
+    console.log(parms)
+    try {
+        let playlistTable = await client.db(Dbname).collection("Playlists")
+        let playlist = await playlistTable.findOne({_id: new ObjectId(parms.playlist)})
+
+        let songs_IDs = playlist.songs
+        let indexToMove = songs_IDs.indexOf(parms.song)
+        let indexToMoveTo=parms.movement+indexToMove
+
+        if(indexToMoveTo<0 || indexToMoveTo>= songs_IDs.length){
+            res.status(400)
+            res.send('movement out of range')
+            return
+        }
+
+        let temp = songs_IDs[indexToMove]
+        songs_IDs[indexToMove] = songs_IDs[indexToMoveTo]
+        songs_IDs[indexToMoveTo] = temp
+
+        let updateScheme = {
+            $set: {
+                songs: songs_IDs
+            },
+        }
+        let updateResult = await playlistTable.updateOne({
+            _id: new ObjectId(parms.playlist),
+            createdBy: req.user._id.toString()
+        }, updateScheme)
+
+        if (updateResult) {
+            res.status(200)
+            res.send("move complete")
+        } else {
+            res.status(400)
+            res.send('move failed not found in db??')
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(404)
+        res.send('error connecting to db')
+    }
+}
+
 function newPlaylistIsVaild(newPlaylist){
     if(newPlaylist.name === undefined || typeof(newPlaylist.name) !== "string"){
         return false
