@@ -1,3 +1,18 @@
+export async function getUserID(){
+    const response = await fetch('/api/users/git/dbID', {
+        method: 'GET'
+    });
+
+    if(response.ok){
+        return await response.text();
+    } else {
+        console.error("Failed to retrieve user ID");
+        return null;
+    }
+}
+
+const userId = await getUserID();
+
 document.getElementById("addSongForm").addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -15,6 +30,8 @@ document.getElementById("addSongForm").addEventListener("submit", async function
         duration: duration,
         genre: genre,
         releaseDate: releaseDate,
+        createdBy: userId,
+        createdOn: new Date()
     }
 
     try {
