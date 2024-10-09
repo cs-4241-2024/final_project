@@ -41,6 +41,7 @@ export async function getUserPlaylist(req, res) {
 
 export async function getUserFavorites(req, res) {
     let userID = req.user._id
+    console.log("fav userID")
     console.log(userID)
     try {
         let userTable = await client.db(Dbname).collection("Users")
@@ -49,7 +50,7 @@ export async function getUserFavorites(req, res) {
         let userFavorites = user.favorites
         let favoriteSongs = []
         let songTable = await client.db(Dbname).collection("Songs")
-
+        console.log("userFavorites")
         console.log(userFavorites)
         for(let i=0; i<userFavorites.length;i++){
             console.log(new ObjectId(userFavorites[i]))
