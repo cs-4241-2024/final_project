@@ -610,6 +610,8 @@ function generateGroupHTML(data) {
         <div class="group-header">
             <h1>Welcome to ${group.groupName}</h1>
             <p>Member Names: ${userNames}</p>
+            <button class="leave-group-btn" onclick="leaveGroup('${group.groupName}')">Leave Group</button>
+            <button class="delete-group-btn" onclick="deleteGroup('${group.groupName}')">Delete Group</button>
         </div>
         <div class="calendar-tasks-container">
           <div id="calendar${index + 1}" class="calendar-section"></div>
@@ -690,4 +692,33 @@ function createGroupButtons(data) {
     button.onclick = () => showContent(`group${index + 1}`); // Attach onclick event
     groupButtonsDiv.appendChild(button); // Add button to the sidebar
   });
+}
+
+
+// Function to handle leaving the group
+function leaveGroup(groupName) {
+  console.log(groupName)
+  const confirmation = confirm("Are you sure you want to leave this group?");
+  if (confirmation) {
+    // Remove the user from the group (logic for leaving group goes here)
+    window.allGroups[groupIndex].users = window.allGroups[groupIndex].users.filter(user => user.username !== currentUser); // Assuming you have a currentUser variable
+
+    // Re-render the groups (or update the UI as needed)
+    generateGroupHTML(window.allGroups);
+    alert("You have left the group.");
+  }
+}
+
+// Function to handle deleting the group
+function deleteGroup(groupName) {
+  console.log(groupName)
+  const confirmation = confirm("Are you sure you want to delete this group?");
+  if (confirmation) {
+    // Remove the group from the list of groups
+    window.allGroups.splice(groupIndex, 1);
+
+    // Re-render the groups (or update the UI as needed)
+    generateGroupHTML(window.allGroups);
+    alert("The group has been deleted.");
+  }
 }
