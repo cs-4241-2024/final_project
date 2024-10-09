@@ -4,21 +4,13 @@
 	margin-right: 5vw;
 	margin-top: 20px;
 	border-radius: 20px;
+	padding: 20px;
 }
 
-.postTitle {
+#postTitle {
 	color: black;
 	font-size: 32px;
-	padding-top: 20px;
-	padding-left: 20px;
-	padding-right: 20px;
 	margin: 0;
-}
-
-.postPageTitle {
-	color: black;
-	margin-left: 5vw;
-	margin-right: 5vw;
 }
 
 .postLink {
@@ -31,18 +23,11 @@
 
 .postContent {
 	font-size: 24px;
-	padding-top: 5px;
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
 	margin: 0;
 }
 
 .reply {
 	padding-top: 5px;
-	padding-left: 20px;
-	padding-right: 20px;
-	/* padding-bottom: 20px; */
 	margin: 0;
 
 }
@@ -51,26 +36,23 @@
 	border-top: 2px;
 	border-style: solid;
 	border-color: rgb(160, 160, 160);
-	margin-left: 20px;
-	margin-right: 20px;
-}
-
-.commentBox {
-	margin-left: 20px;
-	margin-right: 20px;
 }
 
 #submitCommentButton {
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-bottom: 20px;
+	border-radius: 10px;
+	border-width: 1px;
+	margin: 0;
+	margin-top: 5px;
+	font-size: 15px;
 }
 
 .replyAreaTitle {
-	padding-top: 20px;
-	padding-left: 20px;
-	padding-right: 20px;
 	padding-bottom: 10px;
-	font-size: 20px;
+	font-size: 22px;
 	margin: 0;
+	text-decoration: underline;
+}
+
+#commentBox {
+	width: 100%;
 }
