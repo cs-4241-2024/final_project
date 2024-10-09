@@ -100,9 +100,9 @@ async function fetchSessionUser(){
       document.getElementById('currentUser').innerText = `Hi ${user.username}, change your password here`;
       document.getElementById('currentUser').style.color = 'black';
 
-      window.currentSessionUser = user;
+      window.currentSessionUser = await response.json();
+      
       document.getElementById('currentUser').innerText = `Logged in as: ${window.currentSessionUser.username}`;
-
     } else {
       
     }
@@ -426,7 +426,7 @@ async function fetchGroups() {
     if (response.ok) {
       
     } else {
-      console.log('unable to fetch groups');
+      
     }
     const groups = await response.json();
     window.allGroups = groups;
@@ -479,11 +479,11 @@ async function newFetchGroups() {
   }
 }
 
-/*
-  * Function to delete a task from a group
-*/
-async function deleteTask(group, assIndex){
-  console.log("deleting task with group  " +group +" index " + assIndex)
+
+async function deleteTask(groupId, assIndex){
+
+  console.log("The group we are trying to delete a tasj frrom is "+ currentGroup)
+  
   try {
     const response = await fetch('/deleteTask', {
       method: 'POST',
@@ -502,11 +502,9 @@ async function deleteTask(group, assIndex){
   }
 }
 
-/*
-  * Function to mark a task complete
-*/
-async function completeTask(group, assIndex){
-  console.log("completing task with group  " +group +" index " + assIndex)
+
+async function completeTask(groupId, assIndex){
+  
   try {
     const response = await fetch('/completeTask', {
       method: 'POST',
