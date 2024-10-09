@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Song</title>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/addSong.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/addSong.css">
 </head>
 <body>
     <nav class="navbar"></nav>
-    <h2>Add a Song to the Database</h2>
+    <h2>Add a Song</h2>
 
     <form id="addSongForm">
         <label for="name">Song Name:</label>
@@ -19,18 +23,17 @@
         <input type="text" id="album" name="album" required>
 
         <label for="duration">Duration (sec):</label>
-        <input type="text" id="duration" name="duration" required>
+        <input type="number" id="duration" name="duration" required>
 
         <label for="genre">Genre:</label>
         <input type="text" id="genre" name="genre" required>
 
-        <label for="releaseDate">Release Year:</label>
-        <input type="number" id="releaseDate" name="releaseDate" required>
+        <label for="releaseDate">Release Date:</label>
+        <input type="date" id="releaseDate" name="releaseDate" required>
 
         <button type="submit">Add Song</button>
     </form>
 
     <p id="responseMessage"></p>
-    <script src="./js/addSong.js"></script>
 </body>
 </html>

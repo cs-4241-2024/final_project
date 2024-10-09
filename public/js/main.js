@@ -39,3 +39,8 @@ window.onload = function () {
 	const searchButton = document.getElementById("searchButton");
 	searchButton.onclick = search;
 }
+
+// redirect to add song page
+document.getElementById("addSongButton").addEventListener("click", function() {
+	window.location.href = "add-song.html";
+});
