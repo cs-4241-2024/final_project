@@ -41,22 +41,12 @@ const createPostPageRedirect = function () {
 	location.assign(redirectStirng);
 }
 
-// // send user to add song page
-// const createSongPageRedirect = function () {
-// 	const redirectString = makeURL("add-song");
-// 	location.assign(redirectString);
-// }
-
-
 window.onload = function () {
 	nav()
 	const searchButton = document.getElementById("searchButton");
 	searchButton.onclick = search;
 	const createPostButton = document.getElementById("createPostButton");
 	createPostButton.onclick = createPostPageRedirect;
-	// const createSongButton = document.getElementById("createSongButton");
-	// createSongButton.onclick = createSongPageRedirect;
-
 
 
 	const postContainer = document.getElementById("postContainer");
