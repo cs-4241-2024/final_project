@@ -153,18 +153,6 @@ app.get('/applications/all', async (req, res) => {
   }
 });
 
-// app.put('/applications/:id', async (req, res) => {
-//   const applicationId = req.params.id;
-//   const updatedApplication = req.body;
-//   try {
-//     const application = await Application.findByIdAndUpdate(applicationId, updatedApplication, { new: true });
-//     res.json(application);
-//   } catch (error) {
-//     console.error('Error updating application:', error);
-//     res.status(500).send('Error updating application');
-//   }
-// });
-
 app.put('/applications/:id',checkLogin,  async (req, res) => {
   try {
     const applicationId = req.params.id;

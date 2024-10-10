@@ -53,13 +53,13 @@ const Table = ({ applications, handleDeleteApplication, handleUpdateApplication 
   const getStatusColor = (status) => {
     switch (status) {
       case 'Denied':
-        return '#f44336'; // Red for Denied
+        return '#f44336'; // Red 
       case 'Accepted':
-        return '#4CAF50'; // Green for Accepted
+        return '#4CAF50'; // Green 
       case 'Under Review':
-        return '#FFC107'; // Yellow for Under Review
+        return '#FFC107'; // Yellow 
       case 'Interview Stage':
-        return '#2196F3'; // Blue for Interview Stage
+        return '#2196F3'; // Blue 
       default:
         return '#fff'; // Default white
     }
@@ -121,17 +121,6 @@ const Table = ({ applications, handleDeleteApplication, handleUpdateApplication 
                 />
               </td>
               <td>
-                {/* <select
-                  name="status"
-                  value={editableRowId === app._id ? rowData[app._id].status : app.status}
-                  onChange={(e) => handleChange(e, app._id)}
-                  disabled={editableRowId !== app._id}
-                >
-                  <option value="Denied" style="background-color:">Denied</option>
-                  <option value="Accepted">Accepted</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Interview Stage">Interview Stage</option>
-                </select> */}
                 <select
                   name="status"
                   value={editableRowId === app._id ? rowData[app._id].status : app.status}
@@ -141,7 +130,7 @@ const Table = ({ applications, handleDeleteApplication, handleUpdateApplication 
                     backgroundColor: getStatusColor(
                       editableRowId === app._id ? rowData[app._id].status : app.status
                     ),
-                    color: '#fff', // Optional: Change the text color for better visibility
+                    color: '#fff', 
                   }}
                 >
                   <option value="Denied">Denied</option>

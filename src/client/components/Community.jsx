@@ -57,13 +57,12 @@ const Community = () => {
             <td style={{ padding: '12px' }}>{new Date(app.dueDate).toLocaleDateString()}</td>
             <td style={{ padding: '12px' }}>{app.submitted ? 'Yes' : 'No'}</td>
             <td style={{ padding: '12px' }}>
-              {/* Small box around the status value */}
               <span
                 style={{
                   padding: '5px 10px',
-                  backgroundColor: getStatusColor(app.status),  // Dynamic color
+                  backgroundColor: getStatusColor(app.status),  
                   color: '#fff',
-                  borderRadius: '5px',  // Smooth corners
+                  borderRadius: '5px',  
                   display: 'inline-block',
                 }}
               >

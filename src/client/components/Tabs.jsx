@@ -1,12 +1,11 @@
 import React from 'react';
 import '../index.css';
-import '../App.css';// To ensure importing the correct CSS file
-
+import '../App.css';
 
 
 const Tabs = ({ activeTab, setActiveTab }) => {
     return (
-      <div className="tabs-container"> {/* Ensure the class name matches exactly */}
+      <div className="tabs-container">
       <ul className="tabs">
       <img src="src\client\assets\studiousgompei.png" alt="logo" class="logo-img"/>
         <li 

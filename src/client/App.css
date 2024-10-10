@@ -42,47 +42,43 @@
 }
 
 
-/* Logout Button Styling - Positioned in the Top-Right Corner */
 button.logout-button {
-  position: absolute; /* Position the button relative to the screen */
-  top: 20px; /* Distance from the top */
-  right: 20px; /* Distance from the right edge */
+  position: absolute; 
+  top: 20px; 
+  right: 20px; 
   padding: 10px 15px;
   font-size: 16px;
-  background-color: #1f8dd6; /* Red background */
-  color: white; /* White text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth background transition */
+  background-color: #1f8dd6; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
 }
 
 .log-user {
-  position: absolute; /* Position the button relative to the screen */
-  top: 8px; /* Distance from the top */
-  right: 100px; /* Distance from the right edge */
+  position: absolute; 
+  top: 8px; 
+  right: 100px; 
   padding: 10px 15px;
   font-size: 16px;
-  color: black; /* White text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth background transition */
+  color: black; 
+  border: none; 
+  border-radius: 5px;
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
 }
 
-/* Hover Effect for Logout Button */
 button.logout-button:hover {
-  background-color: #1f8dd6; /* Darker red on hover */
+  background-color: #646464; 
 }
 
-
-/* Style for the Add New Application Container */
 .add-new-application-container {
   display: flex;
-  justify-content: end; /* Center the button horizontally */
-  margin-left: 250px; /* Adjust the margin to align with Status column */
+  justify-content: end; 
+  margin-left: 250px; 
   margin-top: 0%;
-  margin-bottom: -65px; /* Space between the button and table */
+  margin-bottom: -65px; 
   width: 75%;
 }
 
@@ -92,7 +88,6 @@ button.logout-button:hover {
   cursor: pointer;
 }
 
-/* Additional Styling for Table and Components */
 .table-container {
   margin-top: 10px;
 }
@@ -101,9 +96,9 @@ button.logout-button:hover {
   margin-right: 5px;
 }
 
-/* Styling for the Job Applications Header */
 .applications-header {
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 5px; /* Lower spacing between header and button */
+  margin-bottom: 5px; 
 }
+  
