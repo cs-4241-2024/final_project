@@ -18,6 +18,9 @@ let board = new tetris(ctx)
 playTetris(board)
 
 document.addEventListener('keydown', (e) => {
+    if (board.gameOver) {
+        return
+    }
     if (e.key === 'ArrowRight') {
         board.moveRight()
     }
@@ -43,9 +46,10 @@ function playTetris(board: tetris) {
     function loop() {
         board.drawBoard()
         requestAnimationFrame(loop)
-        console.log('loop')
+        if (board.gameOver) {
+            return
+        }
         if (++curLoop % TIME == 0) {
-            console.log('tick')
             board.moveDown()
         }
     }

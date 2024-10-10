@@ -9,6 +9,7 @@ export class tetris {
     row: number
     column: number
     colors: string[]
+    gameOver: boolean
 
 
     constructor(ctx: CanvasRenderingContext2D) {
@@ -24,6 +25,7 @@ export class tetris {
         this.column = 0
         this.board = this.emptyBoard()
         this.colors = ['white', 'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'cyan']
+        this.gameOver = false
     }
 
     emptyBoard() {
@@ -90,6 +92,10 @@ export class tetris {
             this.row--
             this.placeTetromino()
             this.tetromino = this.randomTetromino()
+            if (this.checkGameOver()) {
+                this.gameOver = true
+                this.showGameOver()
+            }
             this.row = 0
             this.column = 4
         }
@@ -158,6 +164,19 @@ export class tetris {
         }
     }
 
+    checkGameOver() {
+        if (this.tetromino) {
+            for (let i = 0; i < this.tetromino.length; i++) {
+                for (let j = 0; j < this.tetromino[i].length; j++) {
+                    if (this.tetromino[i][j] !== 0 && this.board[i][j + this.column] !== 0) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+
     randomTetromino() {
         const keys = Object.keys(tetrominos) as Array<keyof typeof tetrominos>;
         const randomKey = keys[Math.floor(Math.random() * keys.length)];
@@ -165,5 +184,28 @@ export class tetris {
         this.row = 0
         this.column = 4
         return this.tetromino
+    }
+
+    showGameOver() {
+        this.ctx.fillText('Game Over', 1, 3)
+        const restartButton = document.createElement('button')
+        restartButton.innerText = 'Restart'
+        restartButton.style.position = 'relative'
+        restartButton.style.marginTop = '20px'
+        document.body.appendChild(restartButton)
+
+        restartButton.addEventListener('click', () => {
+            document.body.removeChild(restartButton)
+            this.resetGame()
+            restartButton.remove()
+        })
+    }
+
+    resetGame() {
+        this.board = this.emptyBoard()
+        this.tetromino = this.randomTetromino()
+        this.row = 0
+        this.column = 4
+        this.gameOver = false
     }
 }
