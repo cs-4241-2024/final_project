@@ -18,6 +18,8 @@ function generateSalt(): string {
   return crypto.randomBytes(16).toString("hex");
 }
 
+
+//Hash password function
 async function hashPassword(password: string, salt: string): Promise<string> {
   const buffer = await pbkdf2(password, salt, 1000, 64, 'sha512');
   return buffer.toString('hex');
@@ -138,6 +140,7 @@ export async function editLocation(
   }
 }
 
+//Delete Location function
 export async function deleteLocation(userID: number, locationID: number): Promise<boolean> {
   const stmt = db.prepare(`
     DELETE FROM locations
