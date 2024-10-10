@@ -22,7 +22,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../chese-board-client/build')));
 
 app.use((req, res, next) => {
   if (req.headers.authorization) {
@@ -51,5 +51,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.get('*', (req, res) => res.sendFile(path.resolve('..', 'chese-board-client', 'build', 'index.html')));
 
 module.exports = app;
