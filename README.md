@@ -7,7 +7,7 @@ by Harshith Iyer and Edward Stump
 Daytime is a calendar app that allows users to add events and tasks to their calendar, as well as view both on the same calendar component. In Outlook Calendar, you are able to view tasks and calendar on the same screen, but tasks show up as a separate window underneath the calendar, making both the tasks window and calendar window smaller, harder to navigate, and less useful overall. We wanted to create a version of a calendar app similar to Google Calendar + Google Tasks, where tasks show up as pieces on your calendar, with events showing up differently but on the same view.
 
 Project Link:
-TODO: Add Link
+https://cs4241final.harbar20.dev/
 
 ## Usage Instructions
 
