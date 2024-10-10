@@ -18,4 +18,4 @@ User need to sign up an account for the builder and liked list features. For the
    The positioning of the board and the cards, and the unfixable error mentioned in part2 of dragging and dropping the cards on the board again, as well as the fact that the two-person team didn't have enough time to complete a lot of the features that were envisioned, and the problems encountered with using google oAuth 2.0 that are still being worked on.
 5. Responsible
    Because we only have two people, since there were only two of us, we didn't have a clear division of work and we both did full-stack work.
-6.
+6.https://wpi0-my.sharepoint.com/:v:/g/personal/zli29_wpi_edu/EfFrvpXXQ2hDjb33alHtII8BebAiMA5y-5lv-pUdbwacZw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=NgKtHy
