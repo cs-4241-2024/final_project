@@ -337,10 +337,6 @@ form#passwordForm {
     font-size: 16px;
 }
 
-.button-all{
-
-}
-
 #passwordForm button:hover {
     background-color: #0056b3;
 }
