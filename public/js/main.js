@@ -441,8 +441,6 @@ async function addNewTask(groupIndex) {
   }
 }
 
-
-
 /*
   * Function to fetch the groups a user is in
 */
@@ -485,11 +483,11 @@ async function newFetchGroups() {
   }
 }
 
-/*
-  * Function to delete a task from a group
-*/
-async function deleteTask(group, assIndex){
-  console.log("deleting task with group  " +group +" index " + assIndex)
+
+async function deleteTask(groupId, assIndex){
+
+  console.log("The group we are trying to delete a tasj frrom is "+ currentGroup)
+  
   try {
     const response = await fetch('/deleteTask', {
       method: 'POST',
@@ -508,11 +506,9 @@ async function deleteTask(group, assIndex){
   }
 }
 
-/*
-  * Function to mark a task complete
-*/
-async function completeTask(group, assIndex){
-  console.log("completing task with group  " +group +" index " + assIndex)
+
+async function completeTask(groupId, assIndex){
+  
   try {
     const response = await fetch('/completeTask', {
       method: 'POST',
