@@ -4,9 +4,9 @@ For our project, we want to create a tetris clone. The end goal of our project i
 
 For the technologies that we plan to use, we think that we will use TypeScript to try something new. Additionally, we will employ Node.js and Express.js for our project. For our database, we will use MongoDB as we are more familiar with it through exprience with project 3.
 
-What have we created is a fully functional Tetris game that matches that of traditional Tetris but we did not include a ramping fall speed for the blocks. As a sort of different take compared to other Tetris websites where you can play another player locally in a 1v1, we decided to add a leaderboard function where you compete against another players who have posted a score onto the leaderboard. 
+What have we created is a fully functional Tetris game that matches that of traditional Tetris but we did not include a ramping fall speed for the blocks. As a sort of different take compared to other Tetris websites where you can play another player locally in a 1v1, we decided to add a leaderboard function where you compete against another players who have posted a score onto the leaderboard.
 
-To start the database: npx tsx server.ts in terminal. Otherwise, there are no additional tools needed to access the website as there is a registration feature integrated in the website. 
+To start the database: npx tsx server.ts in terminal. Otherwise, there are no additional tools needed to access the website as there is a registration feature integrated in the website.
 
 The technologies that we ended up using stayed consistent to what we planned to do. We continued to use React with TypeScript and Node.js for our website, successfully integrating Vite for fast builds and MongoDB as our database system, which streamlined development.
 
@@ -17,5 +17,6 @@ The roles for each member were:
 -Nick Rogerson: Back-end
 -Owen Rago: Game development and some front-end
 
-Our youtube link:
-Our Glitch link:
+Our onedrive video [link](https://wpi0-my.sharepoint.com/:v:/g/personal/ohrago_wpi_edu/ESaid8N4syVCi_pTqHtO_egB-MT3MlaUIA4f2iU1wMVE1w?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=4ejeY0)
+
+Our Glitch [link](https://group-15---tetris.glitch.me/)
