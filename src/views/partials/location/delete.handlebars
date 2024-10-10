@@ -1,0 +1,18 @@
+<dialog id="delete_location" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="text-xl font-bold">Delete {{ location.name }}</h3>
+    <p class="py-4">Are you sure you want to delete {{ location.name }}?</p>
+
+    <form method="POST" action="/api/location/delete">
+      <input type="hidden" name="locationID" value="{{location.id}}">
+      <div class="items-center mt-2 space-y-3">
+        <button class="btn btn-warning w-full" type="submit">
+          Confirm
+        </button>
+      </div>
+    </form>
+  </div>
+</dialog>

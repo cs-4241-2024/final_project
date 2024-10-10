@@ -1,0 +1,28 @@
+{{> header }}
+
+<div class="flex justify-center py-12">
+  <div class="mt-6 font-bold card w-96 mt-20 mb-20 shadow-xl">
+    <div class="card-body">
+      <h2 class="mt-5 text-center text-4xl font-bold leading-9 tracking-tight">
+        Locations
+      </h2>
+      <div class="items-center mt-2 space-y-3">
+        {{#each locations}}
+          <a href="/location/{{this.id}}" class="btn">
+            {{this.name}}
+          </a>
+        {{/each}}
+      </div>
+      <div class="card-actions justify-end mt-4">
+        <button class="btn btn-accent w-full" onclick="add_location.showModal()">
+          Add Location
+        </button>
+        <a class="btn btn-active w-full" href="/toorder">
+          To Order
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{> location/add }}

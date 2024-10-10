@@ -1,0 +1,23 @@
+<dialog id="rename_location" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="text-xl font-bold">Rename {{location.name}}</h3>
+
+   <form hx-post="/api/location/edit" hx-target="body">
+      <div class="items-center mt-2 space-y-3">
+        <input type="hidden" name="locationID" value="{{location.id}}">
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Location Name</span>
+          </div>
+          <input class="input input-bordered w-full" id="name" name="name" type="text" value="{{location.name}}" />
+        </label>
+          <button class="btn btn-neutral w-full" type="submit">
+            Rename
+          </button>
+      </div>
+    </form>
+  </div>
+</dialog>

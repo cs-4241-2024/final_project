@@ -1,0 +1,29 @@
+{
+  "name": "cs4241-final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.ts",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "server": "tsx src/server.ts",
+    "tailwind": "npx tailwindcss -i ./src/public/input.css -o ./src/public/output.css --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/express": "^5.0.0",
+    "@types/express-handlebars": "^5.3.1",
+    "@types/express-session": "^1.18.0",
+    "daisyui": "^4.12.10",
+    "tailwindcss": "^3.4.12",
+    "tsx": "^4.19.1"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "express": "^4.21.0",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.0"
+  }
+}

@@ -1,49 +1,75 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+# CS 4241 Final Project
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+[Hosted Link](https://final.tempel-alpha.ts.net)
+ - user: `test`, password: `test`
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+[Proposal](PROPOSAL.md)
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
+[Video Link](https://youtu.be/xcT_byKhagc)
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
+## Team
+ - Liam Snow (database)
+ - Jake Olsen (server)
+ - Ben Tyler (front end)
+ - Ryan Wright (database, concept design)
 
-### Deliverables
+## Description
+In the food business, manually taking inventory is a tedious task, but the importance of it cannot be undervalued. Running low on or running out of inventory for certain foods can be detrimental for a restaurant, especially during busy hours when demands are high. Additionally, manually taking inventory takes up time that could be spent doing other tasks. An application that streamlines the process of taking inventory would not only benefit staff, but it would make the restaurant run much more smoothly. Additionally, having the ability to keep track of your own home ktichen can help save time when it comes to checking what you have in stock, what you need, and how much of an item you might need.
 
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
+The Kitchen Inventory App is an app used to track the inventory of a given kitchen. It was created with the target audience being managers of resturants within the food buisness, however it is more than capable to also keep track of a households kitchen inventory. When first loading the site you are greeted by the sign in page. If a user does not have an account they are given the option to sign up. This feature is useful if their are multiple users, like roommates within an apartment, who all have their own inventories of food, or for multiple resturants. After signing in you are brought to the Locations page. This page is used to seperate your kitchen into many different places such as a pantry, refrigerator, freezer, etc. We decided to separate inventory by the location of the items because in my experience, most inventory is divided by location and most orders are placed by location, though if users want to have one table for all inventory they can do so. After adding a location you can then clock on it which brings you to that locations inventory. here you can view foods you have stocked as well as add more. There are many different fields for a food item to have including Name, Category, Quantity, Wanted Quantity, and Price. The most interesting fields here are the Quantity and Wanted Quantity field because it helps the application determine what you need more of. When the quantity you have is less than the wanted quantity the item will turn red as well as appear on the To-Order List. This lets the user easily see which items they need to order. This is especially important because there are so many items in inventory that it's hard to keep track of them all, so the program automatically notifying the user if they're low on certain items is very beneficial and a huge time-saver. The To-Order List is found on the Locations page and allows user to see exactly what they need to buy from all locations. This is useful when it comes to shopping or ordering new food to restock your kitchen's inventory. 
 
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
+## Technology
+This project has a core focus around server side rendering (SSR)
+and CRUD. Everything on the client side is handled by HTMX
+which means there is zero client side Javascript, while still
+being a reactive fast webapp.
 
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
+This webapp was built using the following technologies:
+ - [Express.js](https://expressjs.com): web/server framework
+ - [Handlebars](https://handlebarsjs.com/): HTML templating
+ - [daisyUI](https://daisyui.com/) (tailwind): UI components
+ - [HTMX](https://daisyui.com/): javascript behavior in HTML attributes
+ - [SQLite](https://www.sqlite.org/): lightweight file-based database
+ - __Self Hosted__: hosted on Arch Linux server with Docker and Tailscale (see [Hosting](#hosting))
 
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+### Achievements
+ - Secure storage of user credentials using hashing with salting
+ - Protected endpoints: even with the `locationID` of another users location, it cannot be viewed
+ - Protected database calls: users can only view, create, edit, or delete locations and foods for their account (this is checked at every database call)
+ - Seamless HTML injection (no page reload): whenever a food is added or edited, a POST request is made which returns new HTML (only inside `<body>`), which HTMX replaces with the current body content
 
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+### Challenges
+ 1. The biggest challenge we faced in this project was using SvelteKit. We had many attempts at it, but eventually decided that doing this project without a front-end framework (SSR) was more feasible.
+ 2. Another challenge we faced with this project was how to make the edit food dialog/modal. Every other dialog in this app gets generated at page load. In order to solve this we used some more advaned HTMX features. When the edit food button is pressed it fetches the api `/location/{locationID}/edit-food-dialog/{foodID}` and injects the response (HTML for dialog) into a div at the bottom of the page. Whenever that div is changed (`hx-on::after-swap`) it opens the modal.
+ 3. One more challenge came when considering how the program should function. We weren't sure if all food items in the inventory should be displayed on the same page or if they should be on different pages for each location where food is stored. We settled on having different locations because from my experience working in a kitchen, my boss would manually take inventory on separate clipboards for different locations, and would usually place separate orders for each location.
 
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
+## Development
+```bash
+npm run server # to view website (hosted at `http://localhost:3000`)
+npm run tailwind # to live reload css
+```
 
-The README for your second pull request should contain:
+## Hosting
 
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
+This project was self hosted on an Arch Linux
+server with Docker and Tailscale.
 
-Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
+__Example Docker Compose__ (tailscale removed):
+```yaml
+name: final
+services:
+  final:
+    container_name: final
+    image: node:latest
+    volumes: [.:/app]
+    working_dir: /app
+    command: sh -c "npm install && npm start"
+    restart: unless-stopped
+```
 
-## FAQs
+__`.env` File__:
+```bash
+NODE_ENV=production
+```
 
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
+

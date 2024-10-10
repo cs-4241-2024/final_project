@@ -1,0 +1,40 @@
+{{> header }}
+
+<h1 class="mt-5 text-center text-3xl font-bold leading-9 tracking-tight">To Order</h1>
+
+<div class="overflow-x-auto mt-8 mx-5 p-5 shadow-xl card">
+  <table class="table table-zebra rounded-4xl">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Category</th>
+        <th>Quantity</th>
+        <th>Wanted Quantity</th>
+        <th>Unit Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each foods}}
+        <tr>
+          <td class="font-bold">
+            {{this.name}}
+          </td>
+          <td>
+            <a href="../location/{{this.locationID}}" style="color: blue;" class="underline">
+              {{this.location}}
+            </a>
+          </td>
+          <td>{{this.category}}</td>
+          <td>
+            <span style="color: red">
+              {{this.quantity}}
+            </span>
+          </td>
+          <td>{{this.wantedQuantity}}</td>
+          <td>{{this.unitPrice}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
