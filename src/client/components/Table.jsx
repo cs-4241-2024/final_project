@@ -50,11 +50,28 @@ const Table = ({ applications, handleDeleteApplication, handleUpdateApplication 
     }
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Denied':
+        return '#f44336'; // Red for Denied
+      case 'Accepted':
+        return '#4CAF50'; // Green for Accepted
+      case 'Under Review':
+        return '#FFC107'; // Yellow for Under Review
+      case 'Interview Stage':
+        return '#2196F3'; // Blue for Interview Stage
+      default:
+        return '#fff'; // Default white
+    }
+  };
+  
+  
+
   return (
     <div id="table-div">
       <h2>Job Applications</h2>
-      <table id="applicationTable" className="pure-table pure-table-horizontal">
-        <thead>
+      <table id="applicationTable">
+        <thead bgcolor>
           <tr>
             <th>Company Name</th>
             <th>Job Title</th>
@@ -104,11 +121,28 @@ const Table = ({ applications, handleDeleteApplication, handleUpdateApplication 
                 />
               </td>
               <td>
+                {/* <select
+                  name="status"
+                  value={editableRowId === app._id ? rowData[app._id].status : app.status}
+                  onChange={(e) => handleChange(e, app._id)}
+                  disabled={editableRowId !== app._id}
+                >
+                  <option value="Denied" style="background-color:">Denied</option>
+                  <option value="Accepted">Accepted</option>
+                  <option value="Under Review">Under Review</option>
+                  <option value="Interview Stage">Interview Stage</option>
+                </select> */}
                 <select
                   name="status"
                   value={editableRowId === app._id ? rowData[app._id].status : app.status}
                   onChange={(e) => handleChange(e, app._id)}
                   disabled={editableRowId !== app._id}
+                  style={{
+                    backgroundColor: getStatusColor(
+                      editableRowId === app._id ? rowData[app._id].status : app.status
+                    ),
+                    color: '#fff', // Optional: Change the text color for better visibility
+                  }}
                 >
                   <option value="Denied">Denied</option>
                   <option value="Accepted">Accepted</option>

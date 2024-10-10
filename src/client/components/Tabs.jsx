@@ -8,6 +8,7 @@ const Tabs = ({ activeTab, setActiveTab }) => {
     return (
       <div className="tabs-container"> {/* Ensure the class name matches exactly */}
       <ul className="tabs">
+      <img src="src\client\assets\studiousgompei.png" alt="logo" class="logo-img"/>
         <li 
           className={`tab-item ${activeTab === 'myApplications' ? 'active' : ''}`} 
           onClick={() => setActiveTab('myApplications')}

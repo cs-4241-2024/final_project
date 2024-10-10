@@ -3,7 +3,7 @@ import Login from './components/Login';
 import JobApplicationForm from './components/Form';
 import JobApplicationTable from './components/Table';
 import Modal from './components/Modal'; 
-import Tabs from './components/tabs'; 
+import Tabs from './components/Tabs'; 
 import Community from './components/Community'; 
 import Stats from './components/Stats';
 import './index.css';
@@ -109,8 +109,16 @@ function App() {
         className="pure-button pure-button-primary"
       >
         Add New Application
-      </button>
+      </button> 
+      <button 
+        onClick={() => setShowModal(true)} 
+        className="pure-button pure-button-primary"
+      >
+        Add New Application
+      </button> 
+           
     </div>
+    
     
     {/* Render the Job Application Table */}
     <JobApplicationTable 

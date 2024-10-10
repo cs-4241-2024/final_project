@@ -1,6 +1,6 @@
 body {
-  background: rgb(35, 5, 59);
-  color: white;
+  background-color: #ffffff;
+  color: black;
   font-family: 'Roboto', sans-serif;
   display: flex;
   justify-content: center;
@@ -30,14 +30,28 @@ body {
 }
 
 table {
-  width: 100%;
+  width: auto;
   border-collapse: collapse;
-  margin-top: 0;
+  box-shadow:0 .3rem .8rem grey;
+  backdrop-filter: blur(7px);
+  border-radius: .8rem;
 }
 
-th, td {
-  padding: 10px;
-  border: 1px solid white;
+th{
+  padding: 1rem 2rem;
+  background-color: #747474;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 999;
+  letter-spacing: .1rem;
+}
+
+tr:nth-child(even) {
+  background-color: lightgrey;
+}
+
+td{
+  padding: 1rem 2rem;
 }
 
 input, select {
@@ -47,8 +61,8 @@ input, select {
 }
 
 button, .pure-button {
-  background-color: #1f8dd6;
-  color: white;
+  background-color: #D7D3F0;
+  color: black;
   border: none;
   padding: 0.5em 2em;
   border-radius: 5px;
@@ -73,10 +87,28 @@ h1, h2 {
   text-align: center;
 }
 
+.logo-img {
+  width: 50px;
+  /* height: auto; */
+}
+/* New Styles for Moving Tabs to the Top-Left Corner */
+.tabs-container {
+  position: fixed ; /* Force absolute position */
+  top: 0 ; /* Force distance from the top */
+  left: 0 ; /* Force distance from the left */
+  display: flex ; /* Ensure flexbox display */
+  flex-direction: column ; /* Enforce vertical stacking */
+  align-items: flex-start ; /* Align items to the left */
+  gap: 100px ; /* Space between items */
+  background-color: #dadada;
+  height: 100%
+}
+
 .tabs {
   list-style: none;
   padding: 0;
-  display: flex;
+  margin: 0;
+  display: flex, block;
   justify-content: space-around;
   margin-bottom: 20px;
   cursor: pointer;
@@ -84,21 +116,35 @@ h1, h2 {
 
 .tabs li {
   padding: 10px 20px;
+  background-color: transparent !important; /* Make background transparent */
+  border: 1px solid transparent !important; /* Transparent border */
+  cursor: pointer;
+  color: black; /* Ensure text is visible */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+  padding: 20px;
   background-color:grey;
-  border-radius: 5px;
+  /* border-radius: 100px; */
 }
 
 .tabs li.active {
-  background-color: #1f8dd6;
-  color: white;
+  background-color: rgba(255, 255, 255, 0.3) !important; /* Make the active tab slightly visible */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Add border for active state */
+  color: #1f8dd6 ; /* Blue color for active state */
+}
+
+/* Hover Effect for Transparent Buttons */
+.tab li:hover {
+  background-color: #1f8dd6; /* Slight background on hover */
+  border: 1px solid black; /* Visible border on hover */
 }
 
 .tab-content {
-  padding: 20px;
-  border: 1px solid #ddd;
+  right: 0;
+  padding: 20px 20px;
+  border: 1px solid black;
   border-radius: 5px;
 }
-
 
 .modal-overlay {
   position: fixed;
@@ -106,13 +152,12 @@ h1, h2 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7); 
+  background-color: black; 
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
-
 
 .modal-content {
   background-color: #333; 
