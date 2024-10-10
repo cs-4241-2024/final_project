@@ -47,6 +47,10 @@
     3. Some people on the team have never used React
     4.
 
+Figma Wire Frame Model
+![image](https://github.com/user-attachments/assets/a6de7be4-836e-472f-865c-933f15d1285b)
+
+
 5. Contribution:
 
     Cole Welcher:
@@ -54,7 +58,14 @@
         Editor Page (xlsx upload, and the table components for user viewing)
         About Page
         AutoFill Combo Box for class selection/addition
+   
+   Joseph Caproni:
+       -Worked on Front End Design
+       -Created Wire Frame model in Figma
+       -Utilized Material UI Component Library
+       -Created registration page and helped create login page
+       -Created the layout format for the remaining pages
 
-6. 
+7. 
     YT Video:
 
