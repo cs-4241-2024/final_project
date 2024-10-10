@@ -1,11 +1,3 @@
-
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
-
 ### Auto CS 2025 Tracking Sheet ###
 
 1.
@@ -13,15 +5,8 @@
     PreMade user: test     Password: test
     Prefilled with Cole Welcher Academic Progress
 
-        Our project is a auto input tracking sheet for Computer Science majors in the class of 2025. A user can take an
-    excel file (downloaded from My Academic Progess in WorkDay) and uploaded (sometimes will need to unmerge first row, or take it out of
-    protect mode). The the user can upload the excel file to our website and it will autofill a tracking sheet. A user is required to login or register
-    allowing them to view their tracking sheet after leaving the site if they save it. This allows the user to not only having a constantly updated tracking sheet
-    wherever they are but also allows them to periodically update it with a new excel file or manually add classes to make sure they will graduate with 
-    the required courses.
-        We think this is useful to the general body because it is annoying to constantly have a paper tracking sheet filled out, or to have a pdf that your constantly
-    writing in yourself with your classes. Instead simply being able to import your Academic Progress takes the time and stress off the user. Going forward we would like to add 
-    more possible tracking sheets (years and class). In addition there is also an About Page, Instructions Page, Home Page, Login Page, and a Register Page. 
+Our project is an auto input tracking sheet for Computer Science majors in the class of 2025. A user can take an excel file (downloaded from My Academic Progress in WorkDay) and uploaded (sometimes will need to unmerge the first row, or take it out of protect mode). The user can upload the excel file to our website and it will autofill a tracking sheet. A user is required to login or register allowing them to view their tracking sheet after leaving the site if they save it. This allows the user to not only have a constantly updated tracking sheet wherever they are but also allows them to periodically update it with a new excel file or manually add classes to make sure they will graduate with the required courses.
+        We think this is useful to the general body because it is annoying to constantly have a paper tracking sheet filled out, or to have a pdf that you're constantly filling in with your classes. Instead, simply being able to import your Academic Progress takes the time and stress off the user. Going forward we could add more possible tracking sheets (years and class). In addition there is also an About Page, Instructions Page, Home Page, Login Page, and a Register Page. 
 
 
 2.
@@ -39,33 +24,45 @@
     6. Upload excel file to the cite
 
 3. 
+PassportJS with passport-local-mongoose: For login and user registration, hashed passwords for security
+SheetJS XLSX: Excel file parsing, had to skip first row due to merged cell by default
+MUI: For user interface and button layout
+MongoDB with Mongoose: Database with schema validation for users and sheet data
+Heroku: Hosting
+React with react-router-dom: Application Layout, redirects based on authentication
 
 4. 
     Challenges:
     1. Everyone having different schedules made it hard to work together at time
-    2. XLSX parsing has some issues due to merged cells and protected view files
+    2. XLSX parsing had some issues due to merged cells and protected view files
     3. Some people on the team have never used React
-    4.
-
-Figma Wire Frame Model
-![image](https://github.com/user-attachments/assets/a6de7be4-836e-472f-865c-933f15d1285b)
-
+    4. Brendan was commuting from over an hour away
+    5. It was difficult to get a list of all classes for the autofill, we found the xml database used by the planner.wpi.edu site and reformatted it to json for loading in our app
+Figma Wire Frame Model 
 
 5. Contribution:
 
     Cole Welcher:
-        excel file parsing
+        Excel file parsing
         Editor Page (xlsx upload, and the table components for user viewing)
         About Page
         AutoFill Combo Box for class selection/addition
-   
-   Joseph Caproni:
-       -Worked on Front End Design
-       -Created Wire Frame model in Figma
-       -Utilized Material UI Component Library
-       -Created registration page and helped create login page
-       -Created the layout format for the remaining pages
+    Ben Skarnes:
+        Set up vite-express server
+        Client-side routing with react-router-dom
+        Server-side authentication
+        Saving editor data to database
+    Joseph Caproni:
+        Worked on Front End Design 
+        Created Wire Frame model in Figma 
+        Utilized Material UI Component Library 
+        Created registration page and helped create login page 
+        Created the layout format for the remaining pages
+    Brendan Byrne: 
+       Assisted on Front End Design
+       Updated and styled Instructions page
 
-7. 
-    YT Video:
+6. 
+    YT Video: 
+https://www.youtube.com/watch?v=88t-nOyel6I
 
