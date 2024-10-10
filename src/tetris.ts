@@ -94,6 +94,20 @@ export class tetris {
             this.tetromino = this.randomTetromino()
             if (this.checkGameOver()) {
                 this.gameOver = true
+                const score = document.getElementById('score')
+                try {
+                    fetch('/submit-score', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': localStorage.getItem('token')!
+                        },
+                        body: JSON.stringify({ username: localStorage.getItem('username'), score: score!.textContent })
+                    })
+                }
+                catch (error) {
+                    console.error('Submit score error:', error)
+                }
                 this.showGameOver()
             }
             this.row = 0
@@ -159,6 +173,10 @@ export class tetris {
                 if (j === this.COLS - 1) {
                     this.board.splice(i, 1)
                     this.board.unshift(Array(this.COLS).fill(0))
+                    const score = document.getElementById('score')
+                    if (score) {
+                        score.textContent = (parseInt(score.textContent!) + 1000).toString()
+                    }
                 }
             }
         }

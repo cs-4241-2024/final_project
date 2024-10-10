@@ -21,8 +21,21 @@
             <p id="login-message" style="color: red;"></p>
         </form>
     </div>
+    <div id="register-container">
+        <form id="register-form">
+            <input type="text" id="new-username" placeholder="Username" required>
+            <input type="password" id="new-password" placeholder="Password" required>
+            <button type="submit">Register</button>
+            <p id="register-message" style="color: red;"></p>
+        </form>
+    </div>
     <div class="game" style="display: none;" id="game-container">
         <canvas id="tetris" class="tetris"></canvas>
     </div>
+    <div id="score-container" style="display: none">
+      <label for="score">Score: </label>
+      <span id="score">0</span>
+    </div>
+    <button id="leaderboard-button">Leaderboard</button>
 </body>
 </html>

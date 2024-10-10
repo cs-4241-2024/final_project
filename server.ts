@@ -97,7 +97,7 @@ async function run() {
         app.get('/leaderboard', async (req: Request, res: Response) => {
             try {
                 const leaderboard = await scoresCollection!.find().sort({ score: -1 }).limit(10).toArray();
-                res.json(leaderboard);
+                res.json({ leaderboard });
             } catch (err) {
                 console.error('Leaderboard retrieval error:', err);
                 res.status(500).send(err);
@@ -122,6 +122,11 @@ run();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('dist'));
+
+app.get('/leaderboard.html', (req: Request, res: Response) => {
+    res.sendFile(__dirname + '/public/leaderboard.html');
+});
 app.use(express.static('dist'));
 
 // Log all requests

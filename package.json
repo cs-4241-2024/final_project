@@ -5,7 +5,7 @@
   "author": "Owen Rago",
   "scripts": {
     "dev": "vite & tsx server.ts",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && copy leaderboard.html dist",
     "preview": "vite preview"
   },
   "dependencies": {

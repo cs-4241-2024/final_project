@@ -38,19 +38,26 @@
     async function fetchLeaderboard() {
         try {
             const response = await fetch('/leaderboard', {
+                method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Assuming token is stored in localStorage
-                }
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                },
             });
-            const data = await response.json();
+            let data = await response.json();
+            data = data.leaderboard;
+            if (!Array.isArray(data)) {
+                console.log(data);
+                throw new Error('Fetched data is not an array');
+            }
             const leaderboard = document.getElementById('leaderboard');
-            leaderboard.innerHTML = data.map((entry, index) =>
+            leaderboard.innerHTML = data.map((entry, index) => `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${entry.username}</td>
                         <td>${entry.score}</td>
                     </tr>
-               ).join('');
+               `).join('');
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
         }
@@ -58,5 +65,8 @@
 
     fetchLeaderboard();
 </script>
+<div style="text-align: center; margin-top: 20px;">
+    <button onclick="window.location.href='index.html'">Return</button>
+</div>
 </body>
 </html>
