@@ -3,26 +3,34 @@ import crypto from "crypto";
 import { promisify } from 'util';
 import { Food, FoodWithLocationName, Location } from "./types";
 
+// Promisify the crypto.pbkdf2 function for password hashing
 const pbkdf2 = promisify(crypto.pbkdf2);
 
+// Initialize the database connection to a SQLite database
 const db = new Database("db.sqlite", { verbose: console.log });
+
+// Create necessary database tables
 makeUserTable();
 makeFoodsTable();
 makeLocationsTable();
 
+// Close the database connection
 export function close(): void {
   db.close();
 }
 
+// Generate a random salt for password hashing
 function generateSalt(): string {
   return crypto.randomBytes(16).toString("hex");
 }
 
+// Hash the password using the provided salt and return it as a string
 async function hashPassword(password: string, salt: string): Promise<string> {
   const buffer = await pbkdf2(password, salt, 1000, 64, 'sha512');
   return buffer.toString('hex');
 }
 
+// Create the users table if it doesn't exist
 function makeUserTable(): void {
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -35,6 +43,7 @@ function makeUserTable(): void {
   `);
 }
 
+// Create the locations table if it doesn't exist
 function makeLocationsTable(): void {
   db.exec(`
     CREATE TABLE IF NOT EXISTS locations (
@@ -46,6 +55,7 @@ function makeLocationsTable(): void {
   `);
 }
 
+// Create the foods table if it doesn't exist
 function makeFoodsTable(): void {
   db.exec(`
     CREATE TABLE IF NOT EXISTS foods (
@@ -82,6 +92,7 @@ export async function makeUser(username: string, password: string): Promise<numb
   }
 }
 
+// Get the username associated with the given userID
 export async function getUsername(userID: number): Promise<string | null> {
   const stmt = db.prepare("SELECT username FROM users WHERE id = ?");
   const result = stmt.get(userID) as { username: string } | undefined;
@@ -103,6 +114,7 @@ export async function tryLogin(username: string, password: string): Promise<numb
   return attemptedHash === user.password_hash ? user.id : null;
 }
 
+// Create a new location for the given user
 export async function makeLocation(userID: number, name: string): Promise<number | null> {
   const stmt = db.prepare(`
     INSERT INTO locations (user_id, name)
@@ -118,6 +130,7 @@ export async function makeLocation(userID: number, name: string): Promise<number
   }
 }
 
+// Edit an existing location for the user by locationID
 export async function editLocation(
   userID: number,
   locationID: number,
@@ -138,6 +151,7 @@ export async function editLocation(
   }
 }
 
+// Delete an existing location for the user by locationID
 export async function deleteLocation(userID: number, locationID: number): Promise<boolean> {
   const stmt = db.prepare(`
     DELETE FROM locations
@@ -153,6 +167,7 @@ export async function deleteLocation(userID: number, locationID: number): Promis
   }
 }
 
+// Create a new food item for the user
 export async function makeFood(
   userID: number,
   food: Food
@@ -179,6 +194,7 @@ export async function makeFood(
   }
 }
 
+// Edit an existing food item for the user
 export async function editFood(
   userID: number,
   food: Food,
@@ -207,6 +223,7 @@ export async function editFood(
   }
 }
 
+// Delete a food item by foodID for the user
 export async function deleteFood(userID: number, foodID: number): Promise<boolean> {
   const stmt = db.prepare(`
     DELETE FROM foods
@@ -222,6 +239,7 @@ export async function deleteFood(userID: number, foodID: number): Promise<boolea
   }
 }
 
+// Fetch all food items for a specific location for the user
 export async function getFoods(userID: number, locationID: number): Promise<Food[]> {
   const stmt = db.prepare(`
     SELECT id, name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
@@ -238,6 +256,7 @@ export async function getFoods(userID: number, locationID: number): Promise<Food
   }
 }
 
+// Fetch foods that need to be ordered (i.e., quantity < wanted_quantity) for the user
 export async function getFoodsToOrder(userID: number): Promise<FoodWithLocationName[]> {
   const stmt = db.prepare(`
     SELECT id, name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
@@ -264,6 +283,7 @@ export async function getFoodsToOrder(userID: number): Promise<FoodWithLocationN
   }
 }
 
+// Fetch a specific food item by its ID for the user
 export async function getFood(userID: number, locationID: number, foodID: number): Promise<Food | null> {
   const stmt = db.prepare(`
     SELECT id, name, category, quantity, wanted_quantity as wantedQuantity, location_id as locationID, unit_price as unitPrice
@@ -276,15 +296,14 @@ export async function getFood(userID: number, locationID: number, foodID: number
     return food;
   } catch (error) {
     console.error("Error fetching food:", error);
-    return null
+    return null;
   }
 }
 
+// Fetch all locations associated with the given user
 export async function getLocations(userID: number): Promise<Location[]> {
   const stmt = db.prepare(`
-    SELECT id, name
-    FROM locations
-    WHERE user_id = ?
+    SELECT id, name FROM locations WHERE user_id = ?
   `);
 
   try {
@@ -299,6 +318,7 @@ export async function getLocations(userID: number): Promise<Location[]> {
   }
 }
 
+// Fetch a specific location by its ID for the given user
 export async function getLocation(userID: number, locationID: number): Promise<Location | null> {
   const stmt = db.prepare(`
     SELECT id, name
@@ -307,17 +327,21 @@ export async function getLocation(userID: number, locationID: number): Promise<L
   `);
 
   try {
+    // Execute the query to get the location
     const location = stmt.get(userID, locationID) as { id: number; name: string } | undefined;
 
     if (location) {
+      // If a location is found, return it as a Location object
       return {
         id: location.id,
         name: location.name
       } as Location;
     } else {
+      // Return null if no location is found
       return null;
     }
   } catch (error) {
+    // Log any errors encountered during the query
     console.error("Error fetching location:", error);
     return null;
   }
