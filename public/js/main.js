@@ -113,6 +113,7 @@ async function fetchSessionUser(){
       document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
       document.getElementById('currentUsername').value = user.username; // Pre-fill username
       document.getElementById('currentUsername').disabled = true; // Disable editing
+      window.currentUser=user;
     } else {
       
     }
@@ -190,6 +191,13 @@ function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptio
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.value = user.username;
+    
+    // Check if the user is the current user and preselect the checkbox
+    if (user.username === currentUser.username) {
+      checkbox.checked = true;
+      addSelectedOption(user.username, selectedOptionsId); // Add to selected options
+    }
+    
     label.appendChild(checkbox);
     label.appendChild(document.createTextNode(user.username));
     optionsList.appendChild(label);
@@ -198,6 +206,7 @@ function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptio
   searchBar.addEventListener('input', () => filterUsers(searchBarId, dropdownId));
   updateCheckboxListeners(dropdownId, selectedOptionsId); // Reapply listeners
 }
+
 
 function populateUserDropdownAddUser(users, dropdownId, searchBarId, selectedOptionsId) {
   const optionsList = document.getElementById(dropdownId);
@@ -268,6 +277,7 @@ function removeSelectedOption(value, selectedOptionsId) {
 */
 const showGroup = async function (event) {
   await fetchUsers();
+
   populateUserDropdownGroup(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
   showContent("addGroup");
 
