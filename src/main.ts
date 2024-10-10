@@ -7,7 +7,6 @@ const TIME = 40
 
 const canvas = document.getElementById('tetris') as HTMLCanvasElement
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-const tetrisInstance = new tetris(ctx);
 ctx.canvas.width = COLS * SIZE
 ctx.canvas.height = ROWS * SIZE
 

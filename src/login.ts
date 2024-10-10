@@ -4,6 +4,7 @@ const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const registerForm = document.getElementById('register-form') as HTMLFormElement;
 const loginMessage = document.getElementById('login-message') as HTMLParagraphElement;
 const gameContainer = document.getElementById('game-container') as HTMLElement;
+const tutorial = document.querySelector('.tutorial-container');
 
 // Handle registration form submission
 registerForm.addEventListener('submit', async (e) => {
@@ -58,6 +59,7 @@ loginForm.addEventListener('submit', async (e) => {
             loginForm.reset();
             loginForm.style.display = 'none'; // Hide the login
             registerForm.style.display = 'none'; // Hide the register form
+            tutorial.style.display = 'none'; // Hides tutorial
             gameContainer.style.display = 'block'; // Show the game container
             startGame();
         } else {
