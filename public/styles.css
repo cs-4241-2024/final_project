@@ -12,7 +12,6 @@ body {
 .container {
     display: flex;
 }
-  
 
 /* Sidebar */
 .sidebar {
@@ -23,7 +22,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding-top: 10px;
     transition: all 0.3s ease;
 }
 
@@ -33,9 +31,11 @@ body {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-height: calc(100vh - 180px); /* Space for footer */
-    overflow-y: auto; /* Allow scrolling when group buttons exceed the height */
-    padding: 10px 0;
+    overflow-y: auto;
+}
+
+#groupButtons::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar button {
@@ -47,6 +47,8 @@ body {
     margin: 10px 0;
     cursor: pointer;
     font-size: 16px;
+    flex-shrink: 0;
+    color: #000000;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -94,30 +96,30 @@ body {
 
 .content {
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     height: 100%;
 }
 
 .fc {
     max-height: 700px;
-    width: 100%;       
-    height: 100%;      
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     transition: background-color 0.3s ease;
 }
 
 .fc-daygrid-day:hover {
     background-color: #D08F8F;
-    cursor: pointer; 
-  }
-  
+    cursor: pointer;
+}
+
 
 .calendar-tasks-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 .tasks-container {
@@ -126,24 +128,28 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
-  
+
 .calendar-section {
-    flex: 0 0 70%; 
+    flex: 0 0 70%;
     max-width: 70%;
     height: auto;
 }
-  
+
 .tasks-section,.all-tasks-section {
-    padding: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
 }
 
 .tasks-list,.all-tasks-list {
     list-style-type: none;
-    padding: 0;
+    height: 100px;
+    overflow-y: auto;
+    margin: 0;
 }
-  
+
 .tasks-list li,.all-tasks-list li {
     margin-bottom: 10px;
     padding: 10px;
@@ -158,11 +164,54 @@ body {
     background-color: #FFEBEB;
 }
 
-.dropdown-container {
-    width: 300px;
-    margin: 0 auto;
+form#addTask {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between form elements */
+    max-width: 100%; /* Set a max width for the form */
+    padding: 20px;
+    background-color: #EABDBD; /* Match profile background color */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Label Styles */
+form#addTask label {
+    font-size: 18px; /* Increase label font size */
+    margin-bottom: 5px; /* Space below label */
+}
+
+/* Input Fields */
+form#addTask input[type="text"],
+form#addTask input[type="date"],
+form#addTask .search-bar {
+    width: 100%; /* Full width */
+    border: 1px solid #ccc; /* Consistent border */
+    border-radius: 5px; /* Consistent border radius */
+    font-size: 16px; /* Consistent font size */
+}
+
+/* Button Styles */
+form#addTask button, button {
+    padding: 10px; /* Consistent padding */
+    background-color: #007bff; /* Match button color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Match font size */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+form#addTask button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.dropdown-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
 .selected-options {
     display: flex;
     flex-wrap: wrap;
@@ -181,30 +230,40 @@ body {
     position: relative;
     width: 100%;
 }
-
 .search-bar {
     width: 100%;
+    max-width: 300px;
     padding: 10px;
-    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
+/* Vertical Dropdown */
 .options-list {
-    max-height: 150px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    display: none;
+    max-height: 150px; /* Control the maximum height for vertical dropdown */
+    display: flex;
+    flex-direction: column; /* Ensure vertical stacking */
+    overflow-y: auto; /* Allow vertical scrolling if needed */
+    overflow-x: hidden; /* Hide horizontal scrolling */
     position: absolute;
-    width: 100%;
+    top: 100%; /* Position below the search bar */
+    left: 0;
+    width: 100%; /* Full width of the container */
+    max-width:300px;
     background-color: white;
     z-index: 1000;
+    border: 1px solid #ddd;
 }
 
+/* Option label */
 .options-list label {
-    display: block;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
     cursor: pointer;
+    display: block; /* Ensure each option takes up full width */
+    white-space: nowrap; /* Prevent text from wrapping within an option */
 }
+
 
 .options-list label:hover {
     background-color: #f0f0f0;
@@ -213,12 +272,11 @@ body {
 .options-list input[type="checkbox"] {
     margin-right: 10px;
 }
-  
+
 
 /* Footer */
 .footer {
     position: absolute;
-    bottom: 20px;
 }
 
 /* Logout Button Container */
@@ -232,7 +290,7 @@ body {
 /* Account settings*/
 #profile {
     width: 100%;
-    height: 325px;
+    height: auto;
     max-width: 500px;
     margin: 20px auto;
     padding: 20px;
@@ -290,4 +348,70 @@ form#passwordForm {
     margin-bottom: 10px;
 }
 
+#addGroup {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #D08F8F;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    height: auto;
+}
 
+#addGroup h3 {
+    text-align: center;
+    color: #000000;
+}
+
+#addGroup p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+#groupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Input Fields */
+#groupForm input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#groupForm button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#groupForm button:hover {
+    background-color: #0056b3;
+}
+
+.leave-group-btn, .delete-group-btn {
+    background-color: #8B0000; /* Dark Red */
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* Add space between buttons */
+}
+
+.leave-group-btn:hover, .delete-group-btn:hover {
+    background-color: #B22222; /* Lighter red on hover */
+}

@@ -100,14 +100,14 @@ app.post('/addTask', async (req, res) => {
     const { newTask } = req.body;
     const { title, user, date, groupName } = newTask;
 
-    console.log('Received new task data:', newTask); 
+    console.log('Received new task data:', newTask);
 
     try {
         const newAssignment = {
             title,
             assignedTo: user,
             dueDate: date,
-            status: 'incomplete' 
+            status: 'incomplete'
         };
 
         console.log(newAssignment)
@@ -122,17 +122,39 @@ app.post('/addTask', async (req, res) => {
             { groupName },
             { $push: { assignments: newAssignment } }  // Now safely push the new assignment
         );
-        
+
         res.status(201).json({
             success: true,
             message: 'Task added successfully',
-            assignment: newAssignment 
+            assignment: newAssignment
         });
     } catch (error) {
         console.error('well fugma:', error);
         res.status(500).json({ success: false, message: 'Error adding task', error });
     }
 });
+
+app.post('/addUsers', async (req, res) => {
+    const { newUsers } = req.body;
+    const {groupName, users} = newUsers;
+
+    try {
+        console.log('adding users', users);
+        await groupCollection.updateOne(
+            { groupName },  // Check if 'assignments' is null
+            { $set: { users: users } }      // Initialize it as an empty array
+        );
+        res.status(201).json({
+            success: true,
+            message: 'Users added successfully',
+            users: users
+        });
+    } catch (error) {
+        console.error('well fugma:', error);
+        res.status(500).json({ success: false, message: 'Error adding user', error });
+    }
+});
+
 
 app.post('/deleteTask', async (req, res) => {
     const { groupName, assignmentIndex } = req.body;
@@ -330,9 +352,9 @@ app.post('/register', async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = { 
-            username, 
-            password: hashedPassword, 
+        const newUser = {
+            username,
+            password: hashedPassword,
         };
         await usersCollection.insertOne(newUser);
 

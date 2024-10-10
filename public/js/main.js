@@ -5,15 +5,15 @@ function showContent(groupId) {
   console.log("Now showing content for " + groupId + " LOOK HERE")
   const contents = document.querySelectorAll('.content');
   contents.forEach(content => content.style.display = 'none');
-  
+
   const selectedContent = document.getElementById(groupId);
   selectedContent.style.display = 'block';
 
   if (groupId.replace(/\d+$/, '') === 'group') {
     let groupIndex = parseInt(groupId.match(/\d+/)[0], 10) - 1;
-    currentGroup = window.allGroups[groupIndex].groupName;
+    currentGroup = window.allGroups[groupIndex];
     currentGroupID = groupId
-     
+
     let usersInGroup = [];
     for (let i = 0; i < window.allGroups[groupIndex].users.length; i++) {
       usersInGroup.push(window.allGroups[groupIndex].users[i].username);
@@ -22,39 +22,49 @@ function showContent(groupId) {
     const taskSearchBar = document.getElementById(`task-search-bar${groupIndex + 1}`);
     const taskOptionsList = document.getElementById(`task-options-list${groupIndex + 1}`);
 
+    const addUserSearchBar = document.getElementById(`add-user-search-bar${groupIndex + 1}`);
+    const addUserOptionsList = document.getElementById(`add-user-options-list${groupIndex + 1}`);
+
     taskSearchBar.addEventListener('focus', () => {
       taskOptionsList.style.display = 'block';
     });
-    
+
+    addUserSearchBar.addEventListener('focus', () => {
+      addUserOptionsList.style.display = 'block';
+    });
+
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.dropdown')) {
         taskOptionsList.style.display = 'none';
+        addUserOptionsList.style.display = 'none';
       }
     });
 
     populateUserDropdownTask(usersInGroup, `task-options-list${groupIndex + 1}`, `task-search-bar${groupIndex + 1}`, `task-selected-list${groupIndex + 1}`);
-    
+    addUserFilteredUsers = window.allUsers.filter(user => !usersInGroup.includes(user.username));
+    populateUserDropdownAddUser(addUserFilteredUsers, `add-user-options-list${groupIndex + 1}`, `add-user-search-bar${groupIndex + 1}`, `add-user-selected${groupIndex + 1}`);
+
     const calendarEl = document.getElementById('calendar' + (groupIndex + 1));
     if (calendarEl) {
       calendarEl.innerHTML = '';
     }
-    
+
     const groupAssignments = window.allGroups[groupIndex].assignments && window.allGroups[groupIndex].assignments.length > 0
-    ? window.allGroups[groupIndex].assignments.map(assignment => ({
-        title: `${assignment.title} (Assigned to: ${assignment.assignedTo})`,
-        start: assignment.dueDate,
-        color: assignment.status === 'complete' ? 'green' : 'blue'
-      }))
-    : [];
-    
+        ? window.allGroups[groupIndex].assignments.map(assignment => ({
+          title: `${assignment.title} (Assigned to: ${assignment.assignedTo})`,
+          start: assignment.dueDate,
+          color: assignment.status === 'complete' ? 'green' : 'blue'
+        }))
+        : [];
+
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       events: groupAssignments,
       dateClick: (info) => showTasksForDate(info.dateStr, window.allGroups[groupIndex].assignments, groupIndex)
     });
-    
+
     calendar.render();
-  } 
+  }
 }
 
 
@@ -62,30 +72,30 @@ function showTasksForDate(selectedDate, assignments, groupIndex) {
   const tasksForDate = assignments.filter(assignment => assignment.dueDate === selectedDate);
   const tasksListEl = document.getElementById(`tasks-list${groupIndex+1}`);
   tasksListEl.innerHTML = tasksForDate.length > 0
-    ? tasksForDate.map(assignment => `
+      ? tasksForDate.map(assignment => `
           <li>${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})</li>
         `).join("")
-    : '<li>No tasks due on this date</li>';
+      : '<li>No tasks due on this date</li>';
 }
 
 
 const checkAuth = async function () {
-    try {
-        const response = await fetch('/protected', {
-            method: 'GET',
-            credentials: 'include'
-        });
+  try {
+    const response = await fetch('/protected', {
+      method: 'GET',
+      credentials: 'include'
+    });
 
-        if (!response.ok) {
-            throw new Error('Not authenticated');
-        }
-        console.log('Current User is authenticated')
-        
-    }catch (error){
-        console.error('User not authenticated:', error);
-        // Redirect to login page if not authenticated
-        window.location.href = 'login.html';
+    if (!response.ok) {
+      throw new Error('Not authenticated');
     }
+    console.log('Current User is authenticated')
+
+  }catch (error){
+    console.error('User not authenticated:', error);
+    // Redirect to login page if not authenticated
+    window.location.href = 'login.html';
+  }
 }
 
 async function fetchSessionUser(){
@@ -103,8 +113,9 @@ async function fetchSessionUser(){
       document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
       document.getElementById('currentUsername').value = user.username; // Pre-fill username
       document.getElementById('currentUsername').disabled = true; // Disable editing
+      window.currentUser=user;
     } else {
-      
+
     }
   } catch (error) {
 
@@ -117,9 +128,6 @@ async function fetchUsers() {
     const response = await fetch('/get-users');
     const users = await response.json();
     window.allUsers = users;
-
-    populateUserDropdownGroup(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
-
   } catch (error) {
     console.error('Error fetching users:', error);
   }
@@ -128,9 +136,9 @@ async function fetchUsers() {
 function populateUserDropdownTask(users, dropdownId, searchBarId, selectedOptionsId) {
   const optionsList = document.getElementById(dropdownId);
   const searchBar = document.getElementById(searchBarId);
-  
+
   optionsList.innerHTML = ''; // Clear previous options
-  
+
   users.forEach(user => {
     const label = document.createElement('label');
     const radioButton = document.createElement('input');
@@ -141,7 +149,7 @@ function populateUserDropdownTask(users, dropdownId, searchBarId, selectedOption
     label.appendChild(document.createTextNode(user));
     optionsList.appendChild(label);
   });
-  
+
   searchBar.addEventListener('input', () => filterUsers(searchBarId, dropdownId));
   updateRadioListeners(dropdownId, selectedOptionsId); // Reapply listeners
 }
@@ -175,9 +183,37 @@ function updateSelectedOption(value, selectedOptionsId) {
 function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptionsId) {
   const optionsList = document.getElementById(dropdownId);
   const searchBar = document.getElementById(searchBarId);
-  
+
   optionsList.innerHTML = ''; // Clear previous options
-  
+
+  users.forEach(user => {
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = user.username;
+
+    // Check if the user is the current user and preselect the checkbox
+    if (user.username === currentUser.username) {
+      checkbox.checked = true;
+      addSelectedOption(user.username, selectedOptionsId); // Add to selected options
+    }
+
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(user.username));
+    optionsList.appendChild(label);
+  });
+
+  searchBar.addEventListener('input', () => filterUsers(searchBarId, dropdownId));
+  updateCheckboxListeners(dropdownId, selectedOptionsId); // Reapply listeners
+}
+
+
+function populateUserDropdownAddUser(users, dropdownId, searchBarId, selectedOptionsId) {
+  const optionsList = document.getElementById(dropdownId);
+  const searchBar = document.getElementById(searchBarId);
+
+  optionsList.innerHTML = ''; // Clear previous options
+
   users.forEach(user => {
     const label = document.createElement('label');
     const checkbox = document.createElement('input');
@@ -187,7 +223,7 @@ function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptio
     label.appendChild(document.createTextNode(user.username));
     optionsList.appendChild(label);
   });
-  
+
   searchBar.addEventListener('input', () => filterUsers(searchBarId, dropdownId));
   updateCheckboxListeners(dropdownId, selectedOptionsId); // Reapply listeners
 }
@@ -225,6 +261,7 @@ function addSelectedOption(value, selectedOptionsId) {
   selectedOption.className = 'option';
   selectedOption.textContent = value;
   selectedOption.dataset.value = value;
+  console.log(value);
   document.getElementById(selectedOptionsId).appendChild(selectedOption);
 }
 
@@ -240,13 +277,14 @@ function removeSelectedOption(value, selectedOptionsId) {
 */
 const showGroup = async function (event) {
   await fetchUsers();
-  
+
+  populateUserDropdownGroup(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
   showContent("addGroup");
 
   // Show/Hide the options list when clicking on the search bar
   const groupSearchBar = document.getElementById('group-search-bar');
   const groupOptionsList = document.getElementById('group-options-list');
-  
+
   groupSearchBar.addEventListener('focus', () => {
     groupOptionsList.style.display = 'block';
   });
@@ -332,20 +370,20 @@ window.onload = async function () {
   // Add logout functionality
   document.getElementById('logoutBtn').addEventListener('click', async function() {
     try {
-        const response = await fetch('/logout', {
-            method: 'POST'
-        });
-        const data = await response.json();
-        
-        if (response.ok) {
-            
-            window.location.href = '/login.html';
-        } else {
-            alert('Error during logout: ' + data.message);
-        }
+      const response = await fetch('/logout', {
+        method: 'POST'
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+
+        window.location.href = '/login.html';
+      } else {
+        alert('Error during logout: ' + data.message);
+      }
     } catch (error) {
-        console.error('Error logging out:', error);
-        alert('An error occurred during logout. Please try again.');
+      console.error('Error logging out:', error);
+      alert('An error occurred during logout. Please try again.');
     }
   });
 }
@@ -419,7 +457,7 @@ async function addNewTask(groupIndex) {
     alert("Please fill in all the fields.");
     return;
   }
-  const newTask = { title: task, user: assignedUser, date: dueDate, groupName: currentGroup };
+  const newTask = { title: task, user: assignedUser, date: dueDate, groupName: currentGroup.groupName };
   try {
     const response = await fetch('/addTask', {
       method: 'POST',
@@ -431,7 +469,7 @@ async function addNewTask(groupIndex) {
       alert(`Task added successfully to group${groupIndex}`);
       await newFetchGroups(); // Re-fetch groups to get the updated task list
       showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
-      
+
     } else {
       alert('Failed to add task');
     }
@@ -441,7 +479,48 @@ async function addNewTask(groupIndex) {
   }
 }
 
+async function addNewUsers(groupIndex) {
+  const selectedUsersDiv = document.getElementById(`add-user-selected${groupIndex}`);
+  const selectedUsers = Array.from(selectedUsersDiv.children).map(div => {
+    return { username: div.textContent };  // Store user as an object with "username"
+  });
 
+  if (!currentGroup) {
+    alert("No group selected. Please select a group before adding a task.");
+    return;
+  }
+  console.log(selectedUsers)
+  if (!selectedUsers.length) {
+    alert("Please fill in the Add User field.");
+    return;
+  }
+  let groupNewUsers = Array.from(selectedUsers)
+  currentGroup.users.forEach(user => {
+    groupNewUsers.push(user);
+  });
+
+  const newUsers = {groupName: currentGroup.groupName, users: groupNewUsers};
+
+  try {
+    console.log(JSON.stringify({ newUsers }))
+    const response = await fetch('/addUsers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ newUsers })
+    });
+
+    if (response.ok) {
+      alert(`Users added successfully to group${groupIndex}`);
+      await newFetchGroups(); // Re-fetch groups to get the updated task list
+      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
+    } else {
+      alert('Failed to add users');
+    }
+  } catch (error) {
+    console.error('Error adding users:', error);
+    alert('An error occurred. Please try again.');
+  }
+}
 
 /*
   * Function to fetch the groups a user is in
@@ -485,15 +564,15 @@ async function newFetchGroups() {
   }
 }
 
-/*
-  * Function to delete a task from a group
-*/
-async function deleteTask(group, assIndex){
-  console.log("deleting task with group  " +group +" index " + assIndex)
+
+async function deleteTask(groupId, assIndex){
+
+  console.log("The group we are trying to delete a tasj frrom is "+ currentGroup)
+
   try {
     const response = await fetch('/deleteTask', {
       method: 'POST',
-      body: JSON.stringify({groupName: currentGroup, assignmentIndex: assIndex}),
+      body: JSON.stringify({groupName: currentGroup.groupName, assignmentIndex: assIndex}),
       headers: { 'Content-Type': 'application/json' }
     });
 
@@ -508,15 +587,13 @@ async function deleteTask(group, assIndex){
   }
 }
 
-/*
-  * Function to mark a task complete
-*/
-async function completeTask(group, assIndex){
-  console.log("completing task with group  " +group +" index " + assIndex)
+
+async function completeTask(groupId, assIndex){
+
   try {
     const response = await fetch('/completeTask', {
       method: 'POST',
-      body: JSON.stringify({groupName: currentGroup, assignmentIndex: assIndex}),
+      body: JSON.stringify({groupName: currentGroup.groupName, assignmentIndex: assIndex}),
       headers: { 'Content-Type': 'application/json' }
     });
 
@@ -526,7 +603,7 @@ async function completeTask(group, assIndex){
       showContent(currentGroupID); // Re-render the group content to reflect new tasks
     }
   } catch (error) {
-    
+
     alert('There was an error completing the task. Please try again.');
   }
 }
@@ -536,7 +613,7 @@ async function completeTask(group, assIndex){
 */
 function generateGroupHTML(data) {
   data.forEach((group, index) => {
-    
+
     // Clear the existing content first (if any)
     const groupEl = document.getElementById(`group${index + 1}`);
     if (groupEl) {
@@ -552,38 +629,51 @@ function generateGroupHTML(data) {
 
     // Generate HTML for incomplete assignments
     const incompleteAssignmentsHTML = incompleteAssignments.length > 0
-      ? incompleteAssignments.map((assignment, assIndex) => {
-        const originalIndex = group.assignments.findIndex(a => a.title === assignment.title && a.assignedTo === assignment.assignedTo);
-        return `
+        ? incompleteAssignments.map((assignment, assIndex) => {
+          const originalIndex = group.assignments.findIndex(a => a.title === assignment.title && a.assignedTo === assignment.assignedTo);
+          return `
         <li>
           ${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})
           <button class="complete-task-btn" onclick="completeTask('group${index + 1}', ${originalIndex})">Complete</button>
           <button class="delete-task-btn" onclick="deleteTask('group${index + 1}', ${originalIndex})">Delete</button>
         </li>
       `}).join("")
-      : "<li>No incomplete assignments available</li>";
+        : "<li>No incomplete assignments available</li>";
 
     // Generate HTML for completed assignments
     const completedAssignmentsHTML = completedAssignments.length > 0
-      ? completedAssignments.map(assignment => { 
-        const originalIndex = group.assignments.findIndex(a => a.title === assignment.title && a.assignedTo === assignment.assignedTo);
-        return `
+        ? completedAssignments.map(assignment => {
+          const originalIndex = group.assignments.findIndex(a => a.title === assignment.title && a.assignedTo === assignment.assignedTo);
+          return `
         <li>
           ${assignment.title} (Assigned to: ${assignment.assignedTo}, Due: ${assignment.dueDate})
           <button class="delete-task-btn" onclick="deleteTask('group${index + 1}', ${originalIndex})">Delete</button>
         </li>
       `}).join("")
-      : "<li>No completed assignments available</li>";
+        : "<li>No completed assignments available</li>";
 
 
     // Construct the dynamic HTML content
     const groupHTML = `
       <div id="group${index + 1}" class="content" style="display: none;">
         <div class="group-header">
-            <h1>Welcome to ${group.groupName}</h1>
-            <p>Member Names: ${userNames}</p>
-            <button class="leave-group-btn" onclick="leaveGroup('${group.groupName}')">Leave Group</button>
-            <button class="delete-group-btn" onclick="deleteGroup('${group.groupName}')">Delete Group</button>
+          <h1>Welcome to ${group.groupName}</h1>
+          <p>Member Names: ${userNames}</p>
+          <button class="leave-group-btn" onclick="leaveGroup('${group.groupName}')">Leave Group</button>
+          <button class="delete-group-btn" onclick="deleteGroup('${group.groupName}')">Delete Group</button>
+
+          <div class="dropdown-container">
+            <div class="selected-options" id="add-user-selected${index + 1}">
+                <!-- Selected options will appear here -->
+            </div>
+            <div class="dropdown">
+                <input class="search-bar" type="text" placeholder="Add User" id="add-user-search-bar${index + 1}">
+                <div class="options-list" id="add-user-options-list${index + 1}">
+                    <!-- has all users -->
+                </div>
+            </div>
+          </div>
+          <button class="leave-group-btn" type="button" onclick="addNewUsers(${index + 1})">Add New User</button>
         </div>
         <div class="calendar-tasks-container">
           <div id="calendar${index + 1}" class="calendar-section"></div>
@@ -625,7 +715,7 @@ function generateGroupHTML(data) {
                       </div>
                   </div>
                   <input type="date" id="dateInput${index + 1}" placeholder="Date" required>
-                  <button type="button" onclick="addNewTask(${index + 1})">Add new task</button>
+                  <button class="leave-group-btn" type="button" onclick="addNewTask(${index + 1})">Add New Task</button>
               </form>
             </div>
           </div>
@@ -643,7 +733,7 @@ function generateGroupHTML(data) {
 */
 function createGroupButtons(data) {
   const groupButtonsDiv = document.getElementById("groupButtons");
-      
+
   // Clear current buttons before adding new ones
   while (groupButtonsDiv.firstChild) {
     groupButtonsDiv.removeChild(groupButtonsDiv.firstChild);
@@ -653,7 +743,7 @@ function createGroupButtons(data) {
   btnAddGroup.id = 'btnAddGroup';
   btnAddGroup.textContent = '+';
   btnAddGroup.onclick = function() {
-      showGroup();
+    showGroup();
   };
   groupButtonsDiv.appendChild(btnAddGroup)
 
@@ -690,7 +780,6 @@ async function leaveGroup(groupName) {
       alert('There was an error leaving the group. Please try again.');
     }
     // Re-render the groups (or update the UI as needed)
-    generateGroupHTML(window.allGroups);
     alert("You have left the group.");
   }
 }
