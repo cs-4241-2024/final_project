@@ -11,7 +11,7 @@ function showContent(groupId) {
 
   if (groupId.replace(/\d+$/, '') === 'group') {
     let groupIndex = parseInt(groupId.match(/\d+/)[0], 10) - 1;
-    currentGroup = window.allGroups[groupIndex];
+    currentGroup = window.allGroups[groupIndex].groupName;
     currentGroupID = groupId
      
     let usersInGroup = [];
@@ -22,28 +22,18 @@ function showContent(groupId) {
     const taskSearchBar = document.getElementById(`task-search-bar${groupIndex + 1}`);
     const taskOptionsList = document.getElementById(`task-options-list${groupIndex + 1}`);
 
-    const addUserSearchBar = document.getElementById(`add-user-search-bar${groupIndex + 1}`);
-    const addUserOptionsList = document.getElementById(`add-user-options-list${groupIndex + 1}`);
-
     taskSearchBar.addEventListener('focus', () => {
       taskOptionsList.style.display = 'block';
-    });
-
-    addUserSearchBar.addEventListener('focus', () => {
-      addUserOptionsList.style.display = 'block';
     });
     
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.dropdown')) {
         taskOptionsList.style.display = 'none';
-        addUserOptionsList.style.display = 'none';
       }
     });
 
     populateUserDropdownTask(usersInGroup, `task-options-list${groupIndex + 1}`, `task-search-bar${groupIndex + 1}`, `task-selected-list${groupIndex + 1}`);
-    addUserFilteredUsers = window.allUsers.filter(user => !usersInGroup.includes(user.username));
-    populateUserDropdownAddUser(addUserFilteredUsers, `add-user-options-list${groupIndex + 1}`, `add-user-search-bar${groupIndex + 1}`, `add-user-selected${groupIndex + 1}`);
-
+    
     const calendarEl = document.getElementById('calendar' + (groupIndex + 1));
     if (calendarEl) {
       calendarEl.innerHTML = '';
@@ -113,7 +103,6 @@ async function fetchSessionUser(){
       document.getElementById('currentUser').innerText = `Logged in as: ${user.username}`;
       document.getElementById('currentUsername').value = user.username; // Pre-fill username
       document.getElementById('currentUsername').disabled = true; // Disable editing
-      window.currentUser=user;
     } else {
       
     }
@@ -128,6 +117,9 @@ async function fetchUsers() {
     const response = await fetch('/get-users');
     const users = await response.json();
     window.allUsers = users;
+
+    populateUserDropdownGroup(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
+
   } catch (error) {
     console.error('Error fetching users:', error);
   }
@@ -191,34 +183,6 @@ function populateUserDropdownGroup(users, dropdownId, searchBarId, selectedOptio
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.value = user.username;
-    
-    // Check if the user is the current user and preselect the checkbox
-    if (user.username === currentUser.username) {
-      checkbox.checked = true;
-      addSelectedOption(user.username, selectedOptionsId); // Add to selected options
-    }
-    
-    label.appendChild(checkbox);
-    label.appendChild(document.createTextNode(user.username));
-    optionsList.appendChild(label);
-  });
-  
-  searchBar.addEventListener('input', () => filterUsers(searchBarId, dropdownId));
-  updateCheckboxListeners(dropdownId, selectedOptionsId); // Reapply listeners
-}
-
-
-function populateUserDropdownAddUser(users, dropdownId, searchBarId, selectedOptionsId) {
-  const optionsList = document.getElementById(dropdownId);
-  const searchBar = document.getElementById(searchBarId);
-  
-  optionsList.innerHTML = ''; // Clear previous options
-  
-  users.forEach(user => {
-    const label = document.createElement('label');
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.value = user.username;
     label.appendChild(checkbox);
     label.appendChild(document.createTextNode(user.username));
     optionsList.appendChild(label);
@@ -261,7 +225,6 @@ function addSelectedOption(value, selectedOptionsId) {
   selectedOption.className = 'option';
   selectedOption.textContent = value;
   selectedOption.dataset.value = value;
-  console.log(value);
   document.getElementById(selectedOptionsId).appendChild(selectedOption);
 }
 
@@ -277,8 +240,7 @@ function removeSelectedOption(value, selectedOptionsId) {
 */
 const showGroup = async function (event) {
   await fetchUsers();
-
-  populateUserDropdownGroup(window.allUsers, 'group-options-list', 'group-search-bar', 'group-selected-list');
+  
   showContent("addGroup");
 
   // Show/Hide the options list when clicking on the search bar
@@ -457,7 +419,7 @@ async function addNewTask(groupIndex) {
     alert("Please fill in all the fields.");
     return;
   }
-  const newTask = { title: task, user: assignedUser, date: dueDate, groupName: currentGroup.groupName };
+  const newTask = { title: task, user: assignedUser, date: dueDate, groupName: currentGroup };
   try {
     const response = await fetch('/addTask', {
       method: 'POST',
@@ -479,48 +441,7 @@ async function addNewTask(groupIndex) {
   }
 }
 
-async function addNewUsers(groupIndex) {
-  const selectedUsersDiv = document.getElementById(`add-user-selected${groupIndex}`);
-  const selectedUsers = Array.from(selectedUsersDiv.children).map(div => {
-    return { username: div.textContent };  // Store user as an object with "username"
-  });
 
-  if (!currentGroup) {
-    alert("No group selected. Please select a group before adding a task.");
-    return;
-  }
-  console.log(selectedUsers)
-  if (!selectedUsers.length) {
-    alert("Please fill in the Add User field.");
-    return;
-  }
-  let groupNewUsers = Array.from(selectedUsers)
-  currentGroup.users.forEach(user => {
-    groupNewUsers.push(user);
-  });
-
-  const newUsers = {groupName: currentGroup.groupName, users: groupNewUsers};
-
-  try {
-    console.log(JSON.stringify({ newUsers }))
-    const response = await fetch('/addUsers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ newUsers })
-    });
-
-    if (response.ok) {
-      alert(`Users added successfully to group${groupIndex}`);
-      await newFetchGroups(); // Re-fetch groups to get the updated task list
-      showContent(`group${groupIndex}`); // Re-render the group content to reflect new tasks
-    } else {
-      alert('Failed to add users');
-    }
-  } catch (error) {
-    console.error('Error adding users:', error);
-    alert('An error occurred. Please try again.');
-  }
-}
 
 /*
   * Function to fetch the groups a user is in
@@ -564,15 +485,15 @@ async function newFetchGroups() {
   }
 }
 
-
-async function deleteTask(groupId, assIndex){
-
-  console.log("The group we are trying to delete a tasj frrom is "+ currentGroup)
-  
+/*
+  * Function to delete a task from a group
+*/
+async function deleteTask(group, assIndex){
+  console.log("deleting task with group  " +group +" index " + assIndex)
   try {
     const response = await fetch('/deleteTask', {
       method: 'POST',
-      body: JSON.stringify({groupName: currentGroup.groupName, assignmentIndex: assIndex}),
+      body: JSON.stringify({groupName: currentGroup, assignmentIndex: assIndex}),
       headers: { 'Content-Type': 'application/json' }
     });
 
@@ -587,13 +508,15 @@ async function deleteTask(groupId, assIndex){
   }
 }
 
-
-async function completeTask(groupId, assIndex){
-  
+/*
+  * Function to mark a task complete
+*/
+async function completeTask(group, assIndex){
+  console.log("completing task with group  " +group +" index " + assIndex)
   try {
     const response = await fetch('/completeTask', {
       method: 'POST',
-      body: JSON.stringify({groupName: currentGroup.groupName, assignmentIndex: assIndex}),
+      body: JSON.stringify({groupName: currentGroup, assignmentIndex: assIndex}),
       headers: { 'Content-Type': 'application/json' }
     });
 
@@ -657,23 +580,10 @@ function generateGroupHTML(data) {
     const groupHTML = `
       <div id="group${index + 1}" class="content" style="display: none;">
         <div class="group-header">
-          <h1>Welcome to ${group.groupName}</h1>
-          <p>Member Names: ${userNames}</p>
-          <button class="leave-group-btn" onclick="leaveGroup('${group.groupName}')">Leave Group</button>
-          <button class="delete-group-btn" onclick="deleteGroup('${group.groupName}')">Delete Group</button>
-
-          <div class="dropdown-container">
-            <div class="selected-options" id="add-user-selected${index + 1}">
-                <!-- Selected options will appear here -->
-            </div>
-            <div class="dropdown">
-                <input class="search-bar" type="text" placeholder="Add User" id="add-user-search-bar${index + 1}">
-                <div class="options-list" id="add-user-options-list${index + 1}">
-                    <!-- has all users -->
-                </div>
-            </div>
-          </div>
-          <button class="leave-group-btn" type="button" onclick="addNewUsers(${index + 1})">Add New User</button>
+            <h1>Welcome to ${group.groupName}</h1>
+            <p>Member Names: ${userNames}</p>
+            <button class="leave-group-btn" onclick="leaveGroup('${group.groupName}')">Leave Group</button>
+            <button class="delete-group-btn" onclick="deleteGroup('${group.groupName}')">Delete Group</button>
         </div>
         <div class="calendar-tasks-container">
           <div id="calendar${index + 1}" class="calendar-section"></div>
@@ -715,7 +625,7 @@ function generateGroupHTML(data) {
                       </div>
                   </div>
                   <input type="date" id="dateInput${index + 1}" placeholder="Date" required>
-                  <button class="leave-group-btn" type="button" onclick="addNewTask(${index + 1})">Add New Task</button>
+                  <button type="button" onclick="addNewTask(${index + 1})">Add new task</button>
               </form>
             </div>
           </div>
@@ -780,6 +690,7 @@ async function leaveGroup(groupName) {
       alert('There was an error leaving the group. Please try again.');
     }
     // Re-render the groups (or update the UI as needed)
+    generateGroupHTML(window.allGroups);
     alert("You have left the group.");
   }
 }

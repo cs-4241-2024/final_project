@@ -134,28 +134,6 @@ app.post('/addTask', async (req, res) => {
     }
 });
 
-app.post('/addUsers', async (req, res) => {
-    const { newUsers } = req.body;
-    const {groupName, users} = newUsers;
-
-    try {
-        console.log('adding users', users); 
-        await groupCollection.updateOne(
-            { groupName },  // Check if 'assignments' is null
-            { $set: { users: users } }      // Initialize it as an empty array
-        );
-        res.status(201).json({
-            success: true,
-            message: 'Users added successfully',
-            users: users 
-        });
-    } catch (error) {
-        console.error('well fugma:', error);
-        res.status(500).json({ success: false, message: 'Error adding user', error });
-    }
-});
-
-
 app.post('/deleteTask', async (req, res) => {
     const { groupName, assignmentIndex } = req.body;
 
