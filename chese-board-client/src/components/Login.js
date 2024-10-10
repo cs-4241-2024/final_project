@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { HOST } from '../config';
 import { toast } from 'react-toastify';
-import background from "../assets/images/background/background.jpg";
 
 function Login() {
   const [email, setEmail] = useState("");
