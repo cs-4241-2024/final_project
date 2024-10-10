@@ -10,6 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const template = "main";
 
+// Set up Handlebars as the view engine
 app.engine(
   "handlebars",
   engine({
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Extend the express-session interface to include a userID property
 declare module "express-session" {
   export interface SessionData {
     userID?: number;
@@ -52,6 +54,7 @@ function pageHandleAuth(req, res) {
   return userID;
 }
 
+// Route for the home page
 app.get("/", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
@@ -62,6 +65,7 @@ app.get("/", async (req, res, next) => {
   res.render("home", { username, locations });
 });
 
+// Route for the 'to order' page
 app.get("/toorder", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
@@ -72,6 +76,7 @@ app.get("/toorder", async (req, res, next) => {
   res.render("toorder", { username, foods });
 });
 
+// Helper function to render a specific location's details
 async function renderLocation(
   res,
   userID: number,
@@ -90,10 +95,12 @@ async function renderLocation(
   });
 }
 
+// Helper function to validate if a parameter is a valid number
 function validateParam(param: string): boolean {
   return !param || param.length < 1 || isNaN(Number(param));
 }
 
+// Route to display details for a specific location
 app.get("/location/:id", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
   if (!userID) return;
@@ -107,6 +114,7 @@ app.get("/location/:id", async (req, res, next) => {
   await renderLocation(res, userID, locationID, true);
 });
 
+// Route to display the "edit food" dialog for a specific food item at a location
 app.get(
   "/location/:locationID/edit-food-dialog/:foodID",
   async (req, res, next) => {
@@ -139,6 +147,7 @@ function apiHandleAuth(req, res) {
   return userID;
 }
 
+// API route to create a new location
 app.post("/api/location/make", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
@@ -151,6 +160,7 @@ app.post("/api/location/make", async (req, res) => {
   }
 });
 
+// API route to edit an existing location
 app.post("/api/location/edit", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
@@ -163,6 +173,7 @@ app.post("/api/location/edit", async (req, res) => {
   }
 });
 
+// API route to delete a location
 app.post("/api/location/delete", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
