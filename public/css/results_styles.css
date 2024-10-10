@@ -1,0 +1,47 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #D4CBBA;
+}
+
+p {
+    font-family: "Cormorant";
+    font-size: 24px;
+}
+
+h2 {
+    font-family: "Aboreto";
+}
+
+.styled-button {
+    background-color: #726D2D;
+    border: none;
+    border-radius: 8px;
+    width: 25%;
+    font-family: "Aboreto" !important;
+    font-size: 16px;
+    color: white;
+    padding: 10px 5px;
+    box-shadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px;
+    cursor: pointer;
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+
+}
+
+.div1 { 
+    grid-area: 1 / 1 / 2 / 4; 
+    background-color: #50341f;
+}
+
+.pageTitle {
+    text-align: center;
+    font-family: "Aboreto";
+    color: #D4CBBA;
+  }

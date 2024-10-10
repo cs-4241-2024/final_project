@@ -125,7 +125,7 @@ select {
 }
 
 .div2, .div3, .div4 {
-  background-image: url(./assets/brown-stone-modern-pattern-brick.jpg);
+  background-image: url(./assets/blurredRocks.jpg);
   background-position: left;
   background-size: cover;
 }

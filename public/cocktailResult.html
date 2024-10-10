@@ -4,10 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cocktail Search Results</title>
+
+      
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="./css/results_styles.css" />
+
 </head>
 <body>
-  <h1>Search Results</h1>
+
+    <div class="parent">
+        <div class="div1">
+            <h2 class="pageTitle">Order a Cocktail</h2>
+        </div>
+    </div>
+  
   <div id="results"></div>
 
   <script>
@@ -69,7 +87,7 @@
                 // Display the randomly selected drink
                 resultsDiv.innerHTML = `
                     <div id="drink-${cocktail.idDrink}" class="cocktail-item">
-                        <h3>${cocktail.strDrink}</h3>
+                        <h2>${cocktail.strDrink}</h2>
                         <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
                         <p><strong>Category:</strong> ${cocktail.strCategory}</p>
                         <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
@@ -79,8 +97,8 @@
                         <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
 
                         <!-- Add/Remove Drink Buttons -->
-                        <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')">Add to My List</button>
-                        <button onclick="removeFromMyList(${cocktail.idDrink})">Remove from My List</button>
+                        <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')" class="styled-button">Add to My List</button>
+                        <button onclick="removeFromMyList(${cocktail.idDrink})" class="styled-button" style="background-color: #813504;">Remove from My List</button>
 
                         <!-- Review Form -->
                         <form class="review-form" onsubmit="submitReview(event, ${cocktail.idDrink}, '${cocktail.strDrink}')">
