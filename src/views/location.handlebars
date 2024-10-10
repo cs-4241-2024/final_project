@@ -1,16 +1,5 @@
 {{> header }}
 
-<div class="mt-5 flex justify-center items-center">
-  <div class="w-[52px]"></div>
-  <h1 class="px-5 text-center text-3xl font-bold leading-9 tracking-tight">{{ location.name }}</h1>
-  <div class="dropdown">
-    <div tabindex="0" role="button" class="btn m-1">Edit</div>
-    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-      <li><a onclick="rename_location.showModal()">Rename</a></li>
-      <li><a onclick="delete_location.showModal()">Delete</a></li>
-    </ul>
-  </div>
-</div>
 
 <div class="overflow-x-auto mt-8 mx-5 p-5 shadow-xl card">
   <table class="table table-zebra rounded-4xl">
