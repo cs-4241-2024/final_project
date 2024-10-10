@@ -4,7 +4,7 @@
 
 **Glitch:** https://cs4241-webware-chem-stockroom-project.glitch.me/
 
-**Project Video:** https://youtu.be/RJgQraYsfmg
+**Project Video:** https://www.youtube.com/watch?v=rcemuaBHjZo
 
 Currently, the WPI chemistry stockroom's entire inventory is on an Excel sheet and only accessible through the desktop there. It’s not online, there’s no log of who’s been updating / creating errors. Really not the best solution for a fast pace environment like WPI. We wanted to create a website to view and edit the inventory, and use Excel as a safety net instead. It being online allows WPI members to quickly see what’s available to them at the chemistry stockroom. The different account levels we have let only workers at the stockroom to make modifications to the inventory database. We included an admin level account with all permissions to manage accounts and reset the database from a backup in case something goes wrong.
 
