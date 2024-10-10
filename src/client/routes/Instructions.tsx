@@ -39,10 +39,10 @@ function Instructions() {
                             <img src={exportImage} alt="Export to Excel Icon" style={{ marginTop: '10px', width: '80%', height: 'auto' }} />
                         </li>
                         <li>
-                            <strong>Step 6:</strong> Try opening the file and saving it if it doesn't work the first time.
+                            <strong>Step 5:</strong> Try opening the file and saving it if it doesn't work the first time.
                         </li>
                         <li>
-                            <strong>Step 7:</strong> Upload the file to the editor page.
+                            <strong>Step 6:</strong> Upload the file to the editor page.
                         </li>
                         <li>
                             <em>If the upload doesn't work the first time, open the file, disable protected mode, and save.</em>
