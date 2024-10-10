@@ -7,7 +7,7 @@ const TIME = 40
 
 const canvas = document.getElementById('tetris') as HTMLCanvasElement
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-
+const tetrisInstance = new tetris(ctx);
 ctx.canvas.width = COLS * SIZE
 ctx.canvas.height = ROWS * SIZE
 
@@ -51,6 +51,7 @@ function playTetris(board: tetris) {
         }
         if (++curLoop % TIME == 0) {
             board.moveDown()
+            document.getElementById('score')!.innerText = board.getScore().toString(); // Update score display
         }
     }
 

@@ -1,9 +1,41 @@
 import { tetris } from "./tetris";
+
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
+const registerForm = document.getElementById('register-form') as HTMLFormElement;
 const loginMessage = document.getElementById('login-message') as HTMLParagraphElement;
 const gameContainer = document.getElementById('game-container') as HTMLElement;
 
-// Handle form submission
+// Handle registration form submission
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const registerUsername = (document.getElementById('register-username') as HTMLInputElement).value;
+    const registerPassword = (document.getElementById('register-password') as HTMLInputElement).value;
+
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: registerUsername, password: registerPassword })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert(`Registration successful! User ID: ${result.userId}`);
+            registerForm.reset(); // Clear the form after successful registration
+        } else {
+            const error = await response.text();
+            alert(`Registration failed: ${error}`);
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        alert('An error occurred during registration');
+    }
+});
+
+// Handle login form submission
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -11,7 +43,7 @@ loginForm.addEventListener('submit', async (e) => {
     const password = (document.getElementById('password') as HTMLInputElement).value;
 
     try {
-        const response = await fetch('http://localhost:3000/login', {
+        const response = await fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -24,9 +56,9 @@ loginForm.addEventListener('submit', async (e) => {
             localStorage.setItem('token', data.token); // Store the token
             loginMessage.textContent = '';
             loginForm.reset();
-            loginForm.style.display = 'none'; // Hide the login form
+            loginForm.style.display = 'none'; // Hide the login
+            registerForm.style.display = 'none'; // Hide the register form
             gameContainer.style.display = 'block'; // Show the game container
-            // Start the game
             startGame();
         } else {
             const error = await response.text();
@@ -82,6 +114,7 @@ function startGame() {
             requestAnimationFrame(loop);
             if (++curLoop % TIME === 0) {
                 board.moveDown();
+                document.getElementById('score')!.innerText = board.getScore().toString(); // Update score display
             }
         }
     }
