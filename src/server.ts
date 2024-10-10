@@ -72,15 +72,18 @@ app.get("/toorder", async (req, res, next) => {
   res.render("toorder", { username, foods });
 });
 
+
+
+//Redner location
 async function renderLocation(
   res,
   userID: number,
-  locationID: number,
+  locID: number,
   useTemplate: boolean,
 ) {
   const username = await db.getUsername(userID);
-  const location = await db.getLocation(userID, locationID);
-  const foods = await db.getFoods(userID, locationID);
+  const location = await db.getLocation(userID, locID);
+  const foods = await db.getFoods(userID, locID);
 
   res.render("location", {
     username,
@@ -93,6 +96,8 @@ async function renderLocation(
 function validateParam(param: string): boolean {
   return !param || param.length < 1 || isNaN(Number(param));
 }
+
+
 
 app.get("/location/:id", async (req, res, next) => {
   const userID = pageHandleAuth(req, res);
@@ -141,6 +146,8 @@ function apiHandleAuth(req, res) {
   return userID;
 }
 
+
+
 app.post("/api/location/make", async (req, res) => {
   const userID = apiHandleAuth(req, res);
   if (!userID) return;
@@ -152,6 +159,8 @@ app.post("/api/location/make", async (req, res) => {
     res.status(500).json({ error: `Make location failed` });
   }
 });
+
+
 
 app.post("/api/location/edit", async (req, res) => {
   const userID = apiHandleAuth(req, res);
