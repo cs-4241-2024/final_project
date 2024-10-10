@@ -1,0 +1,37 @@
+{
+  "name": "webware-final",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server/main.js -w src/server",
+    "start": "cross-env NODE_ENV=production node src/server/main.js",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "'": "file:awesome.me/kit-040eaf3b40@latest'",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "cookie-session": "^2.1.0",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.2",
+    "mongodb": "^6.9.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite-express": "*",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-react": "^4.2.0",
+    "nodemon": "^3.0.1",
+    "vite": "^5.0.2"
+  },
+  "engines": {
+    "node": "^16.x"
+  }
+}

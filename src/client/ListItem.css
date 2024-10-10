@@ -1,0 +1,30 @@
+
+
+.list-item {
+  display: grid; /* Use grid layout */
+  grid-template-columns: 1fr auto; /* Left side takes available space, right side is auto */
+  
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.item-name {
+  font-size: 12px;
+  text-align: left;
+  font-weight: bold;
+  color: #333;
+}
+
+.item-notes {
+  font-size: 10px;
+  text-align: left;
+  color: #777;
+}
+
+.item-quantity {
+  font-size: 12px;
+  text-align: right;
+}

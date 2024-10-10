@@ -1,0 +1,77 @@
+.top-bar {
+  
+  position: fixed;
+  top: 0px;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  margin: 0;
+  
+  background-color: #f8f9fa; /* Light background color */
+}
+
+.search-bar {
+  flex: 0 0 35%;
+  align-items: center;
+  display: flex;
+}
+
+.search-icon{
+  margin: 0px 5px;
+  font-size: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 5px;              /* Padding for input */
+  border: 1px solid #ccc;    /* Border for input */
+  border-radius: 4px;        /* Rounded corners */
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;        /* Center the title */
+  font-size: 20px;
+}
+.title::before,
+.title::after {
+  content: ""; /* Create empty pseudo-elements */
+  flex: 1; /* Allow them to grow and fill space */
+}
+
+.backup-icon {
+  font-size: 18px; /* Size of the icon */
+  color: #333; /* Icon color */
+}
+
+.backup-icon:hover {
+  color: #0a4d85; /* Color on hover */
+}
+
+.account-menu {
+  position: absolute; /* Position relative to the icon */
+  right: 0; /* Align to the right */
+  background-color: white; /* Background color */
+  border: 1px solid #ddd; /* Border */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+.account-menu ul {
+  list-style: none; /* Remove default list styling */
+  padding: 10px; /* Padding around the menu */
+  margin: 0; /* Remove margin */
+}
+
+.account-menu li {
+  margin: 5px 0; /* Space between items */
+}
