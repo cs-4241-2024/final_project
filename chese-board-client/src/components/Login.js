@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { HOST } from '../config';
 import { toast } from 'react-toastify';
+import background from "../assets/images/background/background.jpg";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -33,6 +34,17 @@ function Login() {
   }
 
   return (
+  <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 'flex',
+        backgroundImage: `url(${background})`, // Set background image
+        backgroundSize: 'cover',  // Ensure the image covers the entire area
+        backgroundPosition: 'center',  // Center the background image
+        backgroundRepeat: 'no-repeat',  // Avoid repeating the image
+      }}>
     <Box
       sx={{
         display: 'flex',
@@ -53,6 +65,7 @@ function Login() {
         </Typography>
       </Card>
     </Box>
+  </Box>
   )
 }
 

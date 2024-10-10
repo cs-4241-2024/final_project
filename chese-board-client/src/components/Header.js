@@ -15,7 +15,7 @@ function Header() {
       <Toolbar>
         <Box display="flex" alignItems="center" gap={2} sx={{ flexGrow: 1 }}>
           <Typography variant="h6" component="div" sx={{ marginRight: 10 }}>
-            Logo
+            TFT
           </Typography>
           <Button variant="text" color="text" onClick={() => navigate('/home')}>Team</Button>
           {
