@@ -330,6 +330,12 @@ function renderIngredients(cocktail) {
   return ingredientsHtml;
 }
 
+const loginRegisterBtn = document.getElementById("login-register-home")
+ //Redirects login/register button to login page
+ loginRegisterBtn.addEventListener("click", () => {
+  window.location.href = "/index.html"
+})
+
 // Submit a review for a drink
 function submitReview(event, idDrink, strDrink) {
   event.preventDefault();
