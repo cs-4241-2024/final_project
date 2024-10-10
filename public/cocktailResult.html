@@ -9,6 +9,115 @@
 <body>
   <h1>Search Results</h1>
   <div id="results"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("DOM fully loaded and parsed");
+        // Function to get query parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Retrieve ingredients from query parameters
+        const ingredient1 = getQueryParam('ingredient1');
+        const ingredient2 = getQueryParam('ingredient2');
+        const ingredient3 = getQueryParam('ingredient3');
+
+        console.log(ingredient1);
+        console.log(ingredient2);
+        console.log(ingredient3);
+
+        triggerSearch(ingredient1, ingredient2, ingredient3);
+    });
+
+    // Function to handle the form submission and search
+    function triggerSearch(ingredient1 = "", ingredient2 = "", ingredient3 = "") {
+        
+        console.log("triggerSearch called");
+        console.log(ingredient1);
+        console.log(ingredient2);
+        console.log(ingredient3);
+
+    if (ingredient1 || ingredient2 || ingredient3) {
+        const ingredients = { ingredient1, ingredient2, ingredient3 };
+
+        fetch("/searchCocktails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ingredients),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+
+            if (data.length > 0) {
+                // Pick a random drink from the results
+                const randomIndex = Math.floor(Math.random() * data.length);
+                const cocktail = data[randomIndex];
+
+                let ingredientsHtml = "";
+                for (let i = 1; i <= 15; i++) {
+                    const ingredient = cocktail[`strIngredient${i}`];
+                    const measure = cocktail[`strMeasure${i}`];
+                    if (ingredient) {
+                        ingredientsHtml += `<p>${measure ? measure : ""} ${ingredient}</p>`;
+                    }
+                }
+
+                // Display the randomly selected drink
+                resultsDiv.innerHTML = `
+                    <div id="drink-${cocktail.idDrink}" class="cocktail-item">
+                        <h3>${cocktail.strDrink}</h3>
+                        <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
+                        <p><strong>Category:</strong> ${cocktail.strCategory}</p>
+                        <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
+                        <p><strong>Alcoholic:</strong> ${cocktail.strAlcoholic}</p>
+                        <p><strong>Ingredients:</strong></p>
+                        ${ingredientsHtml}
+                        <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
+
+                        <!-- Add/Remove Drink Buttons -->
+                        <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')">Add to My List</button>
+                        <button onclick="removeFromMyList(${cocktail.idDrink})">Remove from My List</button>
+
+                        <!-- Review Form -->
+                        <form class="review-form" onsubmit="submitReview(event, ${cocktail.idDrink}, '${cocktail.strDrink}')">
+                            <label for="rating-${cocktail.idDrink}">Rating (1-5):</label>
+                            <input type="number" min="1" max="5" id="rating-${cocktail.idDrink}" required />
+                            <textarea id="reviewText-${cocktail.idDrink}" placeholder="Write your review..." required></textarea>
+                            <button type="submit" class="btn">Submit Review</button>
+                        </form>
+
+                        <!-- Collapsible Trigger for Reviews -->
+                        <ul class="collapsible">
+                            <li>
+                                <div class="collapsible-header">
+                                    <button class="btn blue" onclick="fetchReviews(${cocktail.idDrink})">View Reviews</button>
+                                </div>
+                                <div class="collapsible-body">
+                                    <div id="reviews-${cocktail.idDrink}">
+                                        <p>Click "View Reviews" to see the reviews.</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                `;
+
+                const collapsibleElems = document.querySelectorAll(".collapsible");
+                M.Collapsible.init(collapsibleElems);
+            } else {
+                resultsDiv.innerHTML = "<p>No cocktails found for the given ingredients.</p>";
+            }
+        })
+        .catch((error) => console.error("Error fetching cocktails:", error));
+    } else {
+        console.log("No ingredients selected, skipping search.");
+    }
+    }
+    </script>
   
   <script src="./js/main.js"></script>
 </body>

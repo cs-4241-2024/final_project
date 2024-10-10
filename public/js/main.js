@@ -274,95 +274,23 @@ $(document).ready(function () {
     $.fn.select2.isInitialized = true;
   }
 
-  $(".ingredient-select").on("change", function () {
-    setTimeout(triggerSearch, 200);
+});
+
+$(document).ready(function () {
+  // Attach an event listener to the button
+  $('#getDrinkButton').on('click', function () {
+      const ingredient1 = document.getElementById("ingredient1").value;
+      const ingredient2 = document.getElementById("ingredient2").value;
+      const ingredient3 = document.getElementById("ingredient3").value;
+
+      // Construct the URL with query parameters
+      const url = `/cocktailResult?ingredient1=${encodeURIComponent(ingredient1)}&ingredient2=${encodeURIComponent(ingredient2)}&ingredient3=${encodeURIComponent(ingredient3)}`;
+
+      // Redirect to cocktailResult.html
+      window.location.href = url;
   });
 });
 
-// Function to handle the form submission and search
-function triggerSearch() {
-  const ingredient1 = document.getElementById("ingredient1").value;
-  const ingredient2 = document.getElementById("ingredient2").value;
-  const ingredient3 = document.getElementById("ingredient3").value;
-
-  if (ingredient1 || ingredient2 || ingredient3) {
-    const ingredients = { ingredient1, ingredient2, ingredient3 };
-
-    fetch("/searchCocktails", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(ingredients),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const resultsDiv = document.getElementById("results");
-        resultsDiv.innerHTML = "";
-
-        data.forEach((cocktail) => {
-          let ingredientsHtml = "";
-
-          for (let i = 1; i <= 15; i++) {
-            const ingredient = cocktail[`strIngredient${i}`];
-            const measure = cocktail[`strMeasure${i}`];
-            if (ingredient) {
-              ingredientsHtml += `<p>${
-                measure ? measure : ""
-              } ${ingredient}</p>`;
-            }
-          }
-
-          // Collapsible trigger and content for reviews
-          resultsDiv.innerHTML += `
-            <div id="drink-${cocktail.idDrink}" class="cocktail-item">
-              <h3>${cocktail.strDrink}</h3>
-              <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
-              <p><strong>Category:</strong> ${cocktail.strCategory}</p>
-              <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
-              <p><strong>Alcoholic:</strong> ${cocktail.strAlcoholic}</p>
-              <p><strong>Ingredients:</strong></p>
-              ${ingredientsHtml}
-              <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
-
-              <!-- Add/Remove Drink Buttons -->
-              <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')">Add to My List</button>
-              <button onclick="removeFromMyList(${cocktail.idDrink})">Remove from My List</button>
-
-              <!-- Review Form -->
-              <form class="review-form" onsubmit="submitReview(event, ${cocktail.idDrink}, '${cocktail.strDrink}')">
-                <label for="rating-${cocktail.idDrink}">Rating (1-5):</label>
-                <input type="number" min="1" max="5" id="rating-${cocktail.idDrink}" required />
-
-                <textarea id="reviewText-${cocktail.idDrink}" placeholder="Write your review..." required></textarea>
-                
-                <button type="submit" class="btn">Submit Review</button>
-              </form>
-
-              <!-- Collapsible Trigger for Reviews -->
-              <ul class="collapsible">
-                <li>
-                  <div class="collapsible-header">
-                    <!-- Replaced <a> with <button> to prevent scrolling -->
-                    <button class="btn blue" onclick="fetchReviews(${cocktail.idDrink})">View Reviews</button>
-                  </div>
-                  <div class="collapsible-body">
-                    <div id="reviews-${cocktail.idDrink}">
-                      <p>Click "View Reviews" to see the reviews.</p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          `;
-        });
-
-        const collapsibleElems = document.querySelectorAll(".collapsible");
-        M.Collapsible.init(collapsibleElems);
-      })
-      .catch((error) => console.error("Error fetching cocktails:", error));
-  } else {
-    console.log("No ingredients selected, skipping search.");
-  }
-}
 
 // Function to fetch reviews for a drink
 function fetchReviews(idDrink) {
