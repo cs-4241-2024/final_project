@@ -1,49 +1,63 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+# Daytime
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+by Harshith Iyer and Edward Stump
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+## Overview
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
+Daytime is a calendar app that allows users to add events and tasks to their calendar, as well as view both on the same calendar component. In Outlook Calendar, you are able to view tasks and calendar on the same screen, but tasks show up as a separate window underneath the calendar, making both the tasks window and calendar window smaller, harder to navigate, and less useful overall. We wanted to create a version of a calendar app similar to Google Calendar + Google Tasks, where tasks show up as pieces on your calendar, with events showing up differently but on the same view.
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
+Project Link:
+https://cs4241final.harbar20.dev/
 
-### Deliverables
+## Usage Instructions
 
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
+To use the app, login with github. On the calendar page, there is a blank weekly calendar. To add tasks and events to the calendar, click ether the add task or add event button. Some fields are required, which will prevent the form from being submitted. Once submitted, the event or task will show up on the calendar as long as it falls within the week being displayed. Use the left and right arrows at the top of the screen to change the display week.
 
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
+## Technologies
 
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
+### React + Vite
 
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+We used react to create a component based website. React was a good choice for us because we were both already somewhat familiar with React and knew it would do a good job of managing the state we have in our application.
 
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+### Typescript
 
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
+We used TypeScript to program all react components as the type checking it provides helped us keep our project error free.
 
-The README for your second pull request should contain:
+### Tailwind
 
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
+We used TailwindCSS to style our project as both of us were already familiar with tailwind syntax.
 
-Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
+### MongoDB
 
-## FAQs
+We used MongoDB to store data. The simplicity of storing a collection of JSON objects was perfect for our calendar app, as each task or event can easily be represented as a JSON object.
 
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
+### NodeJS + Express Server
+
+We used Express and NodeJS as our server of choice, hosted on Railway. It connects to MongoDB using MongoDB's official driver.
+
+### Clerk authentication
+
+We used Clerk as our authentication provider. Clerk provides Github authentication and is very easy to set up with a react project. Using Clerk SignedIn and SignedOut components also allowed us not to have a seperate login page.
+
+## Challenges Faced
+
+Because we were making a complicated project with only two people, time was an issue. We ran out of time to implement a few of the features that we set out to complete, such as alternate calendar views (monthly / daily) as well as tags for events and tasks.
+
+## Work Distribution
+
+Harshith:
+
+-   Weekly Calendar Component
+-   Server.js
+-   MongoDB Setup
+-   Clerk Auth Setup
+
+Eddie:
+
+-   CreateEvent Component
+-   CreateTask Component
+-   README Document
+
+## Project Video Link
+
+https://youtu.be/mQlyc_ZFTO0

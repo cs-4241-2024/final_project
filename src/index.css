@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input,
+textarea,
+.input {
+  @apply border-black border-[1px] w-72;
+}
+
+.button {
+  @apply w-36 border-black border-[1px] rounded-md;
+}
