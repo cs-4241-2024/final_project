@@ -21,11 +21,11 @@ We used react to create a component based website. React was a good choice for u
 
 ### Typescript
 
-We used typescript to program all react components as the type checking it provides helped us keep our project error free.
+We used TypeScript to program all react components as the type checking it provides helped us keep our project error free.
 
 ### Tailwind
 
-We used tailwindcss to style our project as both of us were already familiar with tailwind syntax.
+We used TailwindCSS to style our project as both of us were already familiar with tailwind syntax.
 
 ### MongoDB
 
@@ -33,12 +33,11 @@ We used MongoDB to store data. The simplicity of storing a collection of JSON ob
 
 ### NodeJS + Express Server
 
-We used Express and NodeJS as our server of choice. 
-TODO: Harshith explain more pls
+We used Express and NodeJS as our server of choice, hosted on Railway. It connects to MongoDB using MongoDB's official driver.
 
 ### Clerk authentication
 
-We used Clerk as our authentication provider. Clerk provides github authentication and is very easy to set up with a react project. Using Clerk SignedIn and SignedOut components also allowed us not to have a seperate login page.
+We used Clerk as our authentication provider. Clerk provides Github authentication and is very easy to set up with a react project. Using Clerk SignedIn and SignedOut components also allowed us not to have a seperate login page.
 
 ## Challenges Faced
 
@@ -61,4 +60,4 @@ Eddie:
 
 ## Project Video Link
 
-TODO: Link Project Video
+https://youtu.be/mQlyc_ZFTO0
