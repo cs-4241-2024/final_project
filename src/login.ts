@@ -1,7 +1,9 @@
 import { tetris } from "./tetris";
+
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
-const loginMessage = document.getElementById('login-message') as HTMLParagraphElement;
 const registerForm = document.getElementById('register-form') as HTMLFormElement;
+const tutorial = document.querySelector('.tutorial-container') as HTMLElement;
+const loginMessage = document.getElementById('login-message') as HTMLParagraphElement;
 const registerMessage = document.getElementById('register-message') as HTMLParagraphElement;
 const gameContainer = document.getElementById('game-container') as HTMLElement;
 const leaderboardButton = document.getElementById('leaderboard-button') as HTMLButtonElement;
@@ -28,6 +30,7 @@ loginForm.addEventListener('submit', async (e) => {
             loginMessage.textContent = '';
             loginForm.reset();
             loginForm.style.display = 'none'; // Hide the login form
+            tutorial.style.display = 'none'; // Hide the tutorial
             registerForm.style.display = 'none'; // Hide the register form
             gameContainer.style.display = 'block'; // Show the game container
             // Start the game
@@ -138,6 +141,7 @@ function startGame() {
             }
             if (++curLoop % TIME === 0) {
                 board.moveDown();
+                document.getElementById('score')!.innerText = board.getScore().toString(); // Update score display
             }
         }
     }
