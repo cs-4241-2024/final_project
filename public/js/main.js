@@ -663,7 +663,7 @@ function generateGroupHTML(data) {
                 </div>
             </div>
           </div>
-          <button type="button" onclick="addNewUsers(${index + 1})">Add new user</button>
+          <button class="leave-group-btn" type="button" onclick="addNewUsers(${index + 1})">Add New User</button>
         </div>
         <div class="calendar-tasks-container">
           <div id="calendar${index + 1}" class="calendar-section"></div>
@@ -705,7 +705,7 @@ function generateGroupHTML(data) {
                       </div>
                   </div>
                   <input type="date" id="dateInput${index + 1}" placeholder="Date" required>
-                  <button type="button" onclick="addNewTask(${index + 1})">Add new task</button>
+                  <button class="leave-group-btn" type="button" onclick="addNewTask(${index + 1})">Add New Task</button>
               </form>
             </div>
           </div>
@@ -770,7 +770,6 @@ async function leaveGroup(groupName) {
       alert('There was an error leaving the group. Please try again.');
     }
     // Re-render the groups (or update the UI as needed)
-    generateGroupHTML(window.allGroups);
     alert("You have left the group.");
   }
 }
