@@ -4,84 +4,127 @@
     <title>CocktailCombo</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="js/login.js"></script>
-    <!-- Keep this one -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    />
-    <!-- Import Materialize CSS -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-      rel="stylesheet"
-    />
-    <!-- Import Materialize JS -->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet"/>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- <link rel="stylesheet" href="css/main.css" /> -->
+    
+    <link rel="stylesheet" href="./css/styles.css" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
   </head>
+
   <body>
-    <div id="loginSection">
-      <form id="loginForm" class="input-field">
-        <div class="input-field">
-          <label for="login-username" id="loginLabel">Username</label>
-          <input
-            type="text"
-            id="login-username"
-            name="username"
-            class="validate"
-            required
-          />
+
+    <div class="parent">
+
+        <div class="div1">
+            <h2 class="pageTitle">Order a Cocktail</h2>
         </div>
-        <div class="input-field">
-          <label for="login-password" id="loginLabel">Password</label>
-          <input
-            type="password"
-            id="login-password"
-            name="password"
-            class="validate"
-            required
-          />
+
+        <div class="div2">
+            <div class="arch"></div>
         </div>
-        <button type="submit" class="btn waves-effect waves-light">
-          Login
-        </button>
-      </form>
 
-      <!-- Google Login Button -->
-      <div id="googleLog" class="row">
-        <a href="/auth/google" id="google-login-btn" class="google-btn">
-          <i class="fab fa-google"></i> Sign in with Google
-        </a>
-      </div>
+        <div class="div3">
+            <div class="main-form">
+                <div id="loginSection">
+                    <h4>Log In</h4>
 
-      <div class="regButtonDiv row">
-        <p>Don't have an account?</p>
-        <button id="showRegister" class="btn">Register</button>
-      </div>
+                <form id="loginForm" class="input-field">
 
-      <div id="registerSection" style="display: none">
-        <h1 id="registerText">Register</h1>
-        <form id="registerForm" class="form-group">
-          <div class="input-field">
-            <label for="reg-username" id="loginLabel">Username</label>
-            <input type="text" id="reg-username" name="username" required />
-          </div>
-          <div class="input-field">
-            <label for="reg-password" id="loginLabel">Password</label>
-            <!-- <div class="password-container"> -->
-            <input type="password" id="reg-password" name="password" required />
-            <!-- </div> -->
-          </div>
-          <button type="submit" class="btn">Register</button>
-        </form>
-      </div>
+                    <div class="input-field">
+                        <label for="login-username" id="loginLabel">Username</label>
+                        <input
+                            type="text"
+                            id="login-username"
+                            name="username"
+                            class="validate"
+                            required
+                        />
+                    </div>
+
+                    <div class="input-field">
+                        <label for="login-password" id="loginLabel">Password</label>
+                        <input
+                            type="password"
+                            id="login-password"
+                            name="password"
+                            class="validate"
+                            required
+                        />
+                    </div>
+
+                    <button type="submit" class="styled-button">Login</button>
+                
+                </form>
+
+                <!-- Google Login Button -->
+                <div id="googleLog" class="row">
+                    <a href="/auth/google" id="google-login-btn" class="google-btn">
+                    <i class="fab fa-google"></i> Sign in with Google
+                    </a>
+                </div>
+
+                <div class="regButtonDiv row">
+                    <p>Don't have an account?</p>
+                    <button id="showRegister" class="styled-button-variation">Register</button>
+                </div>
+
+                <div id="registerSection" style="display: none">
+
+                    <h4 id="registerText">Register</h4>
+
+                    <form id="registerForm" class="form-group">
+
+                        <div class="input-field">
+                            <label for="reg-username" id="loginLabel">Username</label>
+                            <input type="text" id="reg-username" name="username" required />
+                        </div>
+
+                        <div class="input-field">
+                            <label for="reg-password" id="loginLabel">Password</label>
+                            <!-- <div class="password-container"> -->
+                            <input type="password" id="reg-password" name="password" required />
+                            <!-- </div> -->
+                        </div>
+
+                        <button type="submit" class="styled-button">Register</button>
+
+                    </form>
+                </div>
+            </div>
+            </div>
+
+            <div class="arch"></div>
+        </div>    
+
+        <div class="div4">
+            <div class="arch"></div>
+        </div>
+    
+        <div class="div5">
+    
+        </div>
+    
+        <div class="div6">
+            <div class="barstools"></div>
+        </div>
+
     </div>
+
+    <script src="./js/login.js"></script>
   </body>
 </html>

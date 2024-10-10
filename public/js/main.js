@@ -220,6 +220,7 @@ const ingredients = [
   "Vanilla schnapps",
   "Vanilla vodka",
   "Vermouth",
+  "Vodka",
   "Water",
   "Whipped cream",
   "Whiskey",

@@ -32,8 +32,14 @@ html, body {
   color: #D4CBBA;
 }
 
-h3 {
+h3, h4, p {
   font-family: "Cormorant";
+}
+
+p {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px;
 }
 
 label {
@@ -74,6 +80,44 @@ select {
   box-sizing: border-box;
 }
 
+.input-field {
+  font-family: "Cormorant";
+  font-weight: bold;
+  color: #726D2D !important;
+}
+
+.styled-button {
+  background-color: #726D2D;
+  border: none;
+  border-radius: 8px;
+  width: 50%;
+  font-family: "Aboreto" !important;
+  font-size: 16px;
+  color: white;
+  padding: 10px 5px;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px;
+  cursor: pointer;
+}
+
+.styled-button-variation {
+  background-color: antiquewhite;
+  border: 3px solid #726D2D;
+  border-radius: 8px;
+  width: 50%;
+  font-family: "Aboreto" !important;
+  font-size: 16px;
+  color: #726D2D;
+  padding: 10px 5px;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px;
+  cursor: pointer;
+}
+
+.google-btn {
+  color: #726D2D !important;
+  font-family: "Aboreto" !important;
+  font-weight: bold;
+}
+
 .div1 { 
   grid-area: 1 / 1 / 2 / 4; 
   background-color: #50341f;
@@ -105,7 +149,7 @@ select {
 }
 
 .arch {
-  background-image: url(./assets/archUpdated.png);
+  background-image: url(./assets/archWithBottles.png);
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
