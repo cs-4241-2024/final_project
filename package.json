@@ -1,0 +1,30 @@
+{
+  "name": "CS4241 Tetris Final",
+  "version": "",
+  "description": "Simple Task Logging",
+  "author": "Owen Rago",
+  "engines": {
+    "node": "16.x"
+  },
+  "scripts": {
+    "dev": "vite & tsx server.ts",
+    "build": "tsc && vite build && copy leaderboard.html dist",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mime": "^2.6.0",
+    "mongodb": "^6.9.0",
+    "tsx": "^4.19.1",
+    "vite": "^5.4.8"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}

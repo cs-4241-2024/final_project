@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "ES6",
+      "strict": true
+    },
+    "include": ["./server.ts", "./public/**/*"],
+    "exclude": ["node_modules"]
+  }
