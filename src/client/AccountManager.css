@@ -1,0 +1,42 @@
+.act-window {
+  display: flex;
+  flex-direction: column;
+
+  width: 18rem;
+  padding: 1rem;
+
+  row-gap: 1rem;
+
+  justify-content: center;
+}
+
+.act-title {
+  font-weight: bold;
+  font-size: 2rem;
+
+  /* Override h2 margin */
+  margin: 0%;
+}
+
+.act-row-select {
+  border-bottom: 2px dotted #000000;
+  padding-bottom: 1rem;
+
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.act-row {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.act-select-user {
+  max-width: 7rem;
+}
+
+.act-input {
+  /* Empty to maintain original spacing */
+}

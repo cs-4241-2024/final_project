@@ -1,49 +1,47 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+# Stockroom Inventory
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+*09 October 2024*
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+**Glitch:** https://cs4241-webware-chem-stockroom-project.glitch.me/
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
+**Project Video:** https://youtu.be/RJgQraYsfmg
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
+Currently, the WPI chemistry stockroom's entire inventory is on an Excel sheet and only accessible through the desktop there. It’s not online, there’s no log of who’s been updating / creating errors. Really not the best solution for a fast pace environment like WPI. We wanted to create a website to view and edit the inventory, and use Excel as a safety net instead. It being online allows WPI members to quickly see what’s available to them at the chemistry stockroom. The different account levels we have let only workers at the stockroom to make modifications to the inventory database. We included an admin level account with all permissions to manage accounts and reset the database from a backup in case something goes wrong.
 
-### Deliverables
+## Features
 
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
+- Login and account system (with account management and permission levels)
+- Navigable database with search to quickly locate items and detailed item info
+- On some permission levels, ability to edit database contents
+- On some permission levels, ability to download a backup of the database, upload a backup file to replace the database
+- Built for mobile first, but designed to also be usable on desktop computers
 
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
+## Permission Levels
 
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
+There are four different access levels that accounts can have. Currently, there are four existing accounts that can be used to navigate the website. Each existing account's username and password are its respective permission level (the "guest" account has no password).
 
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+| Username | Password | Permissions |
+| :---- | :---- | :---- |
+| guest | *No password required* | View only, don’t see price, search |
+| ta | ta | View only, don’t see price, search |
+| employee | employee | Previous \+ edit all fields, download backup |
+| admin | admin | Previous \+  upload from backup excel, manage accounts |
 
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+## Technology
 
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
+Our tech stack included React, Express, Node, and MongoDB. Christian also wrote Python scripts to initially populate the database from a spreadsheet. For styling we used basic CSS.
 
-The README for your second pull request should contain:
+## Challenges
 
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
+We faced a number of challenges in this project. A big part of this project involved learning React, especially managing React state and dynamically changing the UI depending on permission levels. Another challenge we faced was debugging features across the tech stack: client, server, and database. For example, we resolved bugs with functions passed as React props and miscommunications about what the columns of our database were called. We leveraged the web browser debugger, server debugging tools, and lots of `console.log` to find and fix these bugs.
 
-Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
+*Please note that we used a file titled `private.js` to store our database login information. This is not included in this repo and, instead, we have submitted it with the same syntax as our Glitch project.*
 
-## FAQs
+## Work Distribution
 
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
+We split up the work relatively evenly among the four of us:
+
+1. **Christian Rua:** account manager menu, main database code, python scripts
+2. **Steven Oliner:** login, permissions, deploying to Glitch
+3. **Ezra Barboza:** initial figma mockup, search, upload and download
+4. **Trajan Espelien:** initial figma mockup, initial ui prototype, editable popovers including permissions

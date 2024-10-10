@@ -1,0 +1,65 @@
+.popover {
+  position: fixed; /* Position it as required */
+  top: 50%;
+
+  /* TODO position the popover 
+  on top of the list item that was tapped */
+
+  top: 80px;
+  margin: 0px 5px;
+
+  max-width: 70%;
+  width: 100%; /* Allow it to shrink */
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 500px) {
+  .popover {
+    max-width: 90%;
+  }
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin: 5px 0px;
+  font-size: 14px;
+}
+
+.form-row label {
+  margin-right: 10px; /* Space between label and input */
+}
+
+.form-row input {
+  flex: 1; /* Allow inputs to take available space */
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-row .first-input {
+  max-width: 25%;
+  margin-right: 20px;
+}
+
+.form-row .second-input {
+  max-width: 25%;
+}
+
+.popover-buttons {
+  display: flex;
+  justify-content: space-between; /* Space between buttons */
+  margin-top: 20px;
+}
+
+.price.hidden {
+  visibility: hidden; /* Keeps the space but hides the content */
+}

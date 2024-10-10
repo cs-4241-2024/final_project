@@ -1,0 +1,110 @@
+[
+  {
+    "name": "Safety Goggles",
+    "note": "backup stock",
+    "quantity": "",
+    "unit": "",
+    "location": 1,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "Clorox disposable wipes",
+    "note": "",
+    "quantity": 10,
+    "unit": "",
+    "location": 2,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "Scouring Pads",
+    "note": "",
+    "quantity": 40,
+    "unit": "pcs",
+    "location": 2,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "soap dispensers",
+    "note": "",
+    "quantity": 7,
+    "unit": "ea",
+    "location": 2,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "Soap refills",
+    "note": "",
+    "quantity": 7.5,
+    "unit": "bottles",
+    "location": 2,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "N95 mask for dust",
+    "note": "two boxes in back up as of May 2023. backup in 108",
+    "quantity": 1,
+    "unit": "open box",
+    "location": 3,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "10 Dram Vials 72/box",
+    "note": "0 in back up",
+    "quantity": 0,
+    "unit": "",
+    "location": 73,
+    "price": "",
+    "date": "8/2/2023"
+  },
+  {
+    "name": "Hazardous Waste Labels (large)",
+    "note": "Back-up stock: Left of chem. room sink",
+    "quantity": "~200",
+    "unit": "",
+    "location": 3,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "Hazardous Waste Labels (small)",
+    "note": "Back-up stock: Left of chem. room sink",
+    "quantity": 37,
+    "unit": "",
+    "location": 3,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "6\" x 9\" Plastic Non-Zip Bags",
+    "note": "",
+    "quantity": 1,
+    "unit": "case",
+    "location": 4,
+    "price": "",
+    "date": "5/24/2023"
+  },
+  {
+    "name": "Shipping Strap Tool Kit",
+    "note": "Nick ordered 6/23 when the shipping straps for an order were lost",
+    "quantity": 1,
+    "unit": "",
+    "location": 5,
+    "price": "",
+    "date": "6/20/2023"
+  },
+  {
+    "name": "Body Fluid Clean Up Kit (Bloodborne pathogens)",
+    "note": "Mercury cleanup kit is under hood (Hg cleanup kit)",
+    "quantity": 2,
+    "unit": "ea",
+    "location": 5,
+    "price": "",
+    "date": "5/24/2023"
+  }
+]
