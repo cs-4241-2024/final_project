@@ -40,7 +40,7 @@ function makeLocationsTable(): void {
     CREATE TABLE IF NOT EXISTS locations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
-      name TEXT NOT NULL UNIQUE,
+      name TEXT NOT NULL,
       FOREIGN KEY (user_id) REFERENCES users(id)
     );
   `);
