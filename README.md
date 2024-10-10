@@ -5,7 +5,7 @@
 
 [Proposal](PROPOSAL.md)
 
-TODO [Video Link](https://)
+[Video Link](https://youtu.be/xcT_byKhagc)
 
 ## Team
  - Liam Snow (database)
