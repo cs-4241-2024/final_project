@@ -40,3 +40,101 @@
 .read-the-docs {
   color: #888;
 }
+
+/* New Styles for Moving Tabs to the Top-Left Corner */
+.tabs-container {
+  position: absolute ; /* Force absolute position */
+  top: 20px ; /* Force distance from the top */
+  left: 20px ; /* Force distance from the left */
+  display: flex ; /* Ensure flexbox display */
+  flex-direction: column ; /* Enforce vertical stacking */
+  align-items: flex-start ; /* Align items to the left */
+  gap: 10px ; /* Space between items */
+  z-index: 1000 !important; /* Ensure it appears on top */
+}
+
+/* Styles for Tab Items */
+.tabs {
+  /*display: flex !important; */
+  display: block;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tab-item {
+  padding: 10px 20px;
+  background-color: transparent !important; /* Make background transparent */
+  border: 1px solid transparent !important; /* Transparent border */
+  cursor: pointer;
+  color: white; /* Ensure text is visible */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover Effect for Transparent Buttons */
+.tab-item:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Slight background on hover */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Visible border on hover */
+}
+
+/* Active Tab Styling */
+.tab-item.active {
+  background-color: rgba(255, 255, 255, 0.3) !important; /* Make the active tab slightly visible */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Add border for active state */
+  color: #1f8dd6 ; /* Blue color for active state */
+}
+
+/* Logout Button Styling - Positioned in the Top-Right Corner */
+button.logout-button {
+  position: absolute; /* Position the button relative to the screen */
+  top: 20px; /* Distance from the top */
+  right: 20px; /* Distance from the right edge */
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #1f8dd6; /* Red background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+/* Hover Effect for Logout Button */
+button.logout-button:hover {
+  background-color: #1f8dd6; /* Darker red on hover */
+}
+
+/* Style for the Add New Application Container */
+.add-new-application-container {
+  display: flex;
+  justify-content: flex-start; /* Center the button horizontally */
+  margin-left: 250px; /* Adjust the margin to align with Status column */
+  margin-top: 0px;
+  margin-bottom: -80px; /* Space between the button and table */
+  width: 100%; /* Make the container full width */
+}
+
+.add-new-application-container button {
+  padding: 6px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 375px; /* Position the button to the right */
+}
+
+/* Additional Styling for Table and Components */
+.table-container {
+  margin-top: 10px;
+}
+
+.pure-button {
+  margin-right: 5px;
+}
+
+/* Styling for the Job Applications Header */
+.applications-header {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 5px; /* Lower spacing between header and button */
+}

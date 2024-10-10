@@ -7,6 +7,8 @@ import Tabs from './components/tabs';
 import Community from './components/Community'; 
 import Stats from './components/Stats';
 import './index.css';
+import './App.css';
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -99,20 +101,26 @@ function App() {
     switch (activeTab) {
       case 'myApplications':
         return (
-          <div>
-            <JobApplicationTable 
-              applications={applications} 
-              handleDeleteApplication={handleDeleteApplication} 
-              handleUpdateApplication={handleUpdateApplication} 
-            />
-            <button 
-              onClick={() => setShowModal(true)} 
-              className="pure-button pure-button-primary"
-            >
-              Add New Application
-            </button>
-          </div>
-        );
+  <div>
+    {/* New container to position the "Add New Application" button above the table */}
+    <div className="add-new-application-container">
+      <button 
+        onClick={() => setShowModal(true)} 
+        className="pure-button pure-button-primary"
+      >
+        Add New Application
+      </button>
+    </div>
+    
+    {/* Render the Job Application Table */}
+    <JobApplicationTable 
+      applications={applications} 
+      handleDeleteApplication={handleDeleteApplication} 
+      handleUpdateApplication={handleUpdateApplication} 
+    />
+  </div>
+);
+
       case 'communityApplications':
         return <Community />; 
       case 'stats':
@@ -143,7 +151,7 @@ function App() {
           )}
 
           {/* logout */}
-          <button onClick={handleLogout} className="pure-button pure-button-primary">
+          <button onClick={handleLogout} className="logout-button pure-button pure-button-primary">
             Logout
           </button>
         </div>
