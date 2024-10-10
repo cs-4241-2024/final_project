@@ -1,5 +1,4 @@
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -16,30 +15,91 @@ body {
   width: 100vw;
 }
 
-.div1 {
-  grid-area: 1 / 1 / 2 / 4;
+
+.main-form {
+  z-index: 2;
+  text-align: center;
+  width: 70%;
+  margin: auto;
+  padding: 1em;
+  background-color: antiquewhite;
+  border-radius: 4px;
+}
+
+.pageTitle {
+  text-align: center;
+  font-family: "Aboreto";
+  color: #D4CBBA;
+}
+
+h3 {
+  font-family: "Cormorant";
+}
+
+label {
+  display: block;
+  color: #726D2D;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.main-form select, .main-form .select2-container {
+  width: 100% !important;  
+}
+
+.main-form .select2-selection {
+  width: 100% !important;  
+}
+
+.dropdown {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  font-family: "Cormorant";
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #726D2D;
+  margin-bottom: 1rem;
+}
+
+.ingredient-select {
+  width: 100% !important;  
+  box-sizing: border-box;
+}
+
+select {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.div1 { 
+  grid-area: 1 / 1 / 2 / 4; 
   background-color: #50341f;
 }
 
-.div2,
-.div3,
-.div4 {
+.div2, .div3, .div4 {
   background-image: url(./assets/brown-stone-modern-pattern-brick.jpg);
   background-position: left;
   background-size: cover;
 }
 
-.div2 {
-  grid-area: 2 / 1 / 4 / 2;
+.div2 { 
+  grid-area: 2 / 1 / 4 / 2; 
   position: relative;
+  
 }
 
-.div3 {
-  grid-area: 2 / 2 / 4 / 3;
+.div3 { 
+  grid-area: 2 / 2 / 4 / 3; 
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.div4 {
+.div4 { 
   grid-area: 2 / 3 / 4 / 4;
   position: relative;
 }
@@ -55,13 +115,13 @@ body {
   height: 100%;
 }
 
-.div5 {
-  grid-area: 4 / 1 / 5 / 4;
+.div5 { 
+  grid-area: 4 / 1 / 5 / 4; 
   background-color: #f2dfb7;
 }
 
-.div6 {
-  grid-area: 5 / 1 / 6 / 4;
+.div6 { 
+  grid-area: 5 / 1 / 6 / 4; 
   background-image: url(./assets/barfronttexture.png);
 }
 
@@ -76,22 +136,45 @@ body {
   background-position: bottom;
 }
 
-/* Style the dropdown search box */
-.select2-container .select2-search--dropdown .select2-search__field {
-  border: 2px solid #007bff;
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
-  background-color: #f8f9fa;
+@media only screen and (max-width: 600px) {
+  
+  .parent {
+      grid-template-columns: 1fr;
+  }
+  
+  .div2, .div4 {
+      display: none;
+  }
+
+  .div3 {
+      grid-area: 2 / 1 / 4 / 2;
+      position: relative;
+      width: 100%;
+  }
+
 }
 
-.select2-container .select2-search--dropdown .select2-search__field:focus {
-  border-color: #0056b3;
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-}
+@media only screen and (min-width: 768px) and (max-width: 900px) {
 
-/* Style the placeholder inside the search field */
-.select2-container
-  .select2-search--dropdown
-  .select2-search__field::placeholder {
-  color: #6c757d;
-  font-style: italic;
+  .parent {
+      grid-template-columns: 1fr 1fr;
+  }
+
+  .div2 {
+      grid-area: 2 / 1 / 4 / 2;
+  }
+
+  .div3 {
+      grid-area: 2 / 2 / 4 / 2;
+  }
+
+  .div2, .div3 {
+      display: block;
+      position: relative;
+      width: 100%;
+  }
+
+  .div4 {
+      display: none;
+  }
 }
