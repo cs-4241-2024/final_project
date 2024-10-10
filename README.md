@@ -1,6 +1,7 @@
 # CS 4241 Final Project
 
 [Hosted Link](https://final.tempel-alpha.ts.net)
+ - user: `test`, password: `test`
 
 [Proposal](PROPOSAL.md)
 
