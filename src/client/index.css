@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  background-image: url("https://cdn.esahubble.org/archives/images/screen/heic1304c.jpg");
+  background-size: contain;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  display: inline-block;
+  width: 100vw;
+  overflow-x: hidden;
+
+}
+
+#imagelistdiv{
+  padding-left: 50px;
+  padding-top: 10px;
+}
+
+body {
+  margin: 0;
+/*   display: flex; */
+  place-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+}
+
+button {
+  border-radius: 8px;
+  border-color: #646cff;
+  color: #ffffff;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+#imagelist{
+  max-width: 95vw;
+  max-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+input{
+  background-color: white;
+  color: black;
+  border-color: black;
+}
+.header-link{
+  color: black;
+}
+#divinputbox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+#white-text{
+  color: #ffffff;
+}
+.image-link{
+  text-decoration: none;
+  color: #ffffff;
+}
+.image-link:link {
+  text-decoration: none;
+  color: #ffffff;
+}
+image-link:visited {
+  text-decoration: none;
+  color: #ffffff;
+}
+image-link:hover{
+  text-decoration: none;
+  color: #aaaaff;
+}
+image-link:active{
+  text-decoration: none;
+  color: #ffffff;
+}
+
+#leftdiv{
+  padding-left: 50px;
+}
+
+.image{
+  transition: box-shadow 0.3s ease;
+  border-style: solid;
+  border-color: #ffffff;
+  border-width: 1px;
+}
+
+.image:hover {
+  box-shadow: 6px 6px 12px #ffffff;
+}
+
+.AppBar{
+  background-color: white;
+  height: 7.5vh;
+  width: 100vw;
+
+}
+
+.leftDisplay{
+  float: left;
+  color: black;
+}
+
+
+#filled-basic{
+  float: left;
+  border-color: #646cff;
+  border-bottom: 4px;
+}
+
+#enterRating{
+  float: left;
+}
+#comment-header{
+  color:white;
+}
+#comment-text{
+  color:white;
+}
+#commentDiv{
+  max-height: 15vh;
+  width: 40vw;
+}
+/* 
+.flex-container{
+  justify-content: space-evenly;
+} */
+
+#flexdiv{
+  background-color: white;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#button{
+  border-style: solid;
+  border-color: #646cff;
+}
+
+.imageZoomed{
+  border-style: solid; 
+  border-color: #646cff;
+  border-width: 4px;
+}
+
+#commentBox{
+  height: 92.5vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
