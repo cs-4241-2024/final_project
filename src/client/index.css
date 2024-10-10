@@ -152,7 +152,8 @@ h1, h2 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: black; 
+  backdrop-filter: blur(2px);
+  /* background-color: rgb(161, 161, 161);  */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,7 +161,7 @@ h1, h2 {
 }
 
 .modal-content {
-  background-color: #333; 
+  background-color: #747474; 
   padding: 20px;
   border-radius: 10px;
   color: white;
@@ -178,4 +179,10 @@ h1, h2 {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+#statHorizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }

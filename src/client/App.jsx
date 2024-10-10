@@ -12,6 +12,7 @@ import './App.css';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
   const [applications, setApplications] = useState([]);
   const [showModal, setShowModal] = useState(false); 
   const [activeTab, setActiveTab] = useState('myApplications'); 
@@ -27,6 +28,7 @@ function App() {
         const data = await response.json();
         if (data.loggedIn) {
           setLoggedIn(true);
+          setUsername(data.username);
           await loadApplications();
         }
       }
@@ -58,6 +60,31 @@ function App() {
     }
   };
 
+  const exportToCSV = () => {
+    if (!applications.length) {
+        alert('No data to export!');
+        return;
+    }
+    const header = ['Company Name', 'Job Title', 'Due Date', 'Submitted', 'Status', 'Actions'].join(',');
+
+    const csv = applications.map((app) => 
+        Object.values(app)
+            .map(value => 
+                `"${String(value).replace(/"/g, '""')}"`
+            ).join(',')
+    ).join('\n');
+
+    const blob = new Blob([header + csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'job-applications.csv';
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  };
+
+
   const handleAddApplication = async (application) => {
     const response = await fetch('/applications', {
       method: 'POST',
@@ -82,6 +109,19 @@ function App() {
       alert('Error deleting application.');
     }
   };
+
+  const handleDeleteAllApplications = async () => {
+    if (!window.confirm('Are you sure you want to delete all applications?')) {
+      return;
+    }
+    if (!applications.length) {
+      alert('No applications to delete!');
+    }
+    for (const app of applications) {
+      await handleDeleteApplication(app._id);
+    }
+  }
+
 
   const handleUpdateApplication = async (updatedApplication) => {
     const response = await fetch(`/applications/${updatedApplication.id}`, {
@@ -110,12 +150,16 @@ function App() {
       >
         Add New Application
       </button> 
-      <button 
-        onClick={() => setShowModal(true)} 
-        className="pure-button pure-button-primary"
+      <button className="pure-button" 
+        onClick={handleDeleteAllApplications} 
       >
-        Add New Application
-      </button> 
+        Delete All
+      </button>
+      <button className="pure-button" 
+        onClick={exportToCSV} 
+      >
+        Export CSV
+      </button>
            
     </div>
     
@@ -157,7 +201,7 @@ function App() {
               <JobApplicationForm handleAddApplication={handleAddApplication} />
             </Modal>
           )}
-
+          <h2 className='log-user'>{username}</h2>
           {/* logout */}
           <button onClick={handleLogout} className="logout-button pure-button pure-button-primary">
             Logout

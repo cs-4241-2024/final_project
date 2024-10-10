@@ -59,23 +59,24 @@ const Stats = ({ applications }) => {
   return (
     <div>
       <h2>Stats</h2>
+      <div id='statHorizontal'>
+        <div>
+          <h3>Application Status:</h3>
+          {statusData.labels && statusData.labels.length > 0 ? (
+            <Pie data={statusData} />
+          ) : (
+            <p>No applications found.</p>
+          )}
+        </div>
 
-      <div>
-        <h3>Application Status:</h3>
-        {statusData.labels && statusData.labels.length > 0 ? (
-          <Pie data={statusData} />
-        ) : (
-          <p>No applications found.</p>
-        )}
-      </div>
-
-      <div>
-        <h3>Submission:</h3>
-        {submissionData.labels && submissionData.labels.length > 0 ? (
-          <Pie data={submissionData} />
-        ) : (
-          <p>No applications found.</p>
-        )}
+        <div>
+          <h3>Submission:</h3>
+          {submissionData.labels && submissionData.labels.length > 0 ? (
+            <Pie data={submissionData} />
+          ) : (
+            <p>No applications found.</p>
+          )}
+        </div>
       </div>
     </div>
   );
