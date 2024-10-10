@@ -122,6 +122,8 @@ select {
 .div1 { 
   grid-area: 1 / 1 / 2 / 4; 
   background-color: #50341f;
+  display: flex;
+  justify-content: space-around;
 }
 
 .div2, .div3, .div4 {
@@ -172,6 +174,7 @@ select {
 
 .barstools {
   position: absolute;
+  z-index: -1;
   top: 0;
   left: 0;
   width: 100%;
