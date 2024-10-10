@@ -34,6 +34,7 @@ html, body {
 
 h3, h4, p {
   font-family: "Cormorant";
+  font-weight: bold;
 }
 
 p {
