@@ -13,35 +13,94 @@ p {
 
 h2 {
     font-family: "Aboreto";
+    font-size: 2em;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.cocktailName {
+    font-family: "Aboreto";
+    font-size: 3em;
 }
 
 .styled-button {
     background-color: #726D2D;
     border: none;
     border-radius: 8px;
-    width: 25%;
+    width: 45%;
     font-family: "Aboreto" !important;
     font-size: 16px;
     color: white;
     padding: 10px 5px;
     box-shadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px;
+    margin: 10px;
     cursor: pointer;
 }
 
+.review-text {
+    color: #D4CBBA;
+}
+
+
 .parent {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 0.4fr 2fr 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
 }
-
+    
 .div1 { 
-    grid-area: 1 / 1 / 2 / 4; 
+    grid-area: 1 / 1 / 2 / 3; 
     background-color: #50341f;
 }
+
+.div2 { 
+    grid-area: 2 / 1 / 3 / 2; 
+    padding: 2.5em;
+    border: 4px solid #9C632C;
+    border-radius: 25px;
+    margin: 1.5em;
+}
+
+.div3 { 
+    grid-area: 2 / 2 / 3 / 3; 
+    padding: 2.5em;
+}
+
+.div4 { 
+    grid-area: 3 / 1 / 4 / 2; 
+    background-image: url(./assets/barfronttexture.png);
+    padding: 2.5em;
+    
+}
+
+.div5 { 
+    grid-area: 3 / 2 / 4 / 3; 
+    background-image: url(./assets/barfronttexture.png);
+    padding: 2.5em;
+}
+
+textarea {
+    display: block;
+    min-width: max-content;
+}
+
+img {
+    border-radius: 25px;
+}
+
+a {
+    color: #D4CBBA;
+    font-family: "Cormorant";
+    font-size: 24px;
+}
+
 
 .pageTitle {
     text-align: center;
     font-family: "Aboreto";
     color: #D4CBBA;
-  }
+}

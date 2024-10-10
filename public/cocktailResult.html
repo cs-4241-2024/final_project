@@ -22,11 +22,18 @@
 
     <div class="parent">
         <div class="div1">
+            <a href="./home.html">Go Back to Home</a>
             <h2 class="pageTitle">Order a Cocktail</h2>
         </div>
-    </div>
+    
+
+    <div class="div2" id="cocktail-info"></div>
+    <div class="div3" id="cocktail-image"></div>
+    <div class="div4" id="review-fields"></div>
+    <div class="div5" id="other-reviews"></div>
+</div>
   
-  <div id="results"></div>
+  <!--<div id="results"></div>-->
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -67,38 +74,40 @@
         })
         .then((response) => response.json())
         .then((data) => {
-            const resultsDiv = document.getElementById("results");
-            resultsDiv.innerHTML = "";
-
             if (data.length > 0) {
-                // Pick a random drink from the results
-                const randomIndex = Math.floor(Math.random() * data.length);
-                const cocktail = data[randomIndex];
+                    const randomIndex = Math.floor(Math.random() * data.length);
+                    const cocktail = data[randomIndex];
 
-                let ingredientsHtml = "";
-                for (let i = 1; i <= 15; i++) {
-                    const ingredient = cocktail[`strIngredient${i}`];
-                    const measure = cocktail[`strMeasure${i}`];
-                    if (ingredient) {
-                        ingredientsHtml += `<p>${measure ? measure : ""} ${ingredient}</p>`;
+                    let ingredientsHtml = "";
+                    for (let i = 1; i <= 15; i++) {
+                        const ingredient = cocktail[`strIngredient${i}`];
+                        const measure = cocktail[`strMeasure${i}`];
+                        if (ingredient) {
+                            ingredientsHtml += `<p>${measure ? measure : ""} ${ingredient}</p>`;
+                        }
                     }
-                }
 
-                // Display the randomly selected drink
-                resultsDiv.innerHTML = `
-                    <div id="drink-${cocktail.idDrink}" class="cocktail-item">
-                        <h2>${cocktail.strDrink}</h2>
-                        <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
+                    // Cocktail text info in div2
+                    document.getElementById('cocktail-info').innerHTML = `
+                        <h2 class="cocktailName">${cocktail.strDrink}</h2>
                         <p><strong>Category:</strong> ${cocktail.strCategory}</p>
                         <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
                         <p><strong>Alcoholic:</strong> ${cocktail.strAlcoholic}</p>
                         <p><strong>Ingredients:</strong></p>
                         ${ingredientsHtml}
                         <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
-
                         <!-- Add/Remove Drink Buttons -->
-                        <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')" class="styled-button">Add to My List</button>
-                        <button onclick="removeFromMyList(${cocktail.idDrink})" class="styled-button" style="background-color: #813504;">Remove from My List</button>
+                        <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')" class="fave styled-button">Add to My List</button>
+                        <button onclick="removeFromMyList(${cocktail.idDrink})" class="fave styled-button" style="background-color: #813504;">Remove from My List</button>
+                    `;
+
+                    // Cocktail image in div3
+                    document.getElementById('cocktail-image').innerHTML = `
+                        <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
+                    `;
+
+                    // Cocktail review form in div4
+                    document.getElementById('review-fields').innerHTML = `
 
                         <!-- Review Form -->
                         <form class="review-form" onsubmit="submitReview(event, ${cocktail.idDrink}, '${cocktail.strDrink}')">
@@ -108,32 +117,31 @@
                             <button type="submit" class="btn">Submit Review</button>
                         </form>
 
+                        
+                    
+                    `;
+
+                    document.getElementById('other-reviews').innerHTML = `
                         <!-- Collapsible Trigger for Reviews -->
                         <ul class="collapsible">
                             <li>
                                 <div class="collapsible-header">
-                                    <button class="btn blue" onclick="fetchReviews(${cocktail.idDrink})">View Reviews</button>
+                                    <button class="styled-button" style="background-color: #D99D06;"onclick="fetchReviews(${cocktail.idDrink})">View Reviews</button>
                                 </div>
                                 <div class="collapsible-body">
                                     <div id="reviews-${cocktail.idDrink}">
-                                        <p>Click "View Reviews" to see the reviews.</p>
+                                        <p class="review-text">Click "View Reviews" to see the reviews.</p>
                                     </div>
                                 </div>
                             </li>
                         </ul>
-                    </div>
-                `;
-
-                const collapsibleElems = document.querySelectorAll(".collapsible");
-                M.Collapsible.init(collapsibleElems);
-            } else {
-                resultsDiv.innerHTML = "<p>No cocktails found for the given ingredients.</p>";
-            }
-        })
-        .catch((error) => console.error("Error fetching cocktails:", error));
-    } else {
-        console.log("No ingredients selected, skipping search.");
-    }
+                    `;
+                } else {
+                    document.getElementById('cocktail-info').innerHTML = "<p class='review-text'>No cocktails found for the given ingredients.</p>";
+                }
+            })
+            .catch((error) => console.error("Error fetching cocktails:", error));
+        }
     }
     </script>
   

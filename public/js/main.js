@@ -302,16 +302,16 @@ function fetchReviews(idDrink) {
         reviewsDiv.innerHTML = reviews
           .map(
             (review) => `
-              <div>
-                <strong>${review.username}</strong> rated ${review.rating}/5
-                <p>${review.reviewText}</p>
+              <div class='review-text'>
+                <strong class='review-text'>${review.username}</strong> rated ${review.rating}/5
+                <p class='review-text'>${review.reviewText}</p>
               </div>
             `
           )
           .join("");
       } else {
         reviewsDiv.innerHTML =
-          "<p>No reviews yet. Be the first to add one!</p>";
+          "<p class='review-text'>No reviews yet. Be the first to add one!</p>";
       }
     })
     .catch((error) => console.error("Error fetching reviews:", error));
