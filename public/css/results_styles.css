@@ -55,6 +55,9 @@ ul {
 .div1 { 
     grid-area: 1 / 1 / 2 / 3; 
     background-color: #50341f;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .div2 { 

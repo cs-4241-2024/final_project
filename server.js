@@ -188,9 +188,7 @@ app.get("/home", isLoggedIn, (req, res) => {
 });
 
 //route to serve cocktail results
-app.get('/cocktailResult', (req, res) => {
-
-  
+app.get('/cocktailResult', (req, res) => {  
   res.sendFile(path.join(__dirname, "public/cocktailResult.html"));
 });
 

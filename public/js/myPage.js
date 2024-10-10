@@ -127,13 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
           (drink) => `
             <div id="drink-${drink.idDrink}" class="cocktail-item">
               <h4>${drink.strDrink}</h4>
-              <button class="btn red" onclick="removeFromMyList(${drink.idDrink})">Remove</button>
+              <button class="styled-button" style="background-color: #813504; width: 20%;" onclick="removeFromMyList(${drink.idDrink})">Remove</button>
 
               <!-- Collapsible Trigger for Reviews -->
               <ul class="collapsible">
                 <li>
                   <div class="collapsible-header">
-                    <button class="btn blue" onclick="fetchReviews(${drink.idDrink})">View Reviews</button>
+                    <button class="styled-button-variation" style="width: 20%;" onclick="fetchReviews(${drink.idDrink})">View Reviews</button>
                   </div>
                   <div class="collapsible-body">
                     <div id="reviews-${drink.idDrink}">
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <label for="rating-${drink.idDrink}">Rating (1-5):</label>
                 <input type="number" min="1" max="5" id="rating-${drink.idDrink}" required />
                 <textarea id="reviewText-${drink.idDrink}" placeholder="Write your review..." required></textarea>
-                <button type="submit" class="btn">Submit Review</button>
+                <button type="submit" class="styled-button" style="background-color: #726D2D; width: 20%;">Submit Review</button>
               </form>
             </div>
           `

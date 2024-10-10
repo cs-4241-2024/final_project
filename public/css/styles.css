@@ -32,7 +32,21 @@ html, body {
   color: #D4CBBA;
 }
 
-h3, h4, p {
+.pageTitleVariation {
+  font-family: "Aboreto";
+  color: #D4CBBA;
+  font-weight: bold; 
+  font-size: 24px;
+  margin-right: 1em;
+  margin-left: 1em;
+}
+
+.accPageTitle {
+  font-family: "Aboreto";
+  color: antiquewhite;
+}
+
+h3, h4, p, label {
   font-family: "Cormorant";
   font-weight: bold;
 }
@@ -98,6 +112,7 @@ select {
   padding: 10px 5px;
   box-shadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px;
   cursor: pointer;
+  z-index: 5;
 }
 
 .styled-button-variation {
@@ -113,10 +128,22 @@ select {
   cursor: pointer;
 }
 
+.cocktail-item {
+  border: 4px solid #50341f;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1.5em;
+  background-color: antiquewhite;
+}
+
 .google-btn {
   color: #726D2D !important;
   font-family: "Aboreto" !important;
   font-weight: bold;
+}
+
+nav {
+  background-color: #50341f;
 }
 
 .div1 { 
@@ -124,6 +151,7 @@ select {
   background-color: #50341f;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .div2, .div3, .div4 {

@@ -22,8 +22,10 @@
 
     <div class="parent">
         <div class="div1">
-            <a href="./home.html">Go Back to Home</a>
+            <!--<a href="./home.html">Go Back to Home</a>-->
+            <button id="goHomeButton" class="styled-button" style="width: auto; padding: 10px 20px;">Go to Home</button>
             <h2 class="pageTitle">Order a Cocktail</h2>
+            <button id="myDrinksButton" class="styled-button" style="width: auto; padding: 10px 20px;">View My Account</button>
         </div>
     
 
@@ -36,6 +38,11 @@
   <!--<div id="results"></div>-->
 
   <script>
+
+    document.getElementById('goHomeButton').addEventListener('click', function() {
+        window.location.href = '/home.html'; // Adjust the path if needed
+    });
+    
     document.addEventListener('DOMContentLoaded', function () {
         console.log("DOM fully loaded and parsed");
         // Function to get query parameters
