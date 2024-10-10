@@ -1,49 +1,70 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+# WWPI Radio Club
+### Team Members
+- Abbey Kratman
+- April Bollinger
+- Arayah Remillard
+- Gibson Phillips
+- Jonathan Asher
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+[https://finalproject-group1.glitch.me/](https://finalproject-group1.glitch.me/)
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+## Project Description
+Our goal was to create a dynamic website to serve as a proof of concept for the WPI on-campus Amateur Radio Club. The WPII radio club hosts weekly shows and various on-campus activites beyond what the current site shows. The current [WWPI website](https://wwpiradioexecs.wixsite.com/wwpi) is depreciated and lacks some functionality that we implemented.
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
+Our website allows for the creation of user accounts to personalize user experiences. A user can view the services the WWPI club provides, book an event, request to have their own show, view member training information, view other users and follow them, view published events, and access inbox messages.
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
+## User Instructions
+A user must register for or login in to there account to see a lot of information or use the forms.
 
-### Deliverables
+## Technologies
+- Cookies - implemented cookies to allow users to log on and stay logged on for the session
+- Express - implemented express to help handle the server side JS
+- Express-handlebars - implemented for login pages
+- Mongodb - User information (username, password, name, email, inbox, id, followers, owned events) and shows (show title, host, date, time, description)
+- HTML - Structure of pages
+- CSS - Styling of pages
+- JS - Used for dynamic behavior and client/server interactions
+- Fontawesome - Icons to link to the clubs social media accounts
+- Github - code organization and collaboration
+- Glitch - final deployment of project
 
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
+## Challenges
+- Importing and using fontawesome icons
+- Dynamic Inbox - Using the DB for the dynamic inbox makes the DB weak against race conditions (multiple users)
+- Addressing Accessibility concerns using color contrast and HTML for screen readers
+- Using MongoDB to allow for followers
+- File Organization - We have a lot of files with different fuctionality
+- Used CRAP design principles - used contrast to ensure our elements stand out from each other, repition on similar elements, alignment to relate elements visually, and kept related content within close proximity of each other.
 
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
 
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
+## Team Contributions
+**Abbey Kratman**
+- CSS and reformating
+- Recorded, edited, and posted demonstration video
+- Used color contrast and html to increase accessibility
 
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+**April Bollinger**
+- Structural HTML
+- Package.json
+- Icons, Links and video embedding
+- Deployment
 
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+**Arayah Remillard**
+- Implemented Mongodb
+- Implemented Express and handlebars
+- Cookies
 
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
+**Gibson Phillips**
+- Found the hosting site
+- Format planning
+- CSS
 
-The README for your second pull request should contain:
+**Jonathan Asher**
+- Cookies
+- Login Authorization
+- Client/server side JS for forms, following users, and inbox alerts
 
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
+## Project Demonstration
+[Project Demonstration Video](https://youtu.be/tNNE-Ki4Qic)
 
-Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
 
-## FAQs
-
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
