@@ -8,11 +8,10 @@
 TODO [Video Link](https://)
 
 ## Team
-TODO add roles
- - Liam Snow (
- - Jake Olsen
- - Ben Tyler
- - Ryan Wright
+ - Liam Snow (database)
+ - Jake Olsen (server)
+ - Ben Tyler (front end)
+ - Ryan Wright (front end)
 
 ## Description
 In the food business, manually taking inventory is a tedious task, but the importance of it cannot be undervalued. Running low on or running out of inventory for certain foods can be detrimental for a restaurant, especially during busy hours when demands are high. Additionally, manually taking inventory takes up time that could be spent doing other tasks. An application that streamlines the process of taking inventory would not only benefit staff, but it would make the restaurant run much more smoothly. Additionally, having the ability to keep track of your own home ktichen can help save time when it comes to checking what you have in stock, what you need, and how much of an item you might need.
