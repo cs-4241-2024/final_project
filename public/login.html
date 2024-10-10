@@ -45,15 +45,26 @@
             width: 100%;
             padding: 15px;
             font-size: 16px;
-            background-color: #007bff;
-            color: white;
             border: none;
             cursor: pointer;
             border-radius: 8px;
             transition: background-color 0.3s ease;
         }
-        button:hover {
+        #login {
+            background-color: #007bff;
+            margin-bottom: 15px;
+            color: white;
+        }
+        #login:hover {
             background-color: #0056b3;
+        }
+
+        #register {
+            background-color: #28a745; /* Different color for the register button */
+            color: white;
+        }
+        #register:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -61,7 +72,7 @@
 <h1>Login to your dashboard</h1>
 <form id="loginForm">
     <label for="username">Username:</label>
-    <input type="username" id="username" placeholder="Enter your username" required>
+    <input type="text" id="username" placeholder="Enter your username" required>
     <label for="password">Password:</label>
     <input type="password" id="password" placeholder="Enter your password" required>
     <button id="login" type="button">Login</button>
