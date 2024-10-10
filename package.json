@@ -4,7 +4,7 @@
   "description": "Simple Task Logging",
   "author": "Owen Rago",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "scripts": {
     "dev": "vite & tsx server.ts",
