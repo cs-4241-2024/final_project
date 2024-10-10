@@ -1,6 +1,7 @@
 import express from "express";
 import ViteExpress from "vite-express";
 import { client } from "./db.js";
+import { ObjectId } from "mongodb";
 
 // App configuration
 const app = express();
@@ -59,8 +60,6 @@ app.post("/event", async (req, res) => {
     const data = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];
 
-    console.log(data)
-
     const response = await client
         .db(DB_NAME)
         .collection(COLLECTION_NAME)
@@ -77,12 +76,14 @@ app.delete("/event", async (req, res) => {
     const { _id } = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];
 
+    console.log(_id);
+
     const response = await client
         .db(DB_NAME)
         .collection(COLLECTION_NAME)
         .deleteOne({
             accessToken: accessToken,
-            _id: _id,
+            _id: ObjectId.createFromHexString(_id),
         });
 
     res.send(response);

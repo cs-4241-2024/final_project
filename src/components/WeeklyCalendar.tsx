@@ -23,6 +23,7 @@ const getSunday = () => {
 };
 
 interface EventData {
+    _id: string;
     date: string;
     startTime: string;
     title: string;
@@ -30,27 +31,125 @@ interface EventData {
 }
 
 interface Event {
+    _id: string;
     date: Date;
     title: string;
     howLong: number;
 }
 
 interface TaskData {
+    _id: string;
     dueDate: string;
     dueTime: string;
     title: string;
 }
 
 interface Task {
+    _id: string;
     dueDate: Date;
     title: string;
 }
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
-const HOUR_HEIGHT = 30;
+const HOUR_HEIGHT = 25;
 const HOUR_MARGIN_TOP = 15;
 
-export default function WeeklyCalendar() {
+function EventComponent({
+    event,
+    setUpdated,
+}: {
+    event: Event;
+    setUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+    const { user } = useUser();
+
+    if (!user) return null;
+
+    const deleteEvent = async () => {
+        console.log(event);
+
+        fetch("/event", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.id}`,
+            },
+            body: JSON.stringify(event),
+        });
+
+        setUpdated(true);
+    };
+
+    return (
+        <div
+            className="absolute bg-red-500 text-white p-1 rounded-md -mt-2 w-[98%] ml-0.5"
+            style={{
+                top: `${
+                    event.date.getHours() * HOUR_HEIGHT +
+                    HOUR_HEIGHT / 2 +
+                    event.date.getMinutes() / 2
+                }px`,
+                height: `${event.howLong * HOUR_HEIGHT}px`,
+            }}
+        >
+            {event.title}
+            <button className="float-right pr-2" onClick={deleteEvent}>
+                x
+            </button>
+        </div>
+    );
+}
+
+function TaskComponent({ task: task }: { task: Task }) {
+    const [showTitle, setShowTitle] = useState(false);
+
+    const handleMouseEnter = () => {
+        setShowTitle(true);
+    };
+
+    const handleMouseLeave = () => {
+        setShowTitle(false);
+    };
+
+    return (
+        <div
+            className="absolute bg-red-500 text-white p-1 rounded-md -mt-2 w-full"
+            style={{
+                top: `${
+                    task.dueDate.getHours() * HOUR_HEIGHT +
+                    HOUR_HEIGHT / 2 +
+                    task.dueDate.getMinutes() / 2
+                }px`,
+                height: `2px`,
+            }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            {task.title}
+            {showTitle && (
+                <div
+                    className="absolute bg-gray-700 text-white p-2 rounded-md shadow-md"
+                    style={{
+                        top: "-40px", // Positioning the Title above the task
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        whiteSpace: "nowrap",
+                    }}
+                >
+                    {task.title || "No description available"}
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default function WeeklyCalendar({
+    updated,
+    setUpdated,
+}: {
+    updated: boolean;
+    setUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
     const [sundayDate, setSundayDate] = useState(getSunday());
     const [events, setEvents] = useState<Event[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -61,14 +160,6 @@ export default function WeeklyCalendar() {
     const nextWeek = () => setSundayDate(addDateBy(sundayDate, 7));
     const prevWeek = () => setSundayDate(addDateBy(sundayDate, -7));
 
-    // const onAddEvent = (date) => {
-    //     const text = prompt("text");
-    //     const from = prompt("from");
-    //     const to = prompt("to");
-
-    //     date.setHours(from);
-    //     setEvents((prev) => [...prev, { text, date, howLong: to - from }]);
-    // };
     const { isSignedIn, user } = useUser();
 
     useEffect(() => {
@@ -84,8 +175,6 @@ export default function WeeklyCalendar() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
-
                 setEvents(
                     data.map((event: EventData) => ({
                         ...event,
@@ -113,31 +202,30 @@ export default function WeeklyCalendar() {
                     }))
                 );
             });
-    }, [isSignedIn, user]);
+
+        setUpdated(false);
+    }, [isSignedIn, user, updated, setUpdated]);
 
     return (
         <>
-            <div className="flex justify-around text-lg mt-5">
-                <p>today: {new Date().toDateString()}</p>
-                <p>from: {sundayDate?.toDateString()}</p>
-                <p>to: {addDateBy(sundayDate, 6).toDateString()}</p>
+            <div className="flex justify-center text-lg mt-5 gap-4 items-center">
+                <button onClick={prevWeek}>{"<"}</button>
+                <p>
+                    {sundayDate?.toDateString()} To{" "}
+                    {addDateBy(sundayDate, 6).toDateString()}
+                </p>
 
-                <button onClick={prevWeek} className="flex items-center">
-                    {"<"}
-                </button>
-                <button onClick={nextWeek} className="flex items-center">
-                    {">"}
-                </button>
+                <button onClick={nextWeek}>{">"}</button>
             </div>
 
-            <div className="w-[calc(100%-30px)] border border-solid m-4 relative">
+            <div className="w-[calc(100%-30px)] m-4 relative">
                 <div className="grid grid-cols-[30px_1fr]">
                     {/* Hours column */}
                     <div className="grid grid-rows-[24] mt-4">
                         {range(24).map((hour: number) => (
                             <div
                                 key={hour}
-                                className="h-[30px] flex items-center"
+                                className="h-[25px] flex items-center justify-center"
                             >
                                 {hour}
                             </div>
@@ -150,10 +238,7 @@ export default function WeeklyCalendar() {
                             return (
                                 <div
                                     key={day}
-                                    // onDoubleClick={() =>
-                                    //     onAddEvent(addDateBy(mondayDate, index))
-                                    // }
-                                    className={`border border-red-500 relative ${
+                                    className={`border-t border-l last:border-r border-b border-red-500 ro relative ${
                                         areDatesSame(
                                             new Date(),
                                             addDateBy(sundayDate, index)
@@ -162,32 +247,20 @@ export default function WeeklyCalendar() {
                                             : ""
                                     }`}
                                 >
-                                    <p>{day}</p>
+                                    <p className="text-xl text-center border-b border-red-500">
+                                        {day}
+                                    </p>
                                     {events.map((event, eventIndex) => {
                                         return (
                                             areDatesSame(
                                                 addDateBy(sundayDate, index),
                                                 event.date
                                             ) && (
-                                                <div
+                                                <EventComponent
                                                     key={eventIndex}
-                                                    className="absolute bg-green-500 text-white mx-1 p-1 rounded-md -mt-2 w-full"
-                                                    style={{
-                                                        top: `${
-                                                            event.date.getHours() *
-                                                                HOUR_HEIGHT +
-                                                            HOUR_HEIGHT / 2 +
-                                                            event.date.getMinutes() /
-                                                                2
-                                                        }px`,
-                                                        height: `${
-                                                            event.howLong *
-                                                            HOUR_HEIGHT
-                                                        }px`,
-                                                    }}
-                                                >
-                                                    {event.title}
-                                                </div>
+                                                    event={event}
+                                                    setUpdated={setUpdated}
+                                                />
                                             )
                                         );
                                     })}
@@ -197,22 +270,10 @@ export default function WeeklyCalendar() {
                                                 addDateBy(sundayDate, index),
                                                 task.dueDate
                                             ) && (
-                                                <div
+                                                <TaskComponent
                                                     key={taskIndex}
-                                                    className="absolute bg-green-500 text-white mx-1 p-1 rounded-md -mt-2 w-full"
-                                                    style={{
-                                                        top: `${
-                                                            task.dueDate.getHours() *
-                                                                HOUR_HEIGHT +
-                                                            HOUR_HEIGHT / 2 +
-                                                            task.dueDate.getMinutes() /
-                                                                2
-                                                        }px`,
-                                                        height: `2px`,
-                                                    }}
-                                                >
-                                                    {task.title}
-                                                </div>
+                                                    task={task}
+                                                />
                                             )
                                         );
                                     })}
@@ -224,7 +285,7 @@ export default function WeeklyCalendar() {
 
                 {/* Current time line */}
                 <div
-                    className="absolute w-full border border-orange-500"
+                    className="absolute w-full border-2 border-yellow-500 opacity-50"
                     style={{
                         top: `${
                             hourNow * HOUR_HEIGHT +

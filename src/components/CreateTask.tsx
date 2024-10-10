@@ -20,7 +20,11 @@ import {
     TimeField,
 } from "react-aria-components";
 
-export default function CreateTask() {
+export default function CreateTask({
+    setUpdated,
+}: {
+    setUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
     const [visible, setVisible] = useState(false);
     const { user, isSignedIn } = useUser();
 
@@ -47,6 +51,7 @@ export default function CreateTask() {
         });
 
         setVisible(false);
+        setUpdated(true);
     };
 
     return (

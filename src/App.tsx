@@ -3,16 +3,19 @@ import Header from "./components/Header";
 import WeeklyCalendar from "./components/WeeklyCalendar";
 import CreateEvent from "./components/CreateEvent";
 import CreateTask from "./components/CreateTask";
+import { useState } from "react";
 
 function App() {
+    const [updated, setUpdated] = useState(false);
+
     return (
         <>
             <Header />
             <SignedIn>
-                <WeeklyCalendar />
+                <WeeklyCalendar updated={updated} setUpdated={setUpdated} />
                 <div className="flex flex-row gap-2 p-2">
-                    <CreateEvent />
-                    <CreateTask />
+                    <CreateEvent setUpdated={setUpdated} />
+                    <CreateTask setUpdated={setUpdated}/>
                 </div>
             </SignedIn>
             <SignedOut>

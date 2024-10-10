@@ -21,7 +21,11 @@ import {
     TimeField,
 } from "react-aria-components";
 
-export default function CreateEvent() {
+export default function CreateEvent({
+    setUpdated,
+}: {
+    setUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
     const [visible, setVisible] = useState(false);
     const { user, isSignedIn } = useUser();
 
@@ -48,6 +52,7 @@ export default function CreateEvent() {
         });
 
         setVisible(false);
+        setUpdated(true);
     };
 
     return (
