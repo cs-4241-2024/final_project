@@ -113,7 +113,7 @@ function TaskComponent({ task: task }: { task: Task }) {
 
     return (
         <div
-            className="absolute bg-red-500 text-white p-1 rounded-md -mt-2 w-full"
+            className="absolute bg-red-500 text-white p-1 rounded-md -mt-2 w-[98%]"
             style={{
                 top: `${
                     task.dueDate.getHours() * HOUR_HEIGHT +
@@ -125,7 +125,6 @@ function TaskComponent({ task: task }: { task: Task }) {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
-            {task.title}
             {showTitle && (
                 <div
                     className="absolute bg-gray-700 text-white p-2 rounded-md shadow-md"
@@ -238,7 +237,7 @@ export default function WeeklyCalendar({
                             return (
                                 <div
                                     key={day}
-                                    className={`border-t border-l last:border-r border-b border-red-500 ro relative ${
+                                    className={`border-t-2 border-l-2 last:border-r-2 border-b-2 border-red-500 first:rounded-s-md last:rounded-e-md relative ${
                                         areDatesSame(
                                             new Date(),
                                             addDateBy(sundayDate, index)

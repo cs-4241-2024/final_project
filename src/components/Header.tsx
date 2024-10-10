@@ -12,7 +12,9 @@ export default function Header() {
     return (
         <header>
             <SignedOut>
-                <SignInButton />
+                <div className="py-3 px-6 text-lg">
+                    <SignInButton />
+                </div>
             </SignedOut>
             <SignedIn>
                 <div className="flex flex-row py-3 px-6 bg-pink-200 border-b border-red-500">
