@@ -107,6 +107,8 @@ app.get("/location/:id", async (req, res, next) => {
   await renderLocation(res, userID, locationID, true);
 });
 
+
+//Handling editing food and their parameters
 app.get(
   "/location/:locationID/edit-food-dialog/:foodID",
   async (req, res, next) => {
