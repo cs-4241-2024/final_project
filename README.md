@@ -41,6 +41,7 @@ This webapp was built using the following technologies:
 ### Challenges
  1. The biggest challenge we faced in this project was using SvelteKit. We had many attempts at it, but eventually decided that doing this project without a front-end framework (SSR) was more feasible.
  2. Another challenge we faced with this project was how to make the edit food dialog/modal. Every other dialog in this app gets generated at page load. In order to solve this we used some more advaned HTMX features. When the edit food button is pressed it fetches the api `/location/{locationID}/edit-food-dialog/{foodID}` and injects the response (HTML for dialog) into a div at the bottom of the page. Whenever that div is changed (`hx-on::after-swap`) it opens the modal.
+ 3. One more challenge came when considering how the program should function. We weren't sure if all food items in the inventory should be displayed on the same page or if they should be on different pages for each location where food is stored. We settled on having different locations because from my experience working in a kitchen, my boss would manually take inventory on separate clipboards for different locations, and would usually place separate orders for each location.
 
 ## Development
 ```bash
