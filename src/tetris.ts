@@ -173,10 +173,7 @@ export class tetris {
                 if (j === this.COLS - 1) {
                     this.board.splice(i, 1)
                     this.board.unshift(Array(this.COLS).fill(0))
-                    const score = document.getElementById('score')
-                    if (score) {
-                        score.textContent = (parseInt(score.textContent!) + 1000).toString()
-                    }
+                    this.score = this.score + 1000
                 }
             }
         }
@@ -257,10 +254,5 @@ export class tetris {
         this.column = 4;
         this.gameOver = false;
         this.score = 0; // Reset score on game reset
-    }
-
-    // Method to get the current score
-    getScore(): number {
-        return this.score;
     }
 }

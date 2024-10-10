@@ -141,7 +141,7 @@ function startGame() {
             }
             if (++curLoop % TIME === 0) {
                 board.moveDown();
-                document.getElementById('score')!.innerText = board.getScore().toString(); // Update score display
+                document.getElementById('score')!.innerText = board.score.toString(); // Update score display
             }
         }
     }
