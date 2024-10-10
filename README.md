@@ -13,6 +13,17 @@ To delete a task click the task on the calendar and click the delete button.
 To edit a task, change the text on the task information, and click save changes.
 
 Technologies used: 
+Event.js defines the schema for an event using mongoose.
+User.js defines the schema for a user using mongoose
+auth.js handles user registration, login, and logout
+events.js handles creating, editing, and deleting events
+calendar.ejs creates the main calendar that users can then interact with
+edit.ejs is the form to edit an event
+login.ejs is the form to login
+register.ejs is the form to register users 
+server.js sets up the express server and connects it to mongodb
+
+we used boostrap embedded in ejs files and AJAX so that users can use the application without the need to refresh everytime they click a button. we also used fullcalendar.js to have the calendar set up. we also used mongoose to interact with the backend. we also used node to run the server and express for user authentication. ejs files are files that allow you to use javascript inside of html, which we felt was easier for our implementation.
 
 Challenges faced:
 Our biggest problem was working together on the coding. It was hard to do individual stuff together then push to the main branch without problems. We ended up doing a lot o wokr on a single computer while we were all together. 
