@@ -1,0 +1,61 @@
+.mainEdit {
+  position: relative;
+  width: 905px;
+  margin: 0 auto;
+  background: white;
+  border: 8px solid #1e1e1e;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+.editor-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 10px;
+}
+
+.AutoComplete {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tracking-sheet-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+  padding: 10px;
+}
+
+.tracking-sheet-container {
+  flex: 1;
+  max-width: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}

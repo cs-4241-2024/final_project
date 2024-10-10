@@ -1,49 +1,68 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+### Auto CS 2025 Tracking Sheet ###
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+1.
+    Link: https://wpi-course-tracker-63d868ddf8d5.herokuapp.com/login
+    PreMade user: test     Password: test
+    Prefilled with Cole Welcher Academic Progress
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+Our project is an auto input tracking sheet for Computer Science majors in the class of 2025. A user can take an excel file (downloaded from My Academic Progress in WorkDay) and uploaded (sometimes will need to unmerge the first row, or take it out of protect mode). The user can upload the excel file to our website and it will autofill a tracking sheet. A user is required to login or register allowing them to view their tracking sheet after leaving the site if they save it. This allows the user to not only have a constantly updated tracking sheet wherever they are but also allows them to periodically update it with a new excel file or manually add classes to make sure they will graduate with the required courses.
+        We think this is useful to the general body because it is annoying to constantly have a paper tracking sheet filled out, or to have a pdf that you're constantly filling in with your classes. Instead, simply being able to import your Academic Progress takes the time and stress off the user. Going forward we could add more possible tracking sheets (years and class). In addition there is also an About Page, Instructions Page, Home Page, Login Page, and a Register Page. 
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
+2.
+    Login: test
+    Password: test
 
-### Deliverables
+    To get to excel download:
+    1. Go to WPI workday
+    2. Go to Academics
+    3. Go to My Academic Progress
+    4. Click on the icon that looks like a building with an X in it (for the major you want CS 2025)
+    ![alt text](image.png)
+    5. Open the excel file and unmerge the first row and/or get out of protected view and save
+        *Sometimes protected files and merged cells make parsing funky*
+    6. Upload excel file to the cite
 
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
+3. 
+PassportJS with passport-local-mongoose: For login and user registration, hashed passwords for security
+SheetJS XLSX: Excel file parsing, had to skip first row due to merged cell by default
+MUI: For user interface and button layout
+MongoDB with Mongoose: Database with schema validation for users and sheet data
+Heroku: Hosting
+React with react-router-dom: Application Layout, redirects based on authentication
 
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
+4. 
+    Challenges:
+    1. Everyone having different schedules made it hard to work together at time
+    2. XLSX parsing had some issues due to merged cells and protected view files
+    3. Some people on the team have never used React
+    4. Brendan was commuting from over an hour away
+    5. It was difficult to get a list of all classes for the autofill, we found the xml database used by the planner.wpi.edu site and reformatted it to json for loading in our app
+Figma Wire Frame Model 
 
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
+5. Contribution:
 
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+    Cole Welcher:
+        Excel file parsing
+        Editor Page (xlsx upload, and the table components for user viewing)
+        About Page
+        AutoFill Combo Box for class selection/addition
+    Ben Skarnes:
+        Set up vite-express server
+        Client-side routing with react-router-dom
+        Server-side authentication
+        Saving editor data to database
+    Joseph Caproni:
+        Worked on Front End Design 
+        Created Wire Frame model in Figma 
+        Utilized Material UI Component Library 
+        Created registration page and helped create login page 
+        Created the layout format for the remaining pages
+    Brendan Byrne: 
+       Assisted on Front End Design
+       Updated and styled Instructions page
 
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+6. 
+    YT Video: 
+https://www.youtube.com/watch?v=88t-nOyel6I
 
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
-
-The README for your second pull request should contain:
-
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
-
-Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
-
-## FAQs
-
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
