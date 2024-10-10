@@ -1,49 +1,37 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+# Calendar
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+Website: 
+https://team-19-final-project.glitch.me/ <br>
+Video: 
+https://youtu.be/Ix7XwDossaE
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+For our project, we created a web app that allows users to view a calendar, create and delete events on that calendar, and invite other users to their own events.
+This app is designed to make it easy for people to manage their important tasks, such as meetings. The main focus is on the calendar, as it provides a user's event information
+in a visually engaging way. We also wanted users to be able to include people they know in their own events, so we added functionality for users to share their events with other users and their calendars. <br>
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
+Users can log in or create an account on the front page. This will check and store the user's information in a database. On the calendar page, the server will serve all the events
+associated with that user's database entry. The calendar has multiple view modes that allow users to see entire months, weeks, specific days, or an overall agenda of upcoming events.
+Users can create their own events on the event creation page by specifying a name for the event, the date, and the start and end times. Newly created events will then appear when returning to the calendar.
+Events on the calendar can be deleted by clicking on an event. Then, a user can see which events they've been invited to by other users on the invitations page, and choose to accept or decline them. 
+Users can invite others by specifying the name of another user present in the database and choosing an event to send to them.
+Accepted invites will appear on the user's calendar as added events.
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
+## Technologies Used
 
-### Deliverables
+- React: We use react routers to manage routing throughout our application. We also used the a react component called BigCalendar to create a Calendar component on the screen.
+- Vite: Vite was used to package the project into modules and to configure the server
+- Express: Node.js Express was used to create a communicative server and streamline the process of handling data going to/from clients
+- MongoDB: MongoDB was used as the database of choice, storing all user information in one collection and handling invites between users in another collection.
 
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
+## Challenges
 
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
+We initially ran into much trouble in trying to include Vite/React when starting on Glitch. We eventually had to scrap our original server and package files and start from scratch.
+We also had some trouble deciding on how to make the calendar component, eventually deciding on one included with React. 
+Getting the functionality for deleting specific events was also a struggle, as our first tries either didn't delete anything from a database entry or deleted every event field from one.
 
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
 
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+## Group Members - Contributions
 
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
-
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
-
-The README for your second pull request should contain:
-
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
-
-Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
-
-## FAQs
-
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
+- Sebastian Gurgol: Main work was with database queries and requests. Also did some CSS styling.
+- Lorenzo: Mainly worked on react frontend forms and routing. Helped out with server requests and CSS styling.
+- Giovanni: Worked on getting the server and react working together. I also implemented the calendar and did work on fetching and server requests.
