@@ -1,16 +1,17 @@
 {
   "name": "cocktail-combo",
   "version": "1.0.0",
-  "description": "potential apis:\r - https://api.api-ninjas.com/v1/cocktail\r - https://www.thecocktaildb.com/api.php\r - https://github.com/lauriharpf/thecocktaildb-downloader/blob/master/thecocktaildb/src/generated/without-images/drinks.ts",
+  "description": "cocktail website",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "author": "",
+  "author": "Ananya Jayamoorthy",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-session": "^1.18.0",
     "materialize-css": "^1.0.0-rc.2",
