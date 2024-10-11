@@ -1,15 +1,7 @@
 # cocktail-combo
-# *Intro/Our Roles*
+# *Our Roles*
 
-Anu: Front end CSS layout, styling + grid, elements  
-
-Rose: Front end back end for bug fixes 
-
-Aaron: Back end with bug fixes in front end 
-
-Kayla: Front end and back end bug fixes and deployment to glitch + Readme 
-
-Tanishka: Project Video and some Frontend design + Readme 
+ Anu took the lead on the front end of the website, and created the CSS layout, styling, and grid system from scratch using vanilla JavaScript, also putting some time into the database and Flexbox for responsiveness. Rose helped out with front end, and contributed to CSS and HTML, and also worked on dealing with back-end bugs fix to ensure the application would work smoothly. Aaron focused on the back end, handling the server-side logic with Express and MongoDB, and additionally fixed bugs on the front end while also contributing to the database. Kayla also gave support and worked on front and back end bug fixes and deployed the project for our group to Glitch. Tanishka handled the project video creation which includes recording and editing, and helped contribute to some of the front-end design ideas and visuals. Together we were all able to combine our skills and make this project from both a technical and design perspective work. 
 
 # *Inspiration*
 
@@ -73,3 +65,6 @@ potential apis:
 - https://api.api-ninjas.com/v1/cocktail
 - https://www.thecocktaildb.com/api.php
 - https://github.com/lauriharpf/thecocktaildb-downloader/blob/master/thecocktaildb/src/generated/without-images/drinks.ts
+
+# Video
+https://www.youtube.com/watch?v=1rkecinoOvE
