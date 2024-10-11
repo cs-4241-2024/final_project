@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Drinks</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="./css/styles.css" />
+    
+  </head>
+  <body style="background-color: #9C632C;">
+    <div class="div1">
+      <h2 class="pageTitle">Order a Cocktail</h2>
+      <button id="goHomeButton" class="styled-button" style="width: auto; padding: 10px 20px;">Go to Home</button>
+    </div>
+
+    <div class="container">
+      <h3 class="accPageTitle">My Drinks List</h3>
+      <div id="myDrinksList"></div>
+
+      <!-- Button to view all reviews -->
+      <button id="viewReviewsButton" class="styled-button-variation">View My Reviews</button>
+
+      <!-- Section for showing all user reviews -->
+      <ul id="myReviewsCollapsible" class="collapsible"></ul>
+    </div>
+
+    <script>
+      document.getElementById('goHomeButton').addEventListener('click', function() {
+        window.location.href = '/home.html'; // Adjust the path if needed
+      });
+    </script>
+  
+    <script src="js/myPage.js"></script>
+  </body>
+</html>

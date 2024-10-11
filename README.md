@@ -1,49 +1,75 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+# Cocktail Combo
+# *Our Roles*
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+ Anu took the lead on the front end of the website, and created the CSS layout, styling, and grid system from scratch using vanilla JavaScript, also putting some time into the database and Flexbox for responsiveness. Rose helped out with front end, and contributed to CSS and HTML, and also worked on dealing with back-end bugs fix to ensure the application would work smoothly. Aaron focused on the back end, handling the server-side logic with Express and MongoDB, and additionally fixed bugs on the front end while also contributing to the database. Kayla also gave support and worked on front and back end bug fixes and deployed the project for our group to Glitch. Tanishka handled the project video creation which includes recording and editing, and helped contribute to some of the front-end design ideas and visuals. Together we were all able to combine our skills and make this project from both a technical and design perspective work. 
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+# *Inspiration*
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
+When brainstorming ideas for our final project, we came up with an idea for a Cocktail building website that could help people with limited ingredients or supplies see what cocktails they can make, instead of search up different recipes and having to keep checking if they have the ingredients or not. We are also college students, so most of us don’t have a stocked bar at college and the project seems engaging since its an efficient tool even we might use in the future. 
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
 
-### Deliverables
+# *Brief Description* 
 
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
+Our web application is a cocktail search website that allows users to be recommended a cocktail based on the ingredients they have at home. The cocktails recommended are not limited to what the user has available. The site allows users to insert three ingredients they have, and a random cocktail will appear. The site also allows users to favorite cocktails. Their favorite cocktail will be viewable on their account page. They are also able to add/ remove the cocktail from their profile. The last big feature the app has is that it allows users to rate the cocktails, the rating will be viewable by all users. 
 
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
+Our site link is https://cocktail-combo.glitch.me/. To log into the site without creating an account use the following log in details: <br/> <br/>
+Username: “admin” <br/>
+Password: “password”
 
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
+# *Technology Used and How* 
 
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+HTML and CSS - to structure our web pages and style the user interface  
 
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
+Vanilla JavaScript - to add dynamic behavioral and interactive features to the website 
 
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
+Client-side JavaScript – to fetch the API based on user input 
 
-The README for your second pull request should contain:
+Node.js – setting up the server 
 
-1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
-2. Any additional instructions that might be needed to fully use your project (login information etc.)
-3. An outline of the technologies you used and how you used them.
-4. What challenges you faced in completing the project.
-5. What each group member was responsible for designing / developing.
-6. A link to your project video.
+Express – Manages user authentication via Google OAuth and serves static files. Handles routes for saving cocktails data from external API. 
 
-Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
+MongoDB – Used as the database to store user profiles, rated cocktails, and saved favorites. 
 
-## FAQs
+Google OAuth Authentication – used for user authentication. 
 
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
+API Integration – used to fetch cocktail data based on the ingredients users have at home. 
+
+CSS Grid and Flexbox – Used for creating a flexible and responsive layout 
+ 
+
+# *Challenges* 
+
+Database integration: We had issues when using databases within our site. Trying to set up the registration database, the rated cocktail database, and the saved favorites database caused multiple issues for our site. 
+
+Authentication Setup: Our biggest issue with using google authentication was trying to deploy glitch, when having google authentication on WPI wifi. Trying to troubleshoot when the issue is the wifi is difficult because you don’t expect that to be the issue with the code you create. When on a home network, we continued to have issues getting google authentication to work. We found that our code was not properly set up for it to work. 
+
+UI/UX Design: The issue we faced when creating our user interface was that certain features weren’t accessible with our layout. Some of our design overlapped buttons which made the buttons unusable. This problem was eventually solved after some research.
+
+	 
+# *Technical Achievements*
+
+*Database System:* Successfully integrated a relational database to store and retrieve user information and user favorites and reviews. The application can now store, update, and delete user favorites and reviews seamlessly. We also set up a database that stored cocktail information using information from a free API that we accessed to display cocktail recipes to the user.
+
+*Multiple Pages:* Developed a multi-page web application with content that changes based on user interactions.  
+
+*Google Authentication:* Implemented Google authentication using OAuth to allow users to securely log in using their Google accounts. This authentication system was set up to handle user sessions and integrate with the back-end to manage users favorites and reviews. 
+
+ 
+# *Design/Evaluation Achievements*
+
+*CSS Div Styling + Grid:* Used CSS Grid and Flexbox to create flexible, responsive layouts for the website. This allowed for better control over the positioning of elements and ensured the design looked great across multiple screen sizes. 
+
+*Layout:* Designed an intuitive and user-friendly layout that allowed users to navigate through the application with ease. The layout ensured clear separation between different sections of the application, making it visually structured and easy to use. 
+
+*Vanilla CSS:* Styled the application with plain CSS, which was more work as we have complex designs within our application. 
+
+# Video
+https://www.youtube.com/watch?v=1rkecinoOvE
+
+# Resources we Consulted/Initial Research:
+UI Plan: https://www.figma.com/design/9Fq1mOFZf4enAhftEbuPbJ/Cocktail-Combo-Concept?node-id=13-8&t=GiKxHuuur6yyFJY0-1 
+
+potential apis:
+- https://api.api-ninjas.com/v1/cocktail
+- https://www.thecocktaildb.com/api.php
+- https://github.com/lauriharpf/thecocktaildb-downloader/blob/master/thecocktaildb/src/generated/without-images/drinks.ts <-- this is where our data came from

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cocktail Search Results</title>
+
+      
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="./css/results_styles.css" />
+
+</head>
+<body>
+
+    <div class="parent">
+        <div class="div1">
+            <!--<a href="./home.html">Go Back to Home</a>-->
+            <button id="goHomeButton" class="styled-button" style="width: auto; padding: 10px 20px;">Go to Home</button>
+            <h2 class="pageTitle">Order a Cocktail</h2>
+            <button id="myDrinksButton" class="styled-button" style="width: auto; padding: 10px 20px;">View My Account</button>
+        </div>
+    
+
+    <div class="div2" id="cocktail-info"></div>
+    <div class="div3" id="cocktail-image"></div>
+    <div class="div4" id="review-fields"></div>
+    <div class="div5" id="other-reviews"></div>
+</div>
+  
+  <!--<div id="results"></div>-->
+
+  <script>
+
+    document.getElementById('goHomeButton').addEventListener('click', function() {
+        window.location.href = '/home.html'; // Adjust the path if needed
+    });
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("DOM fully loaded and parsed");
+        // Function to get query parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Retrieve ingredients from query parameters
+        const ingredient1 = getQueryParam('ingredient1');
+        const ingredient2 = getQueryParam('ingredient2');
+        const ingredient3 = getQueryParam('ingredient3');
+
+        console.log(ingredient1);
+        console.log(ingredient2);
+        console.log(ingredient3);
+
+        triggerSearch(ingredient1, ingredient2, ingredient3);
+    });
+
+    // Function to handle the form submission and search
+    function triggerSearch(ingredient1 = "", ingredient2 = "", ingredient3 = "") {
+        
+        console.log("triggerSearch called");
+        console.log(ingredient1);
+        console.log(ingredient2);
+        console.log(ingredient3);
+
+    if (ingredient1 || ingredient2 || ingredient3) {
+        const ingredients = { ingredient1, ingredient2, ingredient3 };
+
+        fetch("/searchCocktails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ingredients),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * data.length);
+                    const cocktail = data[randomIndex];
+
+                    let ingredientsHtml = "";
+                    for (let i = 1; i <= 15; i++) {
+                        const ingredient = cocktail[`strIngredient${i}`];
+                        const measure = cocktail[`strMeasure${i}`];
+                        if (ingredient) {
+                            ingredientsHtml += `<p>${measure ? measure : ""} ${ingredient}</p>`;
+                        }
+                    }
+
+                    // Cocktail text info in div2
+                    document.getElementById('cocktail-info').innerHTML = `
+                        <h2 class="cocktailName">${cocktail.strDrink}</h2>
+                        <p><strong>Category:</strong> ${cocktail.strCategory}</p>
+                        <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
+                        <p><strong>Alcoholic:</strong> ${cocktail.strAlcoholic}</p>
+                        <p><strong>Ingredients:</strong></p>
+                        ${ingredientsHtml}
+                        <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
+                        <!-- Add/Remove Drink Buttons -->
+                        <button onclick="addToMyList(${cocktail.idDrink}, '${cocktail.strDrink}')" class="fave styled-button">Add to My List</button>
+                        <button onclick="removeFromMyList(${cocktail.idDrink})" class="fave styled-button" style="background-color: #813504;">Remove from My List</button>
+                    `;
+
+                    // Cocktail image in div3
+                    document.getElementById('cocktail-image').innerHTML = `
+                        <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
+                    `;
+
+                    // Cocktail review form in div4
+                    document.getElementById('review-fields').innerHTML = `
+
+                        <!-- Review Form -->
+                        <form class="review-form" onsubmit="submitReview(event, ${cocktail.idDrink}, '${cocktail.strDrink}')">
+                            <label for="rating-${cocktail.idDrink}">Rating (1-5):</label>
+                            <input type="number" min="1" max="5" id="rating-${cocktail.idDrink}" required />
+                            <textarea id="reviewText-${cocktail.idDrink}" placeholder="Write your review..." required></textarea>
+                            <button type="submit" class="btn">Submit Review</button>
+                        </form>
+
+                        
+                    
+                    `;
+
+                    document.getElementById('other-reviews').innerHTML = `
+                        <!-- Collapsible Trigger for Reviews -->
+                        <ul class="collapsible">
+                            <li>
+                                <div class="collapsible-header">
+                                    <button class="styled-button" style="background-color: #D99D06;"onclick="fetchReviews(${cocktail.idDrink})">View Reviews</button>
+                                </div>
+                                <div class="collapsible-body">
+                                    <div id="reviews-${cocktail.idDrink}">
+                                        <p class="review-text">Click "View Reviews" to see the reviews.</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    `;
+                } else {
+                    document.getElementById('cocktail-info').innerHTML = "<p class='review-text'>No cocktails found for the given ingredients.</p>";
+                }
+            })
+            .catch((error) => console.error("Error fetching cocktails:", error));
+        }
+    }
+    </script>
+  
+  <script src="./js/main.js"></script>
+</body>
+</html>
