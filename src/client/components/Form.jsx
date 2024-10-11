@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 const Form = ({ handleAddApplication }) => {
   const [companyName, setCompanyName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
