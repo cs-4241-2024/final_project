@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -7,18 +7,14 @@ const path = require("path");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-
 const app = express();
 const port = 3000;
 
 // MongoDB connection
 mongoose
   .connect(
-    process.env.DATABASE_URL,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+    "mongodb+srv://azzhang3:eGPDbrMNzogUpygL@cluster0.iuxm8.mongodb.net/",
+    { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("MongoDB connection error:", err));
@@ -141,9 +137,9 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "your-client-id",
-      clientSecret: "your-client-secret",
-      callbackURL: "http://localhost:3000/auth/google/callback",
+      clientID: "414493278145-een95ctp3iqpm8uvv90l70emb827f3bn.apps.googleusercontent.com",
+      clientSecret: "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",
+      callbackURL: "https://cocktail-combo.glitch.me/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       const email =
@@ -190,7 +186,7 @@ app.get("/home", isLoggedIn, (req, res) => {
 });
 
 //route to serve cocktail results
-app.get('/cocktailResult', (req, res) => {  
+app.get("/cocktailResult", (req, res) => {
   res.sendFile(path.join(__dirname, "public/cocktailResult.html"));
 });
 
