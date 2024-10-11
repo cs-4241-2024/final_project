@@ -1,49 +1,56 @@
-# Final Project
-*Due October 10th by 11:59 AM*
+## Group 7 
+## Easy Jobs
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
-
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
-
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
-
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
-
-### Deliverables
-
-#### Form Team (due 9/12)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
-
-Teams must be in place by end of day on Thursday, September 12th. If you have not identified a team at this point, you will be assigned a team. 
-
-#### Proposal (due 9/22 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 20th at 11:59 PM (end of day). *Only one pull request is required per team*.
-
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
-
-#### Turning in Your Project
-Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
-
-Deploy your app, in the form of a webpage, to Glitch/Heroku/Digital Ocean or some other service; it is critical that the application functions correctly wherever you post it.
-
-The README for your second pull request should contain:
+https://group-7-final-project.glitch.me/
 
 1. A brief description of what you created, and a link to the project itself (two paragraphs of text)
+
+  This project is a job application tracker. The goal of this project is to help students track each application they send out during the application season. Upon the landing page the user will have access to a central hub to store and edit information about their applications. On the same page there is an option for the user to export all their data into a CSV for external use outside of the application. 
+
+  Additionally, there's a navigation bar to traverse through the other pages of the website along with an extremely cool logo in the top left. Users are also able to see what other community members have applied to, to get informed of other job opportunities. There's a page that shows the user the statistics of their applications. This includes charts for whether they submitted an application or not and their application stage. Users are able to log in and out using passport.  
+
 2. Any additional instructions that might be needed to fully use your project (login information etc.)
+
+Log in using github authentication. 
+
 3. An outline of the technologies you used and how you used them.
+
+- React: Application framework
+- Vite: Faster React development
+- Express: Backend
+- MongoDB: Database storage
+- Mongoose: Set schema for database
+- Passport-github: Authentication using github
+- Cookie-session: User session management 
+- Chart.js: Create pie charts for the statistics
+
+
 4. What challenges you faced in completing the project.
+
+- Setting up the github repository: When setting up the the repo we clone it to our local devices creating a new directory but when we run the starter command "npm create vite-express" it created an additional repository on our local devices. Making the directory nested and unable to run.
+- Pushing to main: When trying to push to main from changes made on other branches it didnt allow us to push and it reverted to previous commits where to code doesnt work.
+- Transitioning to Glitch: When importing from github we found that our dependecies on the package.json werent loading properly on glitch it took older version instead of newer once we specified. 
+- Github Authentication: The callback route was not working properly so we had to go back into github and change the route there so it matches correctly with the one in the code.
+- Edit values in the table/database: The route for edit and delete was having issues where we would get 200 erros, we had to look at it for a while to get it working with the call from the client side.
+- Charts: When adding the charts to teh stats tab it would zoom in to the webpage and not display the graph as it should be. This was problaby thanks to our inexperience with chart.js.
+- Mainting CRAP principles: We had to make sure that for the tables there was always enough contrast for the text. And that everything was in line and in proximity to like elements, while being aligned with other items in the page. It was a lot of mixing and justifying and remodifying to ensure standards.
+
 5. What each group member was responsible for designing / developing.
+
+- Kenneth: Styling, creating the navigation bar, formatting the buttons. 
+- Najum: Tables, styling, logo
+- Gabriel: Backend routes, authentication, database 
+- Anthony: Charts, export to csv, delete all 
+- Samruddhi: Styling, tables, buttons
+
+
 6. A link to your project video.
+
+https://youtu.be/iPMYym-34XQ
+
+
 
 Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
 
-## FAQs
-
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
+-We went beyond the teaching of the class and implemented features that we werent familiar with but we overcame it by researching, doing trial and error. Some of theese features are export to csv, real time data updating like the stats based new added data to the my appplications tab. Not only that but we implemented all the knowledge from past assigments like a1 through a4 by using technologies that were tought in class such as react, vite, and the mongo server. 
+We also aimed for solving direct user problems: community involvement with the aggregated posts, export to csv for external operations, deleting all applications for a new application season, stats to guage how the current application season is going.
