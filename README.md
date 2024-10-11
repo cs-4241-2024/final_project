@@ -63,6 +63,6 @@ The login system supports authentication, allowing users to securely access the 
 
 #### Links
 1. Glitch: https://final-project-team-12.glitch.me/
-2. Video: 
+2. Video: https://www.youtube.com/watch?v=YaGc1-HCIjw
 
 
