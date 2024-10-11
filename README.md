@@ -1,5 +1,74 @@
 # cocktail-combo
+# *Intro/Our Roles*
 
+Anu: Front end CSS layout, styling + grid, elements  
+
+Rose: Front end back end for bug fixes 
+
+Aaron: Back end with bug fixes in front end 
+
+Kayla: Front end and back end bug fixes and deployment to glitch + Readme 
+
+Tanishka: Project Video and some Frontend design + Readme 
+
+# *Inspiration*
+
+When brainstorming ideas for our final project, we came up with an idea for a Cocktail building website that could help people with limited ingredients or supplies see what cocktails they can make, instead of search up different recipes and having to keep checking if they have the ingredients or not. We are also college students, so most of us don’t have a stocked bar at college and the project seems engaging since its an efficient tool even we might use in the future. 
+
+
+# Brief Description 
+
+Our web application is a cocktail search website that allows users to be recommended a cocktail based on the ingredients they have at home. The cocktails recommended are not limited to what the user has available. The site allows users to insert three ingredients they have, and a random cocktail will appear. The site also allows users to favorite cocktails. Their favorite cocktail will be viewable on their account page. They are also able to add/ remove the cocktail from their profile. The last big feature the app has is that it allows users to rate the cocktails, the rating will be viewable by all users. 
+
+Our site link is https://cocktail-combo.glitch.me/. To log into the site without creating an account use the log in username: “Admin”, Password: “password”. 
+
+# Technology Used and How 
+
+HTML and CSS - to structure our web pages and style the user interface  
+
+Vanilla JavaScript - to add dynamic behavioral and interactive features to the website 
+
+Client-side JavaScript – to fetch the API based on user input 
+
+Node.js – setting up the server 
+
+Express – Manages user authentication via Google OAuth and serves static files. Handles routes for saving cocktails data from external API. 
+
+MongoDB – Used as the database to store user profiles, rated cocktails, and saved favorites. 
+
+Google OAuth Authentication – used for user authentication. 
+
+API Intergration – used to fetch cocktail data based on the ingredients users have at home. 
+
+CSS grid and Flexbox – Used for creating a flexible and responsive layout 
+
+ 
+
+# Challenges 
+
+Database integration: We had issues when using databases within our site. Trying to set up the registration database, the rated cocktail database, and the saved favorites database caused multiple issues for our site. 
+
+Authentication Setup: Our biggest issue with using google authentication was trying to deploy glitch, when having google authentication on WPI wifi. Trying to troubleshoot when the issue is the wifi is difficult because you don’t expect that to be the issue with the code you create. When on a home network our other issue was getting google authentication to work. We found that our code was not properly set up for it to work. 
+
+Ui/UX Design: The issue we faced when creating our user interface was that certain features weren’t accessible with our layout. Some of our design overlapped buttons which made the buttons unusable. 
+
+	 
+# *Technical Achievements*
+
+*Database System:* Successfully integrated a relational database to store and retrieve user information and user favorites and reviews. The application can now store, update, and delete user favorites and reviews seamlessly. 
+
+*Multiple Pages:* Developed a multi-page web application with content that changes based on user interactions.  
+
+*Google Authentication:* Implemented Google authentication using OAuth to allow users to securely log in using their Google accounts. This authentication system was set up to handle user sessions and integrate with the back-end to manage users favorites and reviews. 
+
+ 
+# *Design/Evaluation Achievements*
+
+*CSS Div Styling + Grid:* Used CSS Grid and Flexbox to create flexible, responsive layouts for the website. This allowed for better control over the positioning of elements and ensured the design looked great across multiple screen sizes. 
+
+*Layout:* Designed an intuitive and user-friendly layout that allowed users to navigate through the application with ease. The layout ensured clear separation between different sections of the application, making it visually structured and easy to use. 
+
+*Vanilla CSS:* Styled the application with plain CSS, which was more work as we have complex designs within our application. 
 potential apis:
 - https://api.api-ninjas.com/v1/cocktail
 - https://www.thecocktaildb.com/api.php
