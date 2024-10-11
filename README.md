@@ -49,6 +49,14 @@ The login system supports authentication, allowing users to securely access the 
    
 5. Showing and hiding content through JS
 
+6. Creating filterable and searchable dropdowns
+
+7. Populating dropdowns with correct information
+
+8. Managing final week and other assignments in parallel
+
+9. Merging git branches without breaking code 
+
 #### Group Member Contributions
 1. **Tri Vien Le** (Full Stack)
    - I was working as a full-stack developer, mainly producing the Login page and its functionalities. I implemented the login logic as well as the authentication of users using cookies and a protected path. I also implemented the usage of other middlewares to try and optimize our code to make it run smoother but also for debugging purposes. I have also helped debug some functions on both the server-side and client-side of the application. I implemented the delete group functionality on the client-side of the application. I also worked with connecting the MongoDB to the client-side of the application with collections of users/groups.
