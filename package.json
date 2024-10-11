@@ -1,0 +1,28 @@
+{
+  "name": "cocktail-combo",
+  "version": "1.0.0",
+  "description": "cocktail website",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "Ananya Jayamoorthy",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-session": "^1.18.0",
+    "materialize-css": "^1.0.0-rc.2",
+    "mongoose": "^8.7.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
