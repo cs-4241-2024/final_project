@@ -12,7 +12,9 @@ When brainstorming ideas for our final project, we came up with an idea for a Co
 
 Our web application is a cocktail search website that allows users to be recommended a cocktail based on the ingredients they have at home. The cocktails recommended are not limited to what the user has available. The site allows users to insert three ingredients they have, and a random cocktail will appear. The site also allows users to favorite cocktails. Their favorite cocktail will be viewable on their account page. They are also able to add/ remove the cocktail from their profile. The last big feature the app has is that it allows users to rate the cocktails, the rating will be viewable by all users. 
 
-Our site link is https://cocktail-combo.glitch.me/. To log into the site without creating an account use the log in username: “Admin”, Password: “password”. 
+Our site link is https://cocktail-combo.glitch.me/. To log into the site without creating an account use the following log in details:
+Username: “admin”
+Password: “password”
 
 # Technology Used and How 
 
