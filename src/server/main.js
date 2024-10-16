@@ -53,7 +53,7 @@ const JobApplication = mongoose.model('JobApplication', jobApplicationSchema);
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: "http://group-7-final-project.me/auth/github/callback", //CHANGE TO GLITCHHH!!!!
+  callbackURL: "https://group-7-final-project.glitch.me/auth/github/callback", //CHANGE TO GLITCHHH!!!! 
 }, async function (accessToken, refreshToken, profile, done) {
   try {
     let user = await User.findOne({ githubId: profile.id });
