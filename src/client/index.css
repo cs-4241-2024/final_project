@@ -1,0 +1,185 @@
+body {
+  background-color: #ffffff;
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.pure-form fieldset {
+  border: none;
+  padding: 0;
+}
+
+.pure-form label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.pure-form input, 
+.pure-form select {
+  display: block;
+  margin-bottom: 1em;
+  width: auto;
+}
+
+#loginSection a, #loginSection button {
+  margin: 0.8em 0;
+}
+
+table {
+  width: auto;
+  border-collapse: collapse;
+  box-shadow:0 .3rem .8rem grey;
+  backdrop-filter: blur(7px);
+  border-radius: .8rem;
+}
+
+th{
+  padding: 1rem 2rem;
+  background-color: #747474;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 999;
+  letter-spacing: .1rem;
+}
+
+tr:nth-child(even) {
+  background-color: lightgrey;
+}
+
+td{
+  padding: 1rem 2rem;
+}
+
+input, select {
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 14px;
+}
+
+button, .pure-button {
+  background-color: #D7D3F0;
+  color: black;
+  border: none;
+  padding: 0.5em 2em;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button:hover, .pure-button:hover {
+  background-color: grey;
+}
+
+#form-div {
+  margin-bottom: 2em;
+}
+
+#table-div {
+  margin-top: 2em;
+}
+
+h1, h2 {
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+.logo-img {
+  width: 77px;
+  height: auto;
+}
+
+.tabs-container {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 100px;
+  background-color: #dadada;
+  height: 100%
+}
+
+.tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex, block;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.tabs li {
+  padding: 10px 20px;
+  background-color: transparent !important; 
+  border: 1px solid transparent !important;
+  cursor: pointer;
+  color: black; 
+  border-radius: 5px;
+  transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
+  padding: 20px;
+  background-color:grey;
+}
+
+.tabs li.active {
+  background-color: rgba(255, 255, 255, 0.3) !important; 
+  border: 1px solid rgba(255, 255, 255, 0.5); 
+  color: #1f8dd6 ; 
+}
+
+.tab li:hover {
+  background-color: #1f8dd6;
+  border: 1px solid black; 
+}
+
+.tab-content {
+  right: 0;
+  padding: 20px 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #747474; 
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  width: 500px;
+  max-width: 80%;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+#statHorizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
